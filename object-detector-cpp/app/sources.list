@@ -1,0 +1,10 @@
+deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu/ eoan main restricted universe multiverse
+deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu/ eoan-updates main restricted universe multiverse
+deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu/ eoan-backports main restricted universe multiverse
+deb [arch=amd64] http://security.ubuntu.com/ubuntu eoan-security main restricted universe multiverse
+
+deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ eoan main restricted universe multiverse
+deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ eoan-updates main restricted universe multiverse
+deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ eoan-backports main restricted universe multiverse
+deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ eoan-security main restricted universe multiverse
+

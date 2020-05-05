@@ -1,0 +1,19 @@
+version: '3.3'
+
+services:
+  capture-example-app:
+    image: axisecp/opencv-application-examples:0.0.1
+    ipc: "host"
+    environment:
+      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
+      - LD_LIBRARY_PATH=/host/lib
+      - DEBUG=y
+    volumes:
+      - /lib:/host/lib:ro
+      - /tmp:/output
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:rw
+      - /var/run/statuscache:/var/run/statuscache:rw
+    devices:
+      - /dev/datacache0:/dev/datacache0:rw
+      - /dev/datacache0:rw
+
