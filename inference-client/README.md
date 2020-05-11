@@ -32,7 +32,7 @@ inference-client
 To get started following system requirements shall be met:
 * Docker version 19.03.5 or higher
 * Debian Stretch or Ubuntu 18.04
-* Firmware: Q1615-MkIII_9.80.1_24_fimage.bin
+* Firmware: Q1615-MkIII_CVP-20.8.1_beta_1_fimage.bin
 * Docker Daemon installed on the camera
 * Dockerhub ID to pull images
 
@@ -52,8 +52,8 @@ Build a Docker inference-client image
 Push the Docker image to your repo/artifactory server, example:
 
 ```
-docker tag inference-client axisecp/inference-client:0.0.1
-docker push axisecp/inference-client:0.0.1
+docker tag inference-client axisecp/inference-client:1.0.0-armv7hf
+docker push axisecp/inference-client:1.0.0-armv7hf
 ```
 There are two options avialable in this example:
 

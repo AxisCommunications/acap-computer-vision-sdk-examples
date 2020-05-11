@@ -1,18 +1,14 @@
 # Should be used for getting API image
 # Currently, only armv7hf is supported
 ARG ARCH=armv7hf
-ARG VERSION_API=4.0-pre2
+ARG VERSION=4.0-pre2
 
-FROM axisecp/acap4-api:${VERSION_API}-${ARCH} as api
+FROM axisecp/acap4-api:${VERSION}-${ARCH} as api
+FROM axisecp/acap4-toolchain:${VERSION}-${ARCH} as toolchain
 
 ARG DOCKER_PROXY
 ARG http_proxy=${DOCKER_PROXY}
 ARG https_proxy=${DOCKER_PROXY}
-
-RUN dpkg --add-architecture armhf
-
-# Use a sources.list that includes armhf repositories
-COPY sources.list /etc/apt
 
 RUN apt-get update && apt-get install -y \
         libgrpc++-dev:armhf \
@@ -22,10 +18,8 @@ RUN apt-get update && apt-get install -y \
         libssl-dev:armhf \
         libcrypto++-dev:armhf
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        crossbuild-essential-armhf \
-        make \
-        pkg-config
+COPY --from=api /axis/opencv /axis/opencv/
+COPY --from=api /axis/tf-proto /axis/tf-proto/
 
 COPY Makefile /build/
 COPY src/ /build/src/
@@ -36,19 +30,16 @@ FROM arm32v7/ubuntu:19.10
 
 COPY --from=api /axis/opencv/lib/* /usr/lib/
 
-COPY --from=api /usr/lib/arm-linux-gnueabihf/libprotobuf* /usr/lib/
-COPY --from=api /usr/lib/arm-linux-gnueabihf/libgrpc* /usr/lib/
-COPY --from=api /usr/lib/arm-linux-gnueabihf/libgpr* /usr/lib/
-COPY --from=api /usr/lib/arm-linux-gnueabihf/libcares* /usr/lib/
-COPY --from=api /usr/lib/arm-linux-gnueabihf/libprofiler* /usr/lib/
-COPY --from=api /usr/lib/arm-linux-gnueabihf/libz* /usr/lib/
-COPY --from=api /usr/lib/arm-linux-gnueabihf/libssl* /usr/lib/
-COPY --from=api /usr/lib/arm-linux-gnueabihf/libcrypto* /usr/lib/
+COPY --from=toolchain /usr/lib/arm-linux-gnueabihf/libprotobuf* /usr/lib/
+COPY --from=toolchain /usr/lib/arm-linux-gnueabihf/libgrpc* /usr/lib/
+COPY --from=toolchain /usr/lib/arm-linux-gnueabihf/libgpr* /usr/lib/
+COPY --from=toolchain /usr/lib/arm-linux-gnueabihf/libcares* /usr/lib/
+COPY --from=toolchain /usr/lib/arm-linux-gnueabihf/libprofiler* /usr/lib/
+COPY --from=toolchain /usr/lib/arm-linux-gnueabihf/libz* /usr/lib/
+COPY --from=toolchain /usr/lib/arm-linux-gnueabihf/libssl* /usr/lib/
+COPY --from=toolchain /usr/lib/arm-linux-gnueabihf/libcrypto* /usr/lib/
 
-COPY --from=api /build/objdetector /usr/bin/
+COPY --from=toolchain /build/objdetector /usr/bin/
 
 ENTRYPOINT []
 CMD ["/usr/bin/objdetector"]
-
-
-

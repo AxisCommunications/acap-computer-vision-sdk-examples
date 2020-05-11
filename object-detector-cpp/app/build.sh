@@ -10,7 +10,7 @@ if [ "${APP_IMAGE:-}" == "" ]; then
 fi
 
 [ -n "$ARCH" ] && arch="--build-arg ARCH=$ARCH"
-[ -n "$VERSION_API" ] && version_api="--build-arg VERSION_API=$VERSION_API"
+[ -n "$VERSION" ] && version="--build-arg VERSION=$VERSION"
 [ -n "$DOCKER_PROXY" ] && docker_proxy="--build-arg DOCKER_PROXY=$DOCKER_PROXY"
 
-docker build . --tag $APP_IMAGE $arch $version_api $docker_proxy
+docker build . --tag $APP_IMAGE $arch $version $docker_proxy

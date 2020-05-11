@@ -25,7 +25,7 @@ services:
       - /dev/datacache0:/dev/datacache0:rw
 
   inference-server:
-    image: axisecp/larod-inference-server:0.0.1
+    image: axisecp/larod-inference-server:2.0.0-armv7hf
     command: /usr/bin/larod-inference-server -p $INFERENCE_PORT -j 1 -m /models/ssdlite_mobilenet/$MODEL_NAME
     depends_on:
       - ssdlite_mobilenet_object
