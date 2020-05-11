@@ -28,17 +28,6 @@ inference-client
 * **camera-video.yml** - Docker compose file for streaming video example
 * **dog416.png** - Example image
 
-## Prerequisites
-To get started following system requirements shall be met:
-* Docker version 19.03.5 or higher
-* Debian Stretch or Ubuntu 18.04
-* Firmware: Q1615-MkIII_CVP-20.8.1_beta_1_fimage.bin
-* Docker Daemon installed on the camera
-* Dockerhub ID to pull images
-
-
-## Limitations
-
 
 ## How to run the code
 These steps shows how to build and run inference-client

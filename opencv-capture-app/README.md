@@ -34,14 +34,6 @@ opencv-capture-app
 * **build.sh**           - Builds and tags the image of objdetect.cpp image e.g., axisecp/acap4-object-detector-cpp:1.0.0-rc.1
 * **upload.sh**          - To push/pull images to the camera with the Docker Daemon ACAP installed and <APP_IMAGE>.
 
-### Prerequisites
-System Requirements
-* Docker version 19.03.5, on a Linux system
-* Debian stretch, Ubuntu or similar.
-* Vendor-specific firmware image where video_io library is installed and patched
-  together with the internal components.
-* Dockerhub ID
-
 ### Limitations
 * OpenCV module choice cannot be made in this version.
 * In order to change the binary name it has to be done in the Makefile

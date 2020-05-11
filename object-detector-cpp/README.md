@@ -31,15 +31,6 @@ object-detector-cpp
  |- user-env.sh - Should be edited to set environment variables that fit your local environment.
 ```
 
-## Prerequisites
-To get started following system requirements shall be met:
-* Docker version 19.03.5 or higher
-* Debian Stretch or Ubuntu 18.04
-* Firmware: Q1615-MkIII_CVP-20.8.1_beta_1_fimage.bin
-* Docker Daemon installed on the camera
-* Dockerhub ID to pull images (e.g., Inference-server, ssdlite_mobilenet_object etc.)
-
-
 ## How to run the code
 * To build the object-detector-cpp image
   ```shell

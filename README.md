@@ -28,10 +28,8 @@ step-by-step instructions on how to run applications on the camera.
 To get started following system requirements shall be met:
 * Camera: Q1615-MkIII
 * Docker version 19.03.5 or higher
-* Debian Stretch or Ubuntu 18.04
 * Firmware: Q1615-MkIII_9.80.1_24_fimage.bin
 * Docker Daemon installed on the camera
-* Dockerhub ID to pull images
 
 ## Supported architectures
 The examples support the following architectures.
