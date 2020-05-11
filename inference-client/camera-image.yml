@@ -59,4 +59,3 @@ services:
 
 volumes:
   ssdlite_mobilenet_object: {}
-  
