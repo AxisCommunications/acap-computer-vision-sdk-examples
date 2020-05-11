@@ -51,6 +51,7 @@ Below is the list of examples available in the respository.
 There are two types of Docker images here: the ToolChain (SDK), and the API 3.1. These images can be used as the basis for custom built images for running your applications. The images needed are specified in the docker-compose files. All images are public and free to use for anyone.
 * [Toolchain](https://hub.docker.com/repository/docker/axisecp/acap-toolchain) -  An Ubuntu-based Toolchain bundle with all tools for building and packaging an ACAP 3.1 application included.
 * [API 3.1](https://hub.docker.com/repository/docker/axisecp/acap-api) - An Ubuntu-based API bundle with all API components (header and library files) included.
+* [ACAP4-Toolchain](https://hub.docker.com/repository/docker/axisecp/acap4-toolchain) - The ACAP4 toolchain image contains tools that are useful when developing ACAP applications.
 
 ### Pre-trained models
 * [COCO SSD MobileNet v1 model](https://www.tensorflow.org/lite/models/object_detection/overview#starter_model)
@@ -69,5 +70,3 @@ You can help to make this repo a better one using the following commands.
 # License
 [Apache 2.0](LICENSE)
 
-# Ref:
-https://github.com/AxisCommunications/acap-application-examples-test
