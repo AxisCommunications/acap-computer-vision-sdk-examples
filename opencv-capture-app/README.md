@@ -8,7 +8,7 @@ OpenCV v4.2.0 is used and comes with following modules:
 core, imgproc, imgcodecs, videoio,objdetect, python3, video.
 
 Together with this file you should be able to find a directory called
-app, that directory contains the "HelloWorld" application which can
+app, that directory contains the "capture.cpp" application which can
 easily be compiled and run with the help of the tools and step by step
 below.
 
@@ -29,7 +29,8 @@ opencv-capture-app
 └── README.md
 ```
 * **capture.cpp**        - Example application to capture camera properties such as time stamps, zoom, focus etc.
-* **docker-compose.yml** - Docker compose file for the capture example.
+* **dockerfile**         - Docker file with the toolchain included to run the example.
+* **docker-compose.yml** - Docker compose file contains the lattest image of the example from dockerhub.
 * **README.md**          - Step by step instructions on how to run the example.
 * **build.sh**           - Builds and tags the image of objdetect.cpp image e.g., axisecp/acap4-object-detector-cpp:1.0.0-rc.1
 * **upload.sh**          - To push/pull images to the camera with the Docker Daemon ACAP installed and <APP_IMAGE>.
