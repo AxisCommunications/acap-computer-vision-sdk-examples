@@ -79,7 +79,7 @@ docker -H tcp://<IP> pull axisecp/opencv-application-examples
 ```
 #### Run the container
 ```
-docker-compose -H tcp://<IP:Port> -f opencv-capture-app/docker-compose.yml up
+docker-compose -H tcp://<IP:Port> -f docker-compose.yml up
 (e.g., docker-compose -H  tcp://172.25.75.38:2375 -f docker-compose.yml up)
 ```
 #### The expected output:
