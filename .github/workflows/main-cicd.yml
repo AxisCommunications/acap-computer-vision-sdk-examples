@@ -25,7 +25,7 @@ jobs:
     
     # Runs a single command using the runners shell
     - name: Login to dockerhub axis account
-      run: docker login -u ${{ secrets.DOCKERHUB_USER }} -p ${{ secrets.DOCKERHUB_PASS }}
+      run: docker login -u ${{ secrets.DOCKERHUB_USER }} --password-stdin ${{ secrets.DOCKERHUB_PASS }}
 
     # Run build script for capture app
     - name: Bulid capture_app application
