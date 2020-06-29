@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 
 if [ "${CAMERA_IP:-}" = "" ]; then
   if [ "${1:-}" = "" ]; then
