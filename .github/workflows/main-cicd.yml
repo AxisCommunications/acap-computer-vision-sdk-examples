@@ -42,7 +42,6 @@ jobs:
     - name: Bulid object-detector-cpp application
       run: |
         cd ./object-detector-cpp/app
-        chmod 777 build.sh
         ./build.sh docker-sandbox.se.axis.com/rapid/arm32v8/capture_app_test
 
 
