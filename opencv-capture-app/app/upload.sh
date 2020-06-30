@@ -19,4 +19,4 @@ if [ "${APP_IMAGE:-}" = "" ]; then
 fi
 
 docker push "$APP_IMAGE"
-docker -H tcp://$CAMERA_IP pull "$APP_IMAGE"
+docker -H tcp://"$CAMERA_IP" pull "$APP_IMAGE"
