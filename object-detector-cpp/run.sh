@@ -9,4 +9,4 @@ if [ "${CAMERA_IP:-}" = "" ]; then
   fi
 fi
 
-docker-compose -H tcp://"$CAMERA_IP":2375 up
+docker-compose -H tcp://$CAMERA_IP:2375 up
