@@ -22,13 +22,13 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-      
+
     #- uses: actions/checkout@master
     - name: Run ShellCheck
       uses: ludeeus/action-shellcheck@master
       env:
-        SHELLCHECK_OPTS: -e SC2153 -e SC2148
-      
+        SHELLCHECK_OPTS: -e SC2153 -e SC2148 -e SC2086
+
     # Runs a single command using the runners shell
     - name: Login to dockerhub axis account
       run: docker login -u ${{ secrets.DOCKERHUB_USER }} --password ${{ secrets.DOCKERHUB_PASS }}
@@ -39,12 +39,10 @@ jobs:
         cd ./opencv-capture-app/app
         #chmod 777 build.sh
         ./build.sh docker-sandbox.se.axis.com/rapid/arm32v8/capture_app_test
-        
+
     # Run build script for capture app
     - name: Bulid object-detector-cpp application
       run: |
         cd ./object-detector-cpp/app
         ./build.sh docker-sandbox.se.axis.com/rapid/arm32v8/capture_app_test
 
-
-          
