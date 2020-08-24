@@ -66,7 +66,7 @@ docker save -o <application_tarball_name>.tar <opencv_target_application_image>
 ```
 #### [opt 1] Load the image if it's a tarball
 ```
-docker -H tcp://<IP> load -i opencv_img.tar
+docker -H tcp://<Camera_IP> load -i opencv_img.tar
 ```
 #### [opt 2] push it to a repo/artifactory server.
 ```
@@ -74,13 +74,11 @@ docker push axisecp/opencv-application-examples
 ```
 #### [opt 2] pull it from docker hub:
 ```
-docker -H tcp://<IP> pull axisecp/opencv-application-examples
-(e.g., docker -H tcp://172.25.75.38 pull axisecp/opencv-application-examples)
+docker -H tcp://<Camera_IP> pull axisecp/opencv-application-examples
 ```
 #### Run the container
 ```
-docker-compose -H tcp://<IP:Port> -f docker-compose.yml up
-(e.g., docker-compose -H  tcp://172.25.75.38:2375 -f docker-compose.yml up)
+docker-compose -H tcp://<Camera_IP:Port> -f docker-compose.yml up
 ```
 #### The expected output:
 ```bash
@@ -199,22 +197,25 @@ The file that needs those settings is: *~/.docker/config.json.* For reference pl
 
 *Proxy settings can also be added on the edge device*
 ```
-ssh root@<device_ip>
+ssh root@<Camera_IP>
 ```
 * **Run on the device:**
 
 ```
+  #!/bin/sh
+
+  # Setup proxy for dockerd
   cat >> /etc/systemd/system/sdkrun_dockerd.service <<EOF
   [Service]
   Environment="HTTP_PROXY=http://<myproxy.com>:<port>"
   Environment="HTTPS_PROXY=http://<myproxy>:<port>"
   Environment="NO_PROXY=localhost,127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,.<domain>"
   EOF
-```
-* Then restart the dockerd acap
-```
+
   systemctl daemon-reload
   systemctl restart sdkrun_dockerd
+
+  exit
 ```
 ## License
 **Apache 2.0**
