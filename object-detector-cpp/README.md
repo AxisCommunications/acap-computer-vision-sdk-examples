@@ -43,7 +43,7 @@ object-detector-cpp
     ./upload.sh <CAMERA_IP> <APP_IMAGE>
   ```
 
-    <CAMERA_IP> is the IP-adress of a camera with the Docker Daemon ACAP installed and <APP_IMAGE> as above.
+    <CAMERA_IP> is the IP-address of a camera with the Docker Daemon ACAP installed and <APP_IMAGE> as above.
 
     To run as a container on the camera, replace the object-detector-cpp image with your own in the docker-compose.yml.
 
@@ -51,7 +51,7 @@ object-detector-cpp
   ```shell
     ./run.sh <CAMERA_IP>
   ```
-***Note:*** Environment variables can be set which takes away the need to give the build/upload/run scripts arguments. Modify and source the script user-env.sh to set these environment varaibles.
+***Note:*** Environment variables can be set which takes away the need to give the build/upload/run scripts arguments. Modify and source the script user-env.sh to set these environment variables.
 
 
 ### The expected output:
@@ -82,18 +82,18 @@ For reference please see: https://docs.docker.com/network/proxy/.
 ```
 **Run on the device:**
 ```shell
+  #!/bin/sh
   cat >> /etc/systemd/system/sdkrun_dockerd.service <<EOF
   [Service]
   Environment="HTTP_PROXY=http://<myproxy.com>:<port>"
   Environment="HTTPS_PROXY=http://<myproxy>:<port>"
   Environment="NO_PROXY=localhost,127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,.<domain>"
   EOF
-```
-  Then restart the dockerd acap using the following commands:
-```shell
-  systemctl daemon-reload
 
+  systemctl daemon-reload
   systemctl restart sdkrun_dockerd
+
+  exit
 ```
 
 ## License

@@ -44,32 +44,32 @@ Push the Docker image to your repo/artifactory server, example:
 docker tag inference-client axisecp/inference-client:1.0.0-armv7hf
 docker push axisecp/inference-client:1.0.0-armv7hf
 ```
-There are two options avialable in this example:
+There are two options available in this example:
 
 **OPT 1** - Use the following command to run the video streaming inference on the camera, example:
 ```
-docker-compose -H tcp://<IP_Adress:Port> -f camera-video.yml up (e.g., docker-compose -H tcp://172.25.75.141:2375 -f camera-video.yml up)
+docker-compose -H tcp://<IP_Adress:Port> -f camera-video.yml up
 ```
 **OPT 2** - Use the following command to run still image inference on the camera, example:
 ```
-docker-compose -H tcp://<IP_Adress:Port> -f camera-image.yml up (e.g., docker-compose -H tcp://172.25.75.141:2375  -f camera-image.yml up)
+docker-compose -H tcp://<IP_Adress:Port> -f camera-image.yml up
 ```
 
 **Note:** To clear inference-client on camera, example:
 ```
- docker -H tcp://172.25.75.141 system prune -f
- docker -H tcp://172.25.75.141 image rm axisecp/inference-client:0.0.1
+ docker -H tcp://<IP_Adress> system prune -f
+ docker -H tcp://<IP_Adress> image rm axisecp/inference-client:0.0.1
 ```
 
 ### The expected output:
-`docker-compose -H tcp://172.25.75.141:2375 -f camera-video.yml up`
+`docker-compose -H tcp://<IP_Adress:Port> -f camera-video.yml up`
 ```
 ....
 object-detector_1           | 1 Objects found
 object-detector_1           | person
 ```
 
-`docker-compose -H tcp://172.25.75.141:2375  -f camera-image.yml up`
+`docker-compose -H tcp://<IP:Port> -f camera-image.yml up`
 ```
 ....
 inference-client_1          | 3 Objects found
