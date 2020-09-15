@@ -41,6 +41,13 @@ To get started following system requirements shall be met:
 
 
 ## How to run the code
+The video tutorial shows the code executions steps below:
+<div align="center">
+      <a href="https://www.youtube.com/embed/K2NNb2XljV4">
+         <img src="https://img.youtube.com/vi/K2NNb2XljV4/0.jpg">
+      </a>
+</div>
+
 * To build the object-detector-cpp image
   ```shell
     ./build.sh <APP_IMAGE>
@@ -52,15 +59,15 @@ To get started following system requirements shall be met:
     ./upload.sh <CAMERA_IP> <APP_IMAGE>
   ```
 
-    <CAMERA_IP> is the IP-adress of a camera with the Docker Daemon ACAP installed and <APP_IMAGE> as above.
+    <CAMERA_IP> is the IP-address of a camera with the Docker Daemon ACAP installed and <APP_IMAGE> as above.
 
     To run as a container on the camera, replace the object-detector-cpp image with your own in the docker-compose.yml.
 
-* Use the following command to run the example with images from Docker Hub (e.g., ./run.sh 192.168.1.101):
+* Use the following command to run the example with images from Docker Hub:
   ```shell
     ./run.sh <CAMERA_IP>
   ```
-***Note:*** Environment variables can be set which takes away the need to give the build/upload/run scripts arguments. Modify and source the script user-env.sh to set these environment varaibles.
+***Note:*** Environment variables can be set which takes away the need to give the build/upload/run scripts arguments. Modify and source the script user-env.sh to set these environment variables.
 
 
 ### The expected output:

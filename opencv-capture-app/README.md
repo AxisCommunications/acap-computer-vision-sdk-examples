@@ -1,6 +1,6 @@
 # An openCV based example application on an edge device
 This readme file explains how to build an openCV application.
-It is achived by using the ACAP API image containing "OpenCV SDK" that
+It is achieved by using the ACAP API image containing "OpenCV SDK" that
 contains all the essential parts needed. There are tools for building
 an application and running the container image on an edge device.
 
@@ -30,7 +30,7 @@ opencv-capture-app
 ```
 * **capture.cpp**        - Example application to capture camera properties such as time stamps, zoom, focus etc.
 * **dockerfile**         - Docker file with the toolchain included to run the example.
-* **docker-compose.yml** - Docker compose file contains the lattest image of the example from dockerhub.
+* **docker-compose.yml** - Docker compose file contains the latest image of the example from dockerhub.
 * **README.md**          - Step by step instructions on how to run the example.
 * **build.sh**           - Builds and tags the image of objdetect.cpp image e.g., axisecp/acap4-object-detector-cpp:1.0.0-rc.1
 * **upload.sh**          - To push/pull images to the camera with the Docker Daemon ACAP installed and <APP_IMAGE>.
@@ -40,9 +40,13 @@ opencv-capture-app
 * In order to change the binary name it has to be done in the Makefile
 
 ### How to run the code
-Below is a step by step on the whole process. So basically starting
-with the generation of the images to run the final application on an
-edge device.
+The video tutorial shows the step by step execution of the instructions below.
+
+<div align="center">
+      <a href="https://www.youtube.com/embed/4oIgU0JBKD4">
+         <img src="https://img.youtube.com/vi/4oIgU0JBKD4/0.jpg">
+      </a>
+</div>
 
 If you would like to build your own app, just add your files under the source folder and they will be compiled against the openCV SDK just by running the following command:
 
@@ -201,7 +205,7 @@ ssh root@<Camera_IP>
 ```
 * **Run on the device:**
 
-```
+```bash
   #!/bin/sh
 
   # Setup proxy for dockerd
