@@ -51,8 +51,12 @@ To get started following system requirements shall be met:
 * Dockerhub ID to pull images
 
 ## How to run the code
-These steps shows how to build and run inference-client
-
+The video tutorial shows the steps below how to build and run the code.
+<div align="center">
+      <a href="https://www.youtube.com/embed/h7yjFf0jGhs">
+         <img src="https://img.youtube.com/vi/h7yjFf0jGhs/0.jpg">
+      </a>
+</div>
 Build a Docker inference-client image
 
  ```
@@ -64,26 +68,26 @@ Push the Docker image to your repo/artifactory server, example:
 ```
 docker push axisecp/inference-client:1.1.0-armv7hf
 ```
-There are two options avialable in this example:
+There are two options available in this example:
 
 **OPT 1** - Use the following command to run the video streaming inference on the camera, example:
 ```
-docker-compose -H tcp://<IP_Adress:Port> -f camera-video.yml up (e.g., docker-compose -H tcp://192.168.1.101:2375 -f camera-video.yml up)
+docker-compose -H tcp://<IP_Address:Port> -f camera-video.yml up
 ```
 **OPT 2** - Use the following command to run still image inference on the camera, example:
 ```
-docker-compose -H tcp://<IP_Adress:Port> -f camera-image.yml up (e.g., docker-compose -H tcp://192.168.1.101:2375  -f camera-image.yml up)
+docker-compose -H tcp://<IP_Address:Port> -f camera-image.yml up
 ```
 
 ### The expected output:
-`docker-compose -H tcp://192.168.1.101:2375 -f camera-video.yml up`
+`docker-compose -H tcp://<IP_Address:Port> -f camera-video.yml up`
 ```
 ....
 object-detector_1           | 1 Objects found
 object-detector_1           | person
 ```
 
-`docker-compose -H tcp://192.168.1.101:2375  -f camera-image.yml up`
+`docker-compose -H tcp://<IP_Address:Port>  -f camera-image.yml up`
 ```
 ....
 inference-client_1          | 3 Objects found
