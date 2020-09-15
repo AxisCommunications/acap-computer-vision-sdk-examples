@@ -31,6 +31,15 @@ object-detector-cpp
  |- user-env.sh - Should be edited to set environment variables that fit your local environment.
 ```
 
+## Prerequisites
+To get started following system requirements shall be met:
+* Docker version 19.03.5 or higher
+* Debian Stretch or Ubuntu 18.04
+* Firmware: Q1615-MkIII_CVP-20.8.1_beta_1_fimage.bin
+* Docker Daemon installed on the camera
+* Dockerhub ID to pull images (e.g., Inference-server, ssdlite_mobilenet_object etc.)
+
+
 ## How to run the code
 * To build the object-detector-cpp image
   ```shell
@@ -43,15 +52,15 @@ object-detector-cpp
     ./upload.sh <CAMERA_IP> <APP_IMAGE>
   ```
 
-    <CAMERA_IP> is the IP-address of a camera with the Docker Daemon ACAP installed and <APP_IMAGE> as above.
+    <CAMERA_IP> is the IP-adress of a camera with the Docker Daemon ACAP installed and <APP_IMAGE> as above.
 
     To run as a container on the camera, replace the object-detector-cpp image with your own in the docker-compose.yml.
 
-* Use the following command to run the example with images from Docker Hub (e.g., ./run.sh 172.25.75.38):
+* Use the following command to run the example with images from Docker Hub (e.g., ./run.sh 192.168.1.101):
   ```shell
     ./run.sh <CAMERA_IP>
   ```
-***Note:*** Environment variables can be set which takes away the need to give the build/upload/run scripts arguments. Modify and source the script user-env.sh to set these environment variables.
+***Note:*** Environment variables can be set which takes away the need to give the build/upload/run scripts arguments. Modify and source the script user-env.sh to set these environment varaibles.
 
 
 ### The expected output:
@@ -92,9 +101,29 @@ For reference please see: https://docs.docker.com/network/proxy/.
 
   systemctl daemon-reload
   systemctl restart sdkrun_dockerd
-
-  exit
 ```
+## Zero copy
+This example uses larod-inference-server for video inference processing by using gRPC API. In case this client and the inference server is located on the same camera, it is possible to speed up inference by using shared memory to pass the video image to the inference server by activating following define statement in file src/serving_client.hpp:
+```c++
+#define ZEROCOPY
+```
+## Server Authentication
+This example uses larod-inference-server for video inference processing. The API uses an insecure gRPC communication channel, but it is possible to activate SSL/TLS server authentication and encryption by activating following define statement in file src/object_detect.cpp:
+```c++
+#define USE_SSL
+```
+When SSL/TLS is activated, a certificate and private key for your organization must be provided to the inference server. Here is an example how to generate a temporary test certificate:
+```shell
+# Generate TSL/SSL test certificate
+# Press default for all input except: Common Name (e.g. server FQDN or YOUR name) []:localhost
+ openssl req -x509 -newkey rsa:4096 -nodes -days 365 -out testdata/server.pem -keyout testdata/server.key
+```
+The inference server must be started by specifying the certificate and the private key in the file docker-compose.yml:
+```bash
+/usr/bin/larod-inference-server -c certificate.pem -k private.key
+```
+## Model over gRPC
+This example uses larod-inference-server for video inference processing by using gRPC API. The inference server supports multiple clients at the same time. Models are normally loaded when the inference server is starting up, but models can also be loaded by specifying the model file path over gRPC. Please note the model path specified must be accessible by the inference server.
 
 ## License
 **Apache License 2.0**

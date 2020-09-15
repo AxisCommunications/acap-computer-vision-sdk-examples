@@ -2,6 +2,9 @@
 #include <iostream>
 #include <math.h>
 #include <memory>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <unistd.h>
 #include <opencv2/core.hpp>
 #include <opencv2/videoio.hpp>
 #include <string>
@@ -15,6 +18,8 @@
 #include "tensorflow/core/framework/types.grpc.pb.h"
 #include "tensorflow_serving/apis/predict.grpc.pb.h"
 #include "tensorflow_serving/apis/prediction_service.grpc.pb.h"
+
+#define ZEROCOPY
 
 using grpc::Channel;
 using grpc::ClientContext;
@@ -39,7 +44,23 @@ public:
    * @param channel gRPC channel for requests
    */
   ServingClient(std::shared_ptr<Channel> channel)
-      : stub_(PredictionService::NewStub(channel)) {}
+      : stub_(PredictionService::NewStub(channel)) {
+#ifdef ZEROCOPY
+    // Create memory mapped file
+    cerr << "Create memory mapped file" << endl;
+    fd_ = shm_open(sharedFile_, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
+    if (fd_ < 0) {
+      cerr << "Can not create memory mapped file" << endl;
+    }
+#endif
+  }
+
+  ~ServingClient() {
+    if (fd_>= 0) {
+      close(fd_);
+    }
+    shm_unlink(sharedFile_);
+  }
 
   /**
    * Prediction request to inference server. Assembles the client's payload,
@@ -54,6 +75,8 @@ public:
 
 private:
   std::unique_ptr<PredictionService::Stub> stub_;
+  int fd_ = -1;
+  const char* sharedFile_ = "/capture.bmp";
 };
 
 optional<PredictResponse>
@@ -73,27 +96,69 @@ ServingClient::callPredict(const std::string &model_name, const cv::Mat &image,
   proto.mutable_tensor_shape()->add_dim()->set_size(image.cols);
   proto.mutable_tensor_shape()->add_dim()->set_size(image.channels());
 
-  size_t size = image.rows * image.cols * 3;
-  proto.set_tensor_content(image.data, size);
+  size_t size = image.rows * image.cols * image.channels();
 
-  proto.set_dtype(tensorflow::DataType::DT_UINT8);
+  if (fd_ < 0) {
+    proto.set_tensor_content(image.data, size);
 
-  inputs["data"] = proto;
+    proto.set_dtype(tensorflow::DataType::DT_UINT8);
 
-  std::cout << "Waiting for response" << std::endl;
+    inputs["data"] = proto;
 
-  PredictResponse response;
-  ClientContext context;
-  // The actual RPC.
-  Status status = stub_->Predict(&context, request, &response);
+    std::cout << "Waiting for response" << std::endl;
 
-  // Act upon its status.
-  if (status.ok()) {
-    output = "Call predict OK";
-    return response;
-  } else {
-    output = "gRPC call return code: " + status.error_code() + string(": ") +
-             status.error_message();
-    return {};
+    PredictResponse response;
+    ClientContext context;
+    // The actual RPC.
+    Status status = stub_->Predict(&context, request, &response);
+
+    // Act upon its status.
+    if (status.ok()) {
+      output = "Call predict OK";
+      return response;
+    } else {
+      output = "gRPC call return code: " + status.error_code() + string(": ") +
+              status.error_message();
+      return {};
+    }
+  }
+  else
+  {
+    // Zero copy image buffer
+    if (ftruncate(fd_, size) != 0) {
+      output = "Can not set size of memory mapped file";
+      return {};
+    }
+
+    // Get an address to fd's memory for this process's memory space
+    void* data = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd_, 0);
+    if (data == MAP_FAILED) {
+      output = "Can not create memory map";
+      return {};
+    }
+
+    memcpy(data, image.data, size);
+    proto.add_string_val(sharedFile_);
+    proto.set_dtype(tensorflow::DataType::DT_STRING);
+    inputs["data"] = proto;
+    std::cout << "Waiting for response Z" << std::endl;
+
+    PredictResponse response;
+    ClientContext context;
+    // The actual RPC.
+    Status status = stub_->Predict(&context, request, &response);
+
+    // Cleanup
+    munmap(data, size);
+
+    // Act upon its status.
+    if (status.ok()) {
+      output = "Call predict OK";
+      return response;
+    } else {
+      output = "gRPC call return code: " + status.error_code() + string(": ") +
+              status.error_message();
+      return {};
+    }
   }
 }

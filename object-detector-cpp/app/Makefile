@@ -26,7 +26,7 @@ LDLIBS += -L $(BASE)/lib \
  -L /axis/opencv/lib \
  -L /axis/tf-proto
 LDLIBS += -lm -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -lopencv_videoio
-LDLIBS += -lprotobuf -lz -lgrpc -lgpr -lgrpc++ -lssl -lcrypto -lcares -lprofiler
+LDLIBS += -lprotobuf -lz -lgrpc -lgpr -lgrpc++ -lssl -lcrypto -lcares -lprofiler -lrt
 
 .PHONY: all clean
 

@@ -15,7 +15,7 @@ class Detector:
         self.inference_client = None
         self.model_input_height = None
         self.model_input_width = None
-        self.model_name = None
+        self.model_path = None
         self.object_list = None
         self.threshold = None
 
@@ -24,7 +24,7 @@ class Detector:
         image, width_mul, height_mul = rescale(image, self.model_input_width, self.model_input_height)
         image = np.expand_dims(image, axis=0)
         image = image.astype(np.uint8)
-        success, result = self.inference_client.infer({'data': image}, self.model_name)
+        success, result = self.inference_client.infer({'data': image}, self.model_path)
         if not success:
             return False, 0, 0, 0
         bounding_boxes, classes, confidences = tuple([np.squeeze(result[key]) for key in [
@@ -72,7 +72,7 @@ class Detector:
     def read_enviroment(self):
         self.threshold = float(os.environ.get('DETECTION_THRESHOLD', 0.5))
         self.inference_client = InferenceClient(os.environ['INFERENCE_HOST'], int(os.environ['INFERENCE_PORT']))
-        self.model_name = os.environ['MODEL_NAME']
+        self.model_path = os.environ['MODEL_PATH']
         self.model_input_width, self.model_input_height = [int(i) for i in os.environ['MODEL_INPUT_SIZE'].split('x')]
         image_path = os.environ.get('IMAGE_PATH')
         object_list_path = os.environ.get('OBJECT_LIST_PATH')
@@ -84,7 +84,7 @@ class Detector:
         image_path, object_list_path = self.read_enviroment()
         self.read_object_list(object_list_path)
         if image_path is not None:
-            for i in range(5):
+            while True:
                 self.run_image_source(image_path)
         else:
             self.run_camera_source()

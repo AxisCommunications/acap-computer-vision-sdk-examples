@@ -8,10 +8,14 @@
 #include <opencv2/videoio.hpp>
 
 #include "serving_client.hpp"
+#include "test_certificate.h"
+
+#define USE_SSL
 
 using namespace std;
 using namespace cv;
 using namespace chrono;
+using namespace grpc;
 
 const int IMG_WIDTH = 640;
 const int IMG_HEIGHT = 360;
@@ -123,7 +127,7 @@ void output_timing_info(steady_clock::time_point start,
                         steady_clock::time_point grpc_end,
                         steady_clock::time_point postprocess_end) {
 
-  cout << "Capture: " << ms_time(start, framecapture_end) << " ms" 
+  cout << "Capture: " << ms_time(start, framecapture_end) << " ms"
        << endl;
   cout << "Preprocess: " << ms_time(framecapture_end, preprocess_end) << " ms"
        << endl;
@@ -144,10 +148,19 @@ int main() try {
 
   string connect_string = string(getenv("INFERENCE_HOST")) + string(":") +
                           string(getenv("INFERENCE_PORT"));
-  ServingClient client(
-      grpc::CreateChannel(connect_string, grpc::InsecureChannelCredentials()));
 
-  string model(getenv("MODEL_NAME"));
+#ifdef USE_SSL
+  SslCredentialsOptions ssl_opts = {test_certificate, "", ""};
+  shared_ptr<ChannelCredentials> creds = grpc::SslCredentials(ssl_opts);
+  grpc::ChannelArguments args;
+  args.SetSslTargetNameOverride("localhost");
+  ServingClient client(grpc::CreateCustomChannel(connect_string, creds, args));
+#else
+  shared_ptr<ChannelCredentials> creds = InsecureChannelCredentials();
+  ServingClient client(grpc::CreateChannel(connect_string, creds));
+#endif
+
+  string model(getenv("MODEL_PATH"));
 
   const string s(getenv("MODEL_INPUT_SIZE"));
   size_t delim_pos = s.find("x");

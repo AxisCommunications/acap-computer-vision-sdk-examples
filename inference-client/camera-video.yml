@@ -1,12 +1,9 @@
 # Setup and run docker containers for streaming video inference on camera using TPU
-#
-# Running example
-#   $ docker-compose -H tcp://172.25.75.141:2375 -f camera-video.yml up
 
 version: '2.0'
 services:
   inference-client:
-    image: axisecp/inference-client:1.0.0-armv7hf
+    image: axisecp/inference-client:1.1.0-armv7hf
     logging:
       driver: "json-file"
       options:
@@ -19,7 +16,7 @@ services:
       - INFERENCE_HOST=inference-server
       - INFERENCE_PORT=8501
       - LD_LIBRARY_PATH=/host/lib
-      - MODEL_NAME=ssdlite-mobilenet-v2-tpu
+      - MODEL_PATH=/model/ssdlite-mobilenet-v2-tpu
       - MODEL_INPUT_SIZE=300x300
       - OBJECT_LIST_PATH=/model/objects.txt
       - DEBUG=y
@@ -34,13 +31,13 @@ services:
       - /dev/datacache0:/dev/datacache0:rw
 
   inference-server:
-    image: axisecp/larod-inference-server:2.0.0-armv7hf
+    image: axisecp/larod-inference-server:2.1.0-armv7hf
     logging:
       driver: "json-file"
       options:
         max-file: "5"
         max-size: "100k"
-    command: /usr/bin/larod-inference-server -v -p 8501 -j 1 -m /model/ssdlite-mobilenet-v2-tpu
+    command: /usr/bin/larod-inference-server -v -p 8501 -j 1
     depends_on:
       - ssdlite_mobilenet_object
     expose:
