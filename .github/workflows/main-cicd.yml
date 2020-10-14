@@ -45,4 +45,10 @@ jobs:
       run: |
         cd ./object-detector-cpp/app
         ./build.sh docker-sandbox.se.axis.com/rapid/arm32v8/capture_app_test
+        
+    # Run build Inference-client
+    - name: Bulid Inference-client application
+      run: |
+        cd ./inference-client
+        docker build -t axisecp/inference-client:1.1.0-armv7hf .
 
