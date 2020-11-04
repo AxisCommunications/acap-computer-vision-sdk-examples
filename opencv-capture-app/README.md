@@ -82,7 +82,42 @@ docker -H tcp://<Camera_IP> pull axisecp/opencv-application-examples
 ```
 #### Run the container
 ```
-docker-compose -H tcp://<Camera_IP:Port> -f docker-compose.yml up
+docker-compose -H tcp://<Camera_IP:2375> -f docker-compose.yml up
+```
+
+NB. If you want to run the example on FW newer than 10.1 you need to start the example like below
+```
+docker -H tcp://<Camera_IP> run --ipc=host --rm -e DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket \
+--device=/dev/datacache0:rw \
+-v /var/run/dbus:/var/run/dbus:rw \
+-v /usr/lib/libopencv_videoio.so.4.2.0:/usr/lib/libopencv_videoio.so.4.2 \
+-v /usr/lib/libdl.so.2:/usr/lib/libdl.so.2 \
+-v /usr/lib/libpthread.so.0:/usr/lib/libpthread.so.0 \
+-v /usr/lib/librt.so.1:/usr/lib/librt.so.1 \
+-v /usr/lib/libsystemd.so.0:/usr/lib/libsystemd.so.0 \
+-v /usr/lib/libstatuscache.so.1:/usr/lib/libstatuscache.so.1 \
+-v /usr/lib/libvdostream.so.1:/usr/lib/libvdostream.so.1 \
+-v /usr/lib/libgobject-2.0.so.0:/usr/lib/libgobject-2.0.so.0 \
+-v /usr/lib/libglib-2.0.so.0:/usr/lib/libglib-2.0.so.0 \
+-v /usr/lib/libstdc++.so.6:/usr/lib/libstdc++.so.6 \
+-v /usr/lib/libgcc_s.so.1:/usr/lib/libgcc_s.so.1 \
+-v /usr/lib/libc.so.6:/usr/lib/libc.so.6 \
+-v /usr/lib/libcap.so.2:/usr/lib/libcap.so.2 \
+-v /usr/lib/libfido.so.1:/usr/lib/libfido.so.1 \
+-v /usr/lib/libgio-2.0.so.0:/usr/lib/libgio-2.0.so.0 \
+-v /usr/lib/libffi.so.6:/usr/lib/libffi.so.6 \
+-v /usr/lib/libffi.so.7:/usr/lib/libffi.so.7 \
+-v /usr/lib/libpcre.so.1:/usr/lib/libpcre.so.1 \
+-v /usr/lib/libm.so.6:/usr/lib/libm.so.6 \
+-v /usr/lib/libgmodule-2.0.so.0:/usr/lib/libgmodule-2.0.so.0 \
+-v /usr/lib/libz.so.1:/usr/lib/libz.so.1 \
+-v /usr/lib/libresolv.so.2:/usr/lib/libresolv.so.2 \
+-v /var/run/statuscache:/var/run/statuscache:rw \
+<The id of the example to run> ---- The id of the example to run.
+
+You can get the id of the example by running:
+docker -H tcp://<Camera_IP> images
+
 ```
 #### The expected output:
 ```bash

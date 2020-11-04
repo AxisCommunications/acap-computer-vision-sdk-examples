@@ -2,10 +2,14 @@
 # Should be used for getting API image
 # Currently, only armv7hf is supported
 ARG ARCH=armv7hf
-ARG VERSION=4.0-pre2
+ARG VERSION=rel-fw-10.2-maint
+ARG UBUNTU_VERSION=19.10
 
-FROM axisecp/acap4-api:${VERSION}-${ARCH} as api
-FROM axisecp/acap4-toolchain:${VERSION}-${ARCH} as toolchain
+#FROM axisecp/acap4-api:${VERSION}-${ARCH} as api
+#FROM axisecp/acap4-toolchain:${VERSION}-${ARCH} as toolchain
+
+FROM docker-prod.se.axis.com/axisecp/acap4-api:${VERSION}-${ARCH}-ubuntu${UBUNTU_VERSION} as api
+FROM docker-prod.se.axis.com/axisecp/acap4-toolchain:${VERSION}-${ARCH}-ubuntu${UBUNTU_VERSION} as toolchain
 
 ARG DOCKER_PROXY
 ARG http_proxy=${DOCKER_PROXY}
@@ -24,8 +28,13 @@ WORKDIR /build
 RUN make
 
 FROM arm32v7/ubuntu:19.10
-COPY --from=toolchain /axis/opencv/lib/* /usr/lib/
+
+COPY --from=toolchain /axis/opencv/lib/libopencv_core.so* /usr/lib/
+COPY --from=toolchain /axis/opencv/lib/libopencv_imgcodecs.so* /usr/lib/
+COPY --from=toolchain /axis/opencv/lib/libopencv_imgproc.so* /usr/lib/
 COPY --from=toolchain /build/capture_app /usr/bin/
 
 ENTRYPOINT [""]
 CMD ["/usr/bin/capture_app"]
+
+
