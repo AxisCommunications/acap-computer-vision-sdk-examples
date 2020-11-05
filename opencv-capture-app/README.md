@@ -121,6 +121,11 @@ docker -H tcp://<Camera_IP> images
 ```
 #### The expected output:
 ```bash
+Setting Rotation 270: Done
+Setting Rotation 180: Done
+Setting Rotation  90: Done
+Setting Rotation   0: Done
+Configured image parameters in 72667µs
 FRAME[ 0] 640x360 fd[7]  offs[0xc1000] size[0x56400]
 FRAME[ 1] 640x360 fd[11] offs[0xc3000] size[0x56400]
 FRAME[ 2] 640x360 fd[7]  offs[0xc5000] size[0x56400]
@@ -152,6 +157,7 @@ FRAME[27] 640x360 fd[11] offs[0xc1000] size[0x56400]
 FRAME[28] 640x360 fd[7]  offs[0xc3000] size[0x56400]
 FRAME[29] 640x360 fd[11] offs[0xc5000] size[0x56400]
 Captured 30 frames in 973831µs
+Optics: iCS
 iteration[0] gain: 191.000000   expo: 503.000000   zoom: 1.862427   focus: 0.902723   f-number: 1.718091
 iteration[1] gain: 191.000000   expo: 503.000000   zoom: 1.862427   focus: 0.902723   f-number: 1.718091
 iteration[2] gain: 191.000000   expo: 503.000000   zoom: 1.862427   focus: 0.902723   f-number: 1.718091
@@ -213,6 +219,9 @@ not when the stream is running:
 * CAP_PROP_CHANNEL
 * CAP_PROP_FRAME_WIDTH
 * CAP_PROP_FRAME_HEIGHT
+* CAP_PROP_UNIMATRIX_ROTATION  
+  Possible rotations include [0,90,180,270].  
+  Not every camera is required to support every rotation.
 
 These *stream* properties are read-only:
 * CAP_PROP_POS_MSEC
@@ -229,6 +238,32 @@ These *image* properties are read-only:
   Exposure in µs
 * CAP_PROP_UNIMATRIX_FNUMBER
   f-number
+* CAP_PROP_UNIMATRIX_OPTICS_TYPE
+  * CAP_UNIMATRIX_OPTICS_TYPE_MANUAL  
+    Manual zoom/focus/iris
+  * CAP_UNIMATRIX_OPTICS_TYPE_DC  
+    Manual zoom/focus with DirectControl-iris
+  * CAP_UNIMATRIX_OPTICS_TYPE_P  
+    Manual zoom/focus with Precise-iris
+  * CAP_UNIMATRIX_OPTICS_TYPE_iCS  
+    Intelligent CS-mount
+  * CAP_UNIMATRIX_OPTICS_TYPE_CAMBLOCK  
+    Camblock
+
+These *image* properties are write-only:
+* CAP_PROP_UNIMATRIX_EXPOSURE_MODE
+  * CAP_UNIMATRIX_EXPOSURE_MODE_AUTO  
+    Automatic exposure
+  * CAP_UNIMATRIX_EXPOSURE_MODE_HOLD  
+    Hold current exposure
+  * CAP_PROP_UNIMATRIX_MAX_EXPOSURE_us  
+    Limit max automatic exposure time (unit: µs)
+
+These *image* properties are read-write:
+* CAP_PROP_UNIMATRIX_TONEMAPPING  
+  ToneMapping [0-100]
+* CAP_PROP_UNIMATRIX_TEMPORAL_FILTER  
+  Temporal Noise-Filter [0-100]
 
 ## Proxy settings
 Depending on the network you are connected to.
