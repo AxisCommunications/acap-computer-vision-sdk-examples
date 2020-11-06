@@ -2,9 +2,11 @@
 # Currently, only armv7hf is supported
 ARG ARCH=armv7hf
 ARG VERSION=4.0-pre2
+ARG REPO=axisecp
+ARG UBUNTU_VERSION=19.10
 
-FROM axisecp/acap4-api:${VERSION}-${ARCH} as api
-FROM axisecp/acap4-toolchain:${VERSION}-${ARCH} as toolchain
+FROM ${REPO}/acap4-api:${VERSION}-${ARCH}-ubuntu${UBUNTU_VERSION} as api
+FROM ${REPO}/acap4-toolchain:${VERSION}-${ARCH}-ubuntu${UBUNTU_VERSION} as toolchain
 
 ARG DOCKER_PROXY
 ARG http_proxy=${DOCKER_PROXY}
@@ -26,7 +28,7 @@ COPY src/ /build/src/
 WORKDIR /build
 RUN make
 
-FROM arm32v7/ubuntu:19.10
+FROM arm32v7/ubuntu:${UBUNTU_VERSION}
 
 COPY --from=api /axis/opencv/lib/* /usr/lib/
 
