@@ -24,10 +24,10 @@ jobs:
     - uses: actions/checkout@v2
 
     #- uses: actions/checkout@master
-    - name: Run ShellCheck
-      uses: ludeeus/action-shellcheck@master
-      env:
-        SHELLCHECK_OPTS: -e SC2153 -e SC2148 -e SC2086
+    #- name: Run ShellCheck
+    #  uses: ludeeus/action-shellcheck@master
+    #  env:
+    #    SHELLCHECK_OPTS: -e SC2153 -e SC2148 -e SC2086
 
     # Runs a single command using the runners shell
     - name: Login to dockerhub axis account
@@ -45,4 +45,10 @@ jobs:
       run: |
         cd ./object-detector-cpp/app
         ./build.sh docker-sandbox.se.axis.com/rapid/arm32v8/capture_app_test
+        
+    # Run build Inference-client
+    - name: Bulid Inference-client application
+      run: |
+        cd ./inference-client
+        docker build -t axisecp/inference-client:1.1.0-armv7hf .
 
