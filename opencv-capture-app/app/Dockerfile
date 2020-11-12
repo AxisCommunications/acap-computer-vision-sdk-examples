@@ -31,6 +31,7 @@ FROM arm32v7/ubuntu:19.10
 COPY --from=toolchain /axis/opencv/lib/libopencv_core.so* /usr/lib/
 COPY --from=toolchain /axis/opencv/lib/libopencv_imgcodecs.so* /usr/lib/
 COPY --from=toolchain /axis/opencv/lib/libopencv_imgproc.so* /usr/lib/
+
 COPY --from=toolchain /build/capture_app /usr/bin/
 
 ENTRYPOINT [""]
