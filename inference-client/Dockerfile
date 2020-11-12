@@ -1,6 +1,7 @@
 # This Dockerfile creates a Docker image for inference-client
+ARG REPO=axisecp
 
-FROM axisecp/python-tfserving:1.0.0-armv7hf
+FROM ${REPO}/python-tfserving:1.0.0-armv7hf
 LABEL version="1.0.0" \
       maintainer="rapid@axis.com"
 
