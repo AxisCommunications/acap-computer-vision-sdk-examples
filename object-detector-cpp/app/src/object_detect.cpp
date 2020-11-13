@@ -137,15 +137,14 @@ void output_timing_info(steady_clock::time_point start,
        << endl;
 }
 
-int main() try {
+int main(int argc, char *argv[]) try {
   // Number of outstanding zero-copy buffers (This is a very precious resource)
   constexpr size_t BUFFERS = 2;
   Mat frame[BUFFERS];
 
+  cout << "Start: " << argv[0] << endl;
   vector<string> classes = get_classes_from_file();
-
   VideoCapture cap = setup_capture(BUFFERS);
-
   string connect_string = string(getenv("INFERENCE_HOST")) + string(":") +
                           string(getenv("INFERENCE_PORT"));
 

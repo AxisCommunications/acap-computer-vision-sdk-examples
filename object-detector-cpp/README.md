@@ -21,21 +21,16 @@ object-detector-cpp
  | | |- serving_client.hpp - Creates the request and makes the call to the inference-server.
  | |- Dockerfile - Builds the program using an image that contains everything necessary for building, and copies it into another image.
  | |- Makefile - Used by the make tool to build the program
- | |- build.sh - Builds and tags the image of objdetect.cpp image e.g., axisecp/acap4-object-detector-cpp:1.0.0-rc.1
- | |- upload.sh - To push/pull images to the camera with the Docker Daemon ACAP installed and <APP_IMAGE>.
- |- .env - To set the model name and inference port
+ | |- build.sh - Builds and tags the image of objdetect.cpp image
  |- README.md - How to execute the example
- |- build-upload-run.sh - Builds, pushes the image to a repository, pulls the image to the camera, and runs everything on the camera.
  |- docker-compose.yml - Specifies the group of images used to run the application, and their interdependencies.
- |- run.sh - Runs the application, using the specification in the docker-compose.yml file.
- |- user-env.sh - Should be edited to set environment variables that fit your local environment.
 ```
 
 ## Prerequisites
 To get started following system requirements shall be met:
 * Docker version 19.03.5 or higher
 * Debian Stretch or Ubuntu 18.04
-* Firmware: Q1615-MkIII_CVP-20.8.1_beta_1_fimage.bin
+* Firmware: Q1615-MkIII_10.2.0_fimage.bin
 * Docker Daemon installed on the camera
 * Dockerhub ID to pull images (e.g., Inference-server, ssdlite_mobilenet_object etc.)
 
@@ -48,30 +43,36 @@ The video tutorial shows the code executions steps below:
       </a>
 </div>
 
-* To build the object-detector-cpp image
-  ```shell
-    ./build.sh <APP_IMAGE>
-  ```
-    <APP_IMAGE> is the name to tag the image with, e.g., axisecp/acap4-object-detector-cpp:1.0.0-rc.1
+* To build the object-detector-cpp image.
+```sh
+# Find build folder 
+cd acap-application-examples/object-detector-cpp/app
 
-* To push the image and pull it to the camera
-  ```shell
-    ./upload.sh <CAMERA_IP> <APP_IMAGE>
-  ```
+# Adjust some environment variables to your preference, then build and push to docker repo
+export REPO=axisecp &&\
+export VERSION=4.0-pre3 &&\
+export ARCH=armv7hf &&\
+export UBUNTU_VERSION=19.10 &&\
+export BUILD_IMAGE=${REPO}/acap4-object-detector-cpp:1.1.1-api.${VERSION}-${ARCH}-ubuntu${UBUNTU_VERSION} &&\
+./build.sh $BUILD_IMAGE &&\
+docker push $BUILD_IMAGE
+cd ..
+```
 
-    <CAMERA_IP> is the IP-address of a camera with the Docker Daemon ACAP installed and <APP_IMAGE> as above.
+* Use the following commands to run the example with images from Docker Hub:
+```sh
+# Set your camera IP address
+export AXIS_TARGET_IP=<actual camera IP address>
 
-    To run as a container on the camera, replace the object-detector-cpp image with your own in the docker-compose.yml.
+# Clear docker memory on camera
+docker -H tcp://$AXIS_TARGET_IP system prune -a
 
-* Use the following command to run the example with images from Docker Hub:
-  ```shell
-    ./run.sh <CAMERA_IP>
-  ```
-***Note:*** Environment variables can be set which takes away the need to give the build/upload/run scripts arguments. Modify and source the script user-env.sh to set these environment variables.
-
+# Run on camera
+docker-compose -H tcp://$AXIS_TARGET_IP:2375 up
+```
 
 ### The expected output:
-```bash
+```
 object-detector_1           | Caught frame 78 640x360
 object-detector_1           | Connecting to: inference-server:8501
 object-detector_1           | Waiting for response
@@ -93,11 +94,11 @@ Depending on the network, you might need proxy settings in the following file: *
 For reference please see: https://docs.docker.com/network/proxy/.
 
 *Proxy settings can also be added on the edge device*
-```shell
+```sh
   ssh root@<CAMERA_IP>
 ```
 **Run on the device:**
-```shell
+```sh
   #!/bin/sh
   cat >> /etc/systemd/system/sdkrun_dockerd.service <<EOF
   [Service]
@@ -120,13 +121,13 @@ This example uses larod-inference-server for video inference processing. The API
 #define USE_SSL
 ```
 When SSL/TLS is activated, a certificate and private key for your organization must be provided to the inference server. Here is an example how to generate a temporary test certificate:
-```shell
+```sh
 # Generate TSL/SSL test certificate
 # Press default for all input except: Common Name (e.g. server FQDN or YOUR name) []:localhost
  openssl req -x509 -newkey rsa:4096 -nodes -days 365 -out testdata/server.pem -keyout testdata/server.key
 ```
 The inference server must be started by specifying the certificate and the private key in the file docker-compose.yml:
-```bash
+```sh
 /usr/bin/larod-inference-server -c certificate.pem -k private.key
 ```
 ## Model over gRPC
