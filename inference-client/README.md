@@ -64,12 +64,12 @@ Build a Docker inference-client image, example:
 cd acap-application-examples/inference-client
 
 # Adjust some environment variables to your preference, then build and push to docker repo
-export REPO=axisecp &&\
-export ARCH=armv7hf &&\
-export UBUNTU_VERSION=19.10 &&\
-export BUILD_IMAGE=${REPO}/inference-client:1.1.0-${ARCH}-ubuntu${UBUNTU_VERSION} &&\
-export PYTHON_TFSERVING=axisecp/python-tfserving:1.1.0-armv7hf-ubuntu19.10 &&\
-docker build --build-arg PYTHON_TFSERVING -t $BUILD_IMAGE . &&\
+export REPO=axisecp
+export ARCH=armv7hf
+export UBUNTU_VERSION=19.10
+export BUILD_IMAGE=${REPO}/inference-client:1.1.0-${ARCH}-ubuntu${UBUNTU_VERSION}
+export PYTHON_TFSERVING=axisecp/python-tfserving:1.1.0-armv7hf-ubuntu19.10
+docker build --build-arg PYTHON_TFSERVING -t $BUILD_IMAGE .
 docker push $BUILD_IMAGE
 ```
 

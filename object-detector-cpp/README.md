@@ -49,12 +49,12 @@ The video tutorial shows the code executions steps below:
 cd acap-application-examples/object-detector-cpp/app
 
 # Adjust some environment variables to your preference, then build and push to docker repo
-export REPO=axisecp &&\
-export VERSION=4.0-pre3 &&\
-export ARCH=armv7hf &&\
-export UBUNTU_VERSION=19.10 &&\
-export BUILD_IMAGE=${REPO}/acap4-object-detector-cpp:1.1.1-api.${VERSION}-${ARCH}-ubuntu${UBUNTU_VERSION} &&\
-./build.sh $BUILD_IMAGE &&\
+export REPO=axisecp
+export VERSION=4.0-pre3
+export ARCH=armv7hf
+export UBUNTU_VERSION=19.10
+export BUILD_IMAGE=${REPO}/acap4-object-detector-cpp:1.1.1-api.${VERSION}-${ARCH}-ubuntu${UBUNTU_VERSION}
+./build.sh $BUILD_IMAGE
 docker push $BUILD_IMAGE
 cd ..
 ```
