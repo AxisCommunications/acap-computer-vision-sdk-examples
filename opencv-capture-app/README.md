@@ -82,10 +82,50 @@ docker -H tcp://<Camera_IP> pull axisecp/opencv-application-examples
 ```
 #### Run the container
 ```
-docker-compose -H tcp://<Camera_IP:Port> -f docker-compose.yml up
+docker-compose -H tcp://<Camera_IP:2375> -f docker-compose.yml up
+```
+
+NB. If you want to run the example on FW newer than 10.1 you need to start the example like below
+```
+docker -H tcp://<Camera_IP> run --ipc=host --rm -e DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket \
+--device=/dev/datacache0:rw \
+-v /var/run/dbus:/var/run/dbus:rw \
+-v /usr/lib/libopencv_videoio.so.4.2.0:/usr/lib/libopencv_videoio.so.4.2 \
+-v /usr/lib/libdl.so.2:/usr/lib/libdl.so.2 \
+-v /usr/lib/libpthread.so.0:/usr/lib/libpthread.so.0 \
+-v /usr/lib/librt.so.1:/usr/lib/librt.so.1 \
+-v /usr/lib/libsystemd.so.0:/usr/lib/libsystemd.so.0 \
+-v /usr/lib/libstatuscache.so.1:/usr/lib/libstatuscache.so.1 \
+-v /usr/lib/libvdostream.so.1:/usr/lib/libvdostream.so.1 \
+-v /usr/lib/libgobject-2.0.so.0:/usr/lib/libgobject-2.0.so.0 \
+-v /usr/lib/libglib-2.0.so.0:/usr/lib/libglib-2.0.so.0 \
+-v /usr/lib/libstdc++.so.6:/usr/lib/libstdc++.so.6 \
+-v /usr/lib/libgcc_s.so.1:/usr/lib/libgcc_s.so.1 \
+-v /usr/lib/libc.so.6:/usr/lib/libc.so.6 \
+-v /usr/lib/libcap.so.2:/usr/lib/libcap.so.2 \
+-v /usr/lib/libfido.so.1:/usr/lib/libfido.so.1 \
+-v /usr/lib/libgio-2.0.so.0:/usr/lib/libgio-2.0.so.0 \
+-v /usr/lib/libffi.so.6:/usr/lib/libffi.so.6 \
+-v /usr/lib/libffi.so.7:/usr/lib/libffi.so.7 \
+-v /usr/lib/libpcre.so.1:/usr/lib/libpcre.so.1 \
+-v /usr/lib/libm.so.6:/usr/lib/libm.so.6 \
+-v /usr/lib/libgmodule-2.0.so.0:/usr/lib/libgmodule-2.0.so.0 \
+-v /usr/lib/libz.so.1:/usr/lib/libz.so.1 \
+-v /usr/lib/libresolv.so.2:/usr/lib/libresolv.so.2 \
+-v /var/run/statuscache:/var/run/statuscache:rw \
+<The id of the example to run> ---- The id of the example to run.
+
+You can get the id of the example by running:
+docker -H tcp://<Camera_IP> images
+
 ```
 #### The expected output:
 ```bash
+Setting Rotation 270: Done
+Setting Rotation 180: Done
+Setting Rotation  90: Done
+Setting Rotation   0: Done
+Configured image parameters in 72667µs
 FRAME[ 0] 640x360 fd[7]  offs[0xc1000] size[0x56400]
 FRAME[ 1] 640x360 fd[11] offs[0xc3000] size[0x56400]
 FRAME[ 2] 640x360 fd[7]  offs[0xc5000] size[0x56400]
@@ -117,6 +157,7 @@ FRAME[27] 640x360 fd[11] offs[0xc1000] size[0x56400]
 FRAME[28] 640x360 fd[7]  offs[0xc3000] size[0x56400]
 FRAME[29] 640x360 fd[11] offs[0xc5000] size[0x56400]
 Captured 30 frames in 973831µs
+Optics: iCS
 iteration[0] gain: 191.000000   expo: 503.000000   zoom: 1.862427   focus: 0.902723   f-number: 1.718091
 iteration[1] gain: 191.000000   expo: 503.000000   zoom: 1.862427   focus: 0.902723   f-number: 1.718091
 iteration[2] gain: 191.000000   expo: 503.000000   zoom: 1.862427   focus: 0.902723   f-number: 1.718091
@@ -178,6 +219,9 @@ not when the stream is running:
 * CAP_PROP_CHANNEL
 * CAP_PROP_FRAME_WIDTH
 * CAP_PROP_FRAME_HEIGHT
+* CAP_PROP_UNIMATRIX_ROTATION  
+  Possible rotations include [0,90,180,270].  
+  Not every camera is required to support every rotation.
 
 These *stream* properties are read-only:
 * CAP_PROP_POS_MSEC
@@ -194,6 +238,32 @@ These *image* properties are read-only:
   Exposure in µs
 * CAP_PROP_UNIMATRIX_FNUMBER
   f-number
+* CAP_PROP_UNIMATRIX_OPTICS_TYPE
+  * CAP_UNIMATRIX_OPTICS_TYPE_MANUAL  
+    Manual zoom/focus/iris
+  * CAP_UNIMATRIX_OPTICS_TYPE_DC  
+    Manual zoom/focus with DirectControl-iris
+  * CAP_UNIMATRIX_OPTICS_TYPE_P  
+    Manual zoom/focus with Precise-iris
+  * CAP_UNIMATRIX_OPTICS_TYPE_iCS  
+    Intelligent CS-mount
+  * CAP_UNIMATRIX_OPTICS_TYPE_CAMBLOCK  
+    Camblock
+
+These *image* properties are write-only:
+* CAP_PROP_UNIMATRIX_EXPOSURE_MODE
+  * CAP_UNIMATRIX_EXPOSURE_MODE_AUTO  
+    Automatic exposure
+  * CAP_UNIMATRIX_EXPOSURE_MODE_HOLD  
+    Hold current exposure
+  * CAP_PROP_UNIMATRIX_MAX_EXPOSURE_us  
+    Limit max automatic exposure time (unit: µs)
+
+These *image* properties are read-write:
+* CAP_PROP_UNIMATRIX_TONEMAPPING  
+  ToneMapping [0-100]
+* CAP_PROP_UNIMATRIX_TEMPORAL_FILTER  
+  Temporal Noise-Filter [0-100]
 
 ## Proxy settings
 Depending on the network you are connected to.

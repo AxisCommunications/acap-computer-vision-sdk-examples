@@ -2,9 +2,10 @@
 # Should be used for getting API image
 # Currently, only armv7hf is supported
 ARG ARCH=armv7hf
-ARG VERSION=4.0-pre2
+ARG VERSION=4.0-pre3
 ARG REPO=axisecp
 ARG UBUNTU_VERSION=19.10
+
 
 FROM ${REPO}/acap4-api:${VERSION}-${ARCH}-ubuntu${UBUNTU_VERSION} as api
 FROM ${REPO}/acap4-toolchain:${VERSION}-${ARCH}-ubuntu${UBUNTU_VERSION} as toolchain
@@ -25,9 +26,15 @@ COPY src/ /build/src/
 WORKDIR /build
 RUN make
 
-FROM arm32v7/ubuntu:${UBUNTU_VERSION}
-COPY --from=toolchain /axis/opencv/lib/* /usr/lib/
+FROM arm32v7/ubuntu:19.10
+
+COPY --from=toolchain /axis/opencv/lib/libopencv_core.so* /usr/lib/
+COPY --from=toolchain /axis/opencv/lib/libopencv_imgcodecs.so* /usr/lib/
+COPY --from=toolchain /axis/opencv/lib/libopencv_imgproc.so* /usr/lib/
+
 COPY --from=toolchain /build/capture_app /usr/bin/
 
 ENTRYPOINT [""]
 CMD ["/usr/bin/capture_app"]
+
+

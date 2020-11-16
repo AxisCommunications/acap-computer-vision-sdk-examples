@@ -1,7 +1,10 @@
 #!/bin/sh -e
 
+set -x
+
 if [ "${APP_IMAGE:-}" = "" ]; then
   if [ "${1:-}" = "" ]; then
+
     echo "Manually set APP_IMAGE or supply it an argument" 1>&2
     exit 1
   else
