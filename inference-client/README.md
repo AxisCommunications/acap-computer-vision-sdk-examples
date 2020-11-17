@@ -46,7 +46,7 @@ inference-client
 To get started following system requirements shall be met:
 * Docker version 19.03.5 or higher
 * Debian Stretch or Ubuntu 18.04
-* Firmware: Q1615-MkIII_CVP-20.8.1_beta_1_fimage.bin
+* Firmware: Q1615-MkIII_10.2.0_fimage.bin
 * Docker Daemon installed on the camera
 * Dockerhub ID to pull images
 
@@ -57,37 +57,47 @@ The video tutorial shows the steps below how to build and run the code.
          <img src="https://img.youtube.com/vi/h7yjFf0jGhs/0.jpg">
       </a>
 </div>
-Build a Docker inference-client image
+Build a Docker inference-client image, example:
 
- ```
- docker build -t axisecp/inference-client:1.1.0-armv7hf .
- ```
+```sh
+# Find build folder 
+cd acap-application-examples/inference-client
 
-Push the Docker image to your repo/artifactory server, example:
-
+# Adjust some environment variables to your preference, then build and push to docker repo
+export REPO=axisecp
+export ARCH=armv7hf
+export UBUNTU_VERSION=19.10
+export BUILD_IMAGE=${REPO}/inference-client:1.1.0-${ARCH}-ubuntu${UBUNTU_VERSION}
+export PYTHON_TFSERVING=axisecp/python-tfserving:1.1.0-armv7hf-ubuntu19.10
+docker build --build-arg PYTHON_TFSERVING -t $BUILD_IMAGE .
+docker push $BUILD_IMAGE
 ```
-docker push axisecp/inference-client:1.1.0-armv7hf
-```
+
 There are two options available in this example:
 
-**OPT 1** - Use the following command to run the video streaming inference on the camera, example:
-```
-docker-compose -H tcp://<IP_Address:Port> -f camera-video.yml up
-```
-**OPT 2** - Use the following command to run still image inference on the camera, example:
-```
-docker-compose -H tcp://<IP_Address:Port> -f camera-image.yml up
+```sh
+# Set your camera IP address
+export AXIS_TARGET_IP=<actual camera IP address>
+
+# Clear docker memory on camera
+docker -H tcp://$AXIS_TARGET_IP system prune -a
+
+# **OPT 1** - Use the following command to run the video streaming inference on the camera, example:
+docker-compose -H tcp://$AXIS_TARGET_IP:2375 -f camera-video.yml up
+
+# **OPT 2** - Use the following command to run still image inference on the camera, example:
+docker-compose -H tcp://$AXIS_TARGET_IP:2375 -f camera-image.yml up
 ```
 
 ### The expected output:
-`docker-compose -H tcp://<IP_Address:Port> -f camera-video.yml up`
+`docker-compose -H tcp://$AXIS_TARGET_IP:2375 -f camera-video.yml up`
 ```
 ....
 object-detector_1           | 1 Objects found
 object-detector_1           | person
 ```
 
-`docker-compose -H tcp://<IP_Address:Port>  -f camera-image.yml up`
+`docker-compose -H tcp://$AXIS_TARGET_IP:2375 -f camera-image.yml up`
 ```
 ....
 inference-client_1          | 3 Objects found
