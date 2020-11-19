@@ -38,14 +38,15 @@ The examples support the following architectures.
 ## Example applications for video analytics
 Below is the list of examples available in the respository.
 
-* [Inference client](./inference-client/)
-  * The example code is written in Python and implements the object detection on a
-    video stream and still image from the camera.
-* [Object-detector-cpp](./object-detector-cpp/)
-  * The example code is written in C++ for object detection on the camera.
-* [OpenCV-capture-app](./opencv-capture-app/)
-  * The example code is written in C++ to capture camera properties such as time stamps,
-   zoom, focus etc.
+* [inference-client](./inference-client/)
+  * A Python example which implements object detection on a
+    video stream and on still images from the camera.
+* [object-detector-cpp](./object-detector-cpp/)
+  * A C++ example which runs object detection on the camera.
+* [opencl-fft](./opencl-fft/)
+  * A C++ example which demonstrates how to use OpenCL in ACAP4 to speed up calculations. The application runs Fast Fourier Transform on the camera GPU.
+* [opencv-capture-app](./opencv-capture-app/)
+  * A C++ example which captures camera frames and properties such as time stamps, zoom, focus etc., through OpenCV.
 
 ### DockerHub Images
 There are two types of Docker images here: the ToolChain (SDK), and the API 3.1. These images can be used as the basis for custom built images for running your applications. The images needed are specified in the docker-compose files. All images are public and free to use for anyone.
@@ -69,4 +70,3 @@ You can help to make this repo a better one using the following commands.
 
 # License
 [Apache 2.0](LICENSE)
-
