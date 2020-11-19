@@ -1,0 +1,17 @@
+version: '3.3'
+services:
+  opencl-fft:
+    image: $APP_IMAGE
+    command: $APP_COMMAND
+    devices:
+      - /dev/galcore:/dev/galcore:rw
+    volumes:
+      - /usr/lib/libCLC.so:/usr/lib/libCLC.so
+      - /usr/lib/libEGL.so:/usr/lib/libEGL.so
+      - /usr/lib/libGAL.so:/usr/lib/libGAL.so
+      - /usr/lib/libVSC.so:/usr/lib/libVSC.so
+      - /usr/lib/libGLESv2.so:/usr/lib/libGLESv2.so
+      - /usr/lib/libVivanteOpenCL.so:/usr/lib/libVivanteOpenCL.so
+      - /usr/lib/libOpenCL.so:/usr/lib/libOpenCL.so
+      - /usr/lib/libLLVM_viv.so:/usr/lib/libLLVM_viv.so
+      - /etc/OpenCL/vendors/:/etc/OpenCL/vendors/
