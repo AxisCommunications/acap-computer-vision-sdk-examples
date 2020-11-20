@@ -1,6 +1,6 @@
 
 # Mission
-Our mission is to provide an excellent development expereince by enabling developers
+Our mission is to provide an excellent development experience by enabling developers
 to build new AI/ML applications for a smarter and safer world.
 
 # Axis video analytics example applications
@@ -14,9 +14,9 @@ This not only uses the least amount of bandwidth but also significantly reduces
 the cost and complexity of the network. Open application development platforms
 such as Axis Camera Application Platform (ACAP) Facilitate the integration of
 compatible third-party solutions, resulting in a quickly growing variety of
-applications–general as well as specialized for different industries. The
+applications – general as well as specialized for different industries. The
 growing number of video analytics applications creates new end-user benefits
-and opens up new business possibilities.
+and opens new business possibilities.
 
 # Getting started
 This repository contains a set of application examples which aims to enrich the
@@ -28,7 +28,7 @@ step-by-step instructions on how to run applications on the camera.
 To get started following system requirements shall be met:
 * Camera: Q1615-MkIII
 * Docker version 19.03.5 or higher
-* Firmware: Q1615-MkIII_9.80.1_24_fimage.bin
+* Firmware: 10.2.0
 * Docker Daemon installed on the camera
 
 ## Supported architectures
@@ -36,7 +36,7 @@ The examples support the following architectures.
 * armv7hf
 
 ## Example applications for video analytics
-Below is the list of examples available in the respository.
+Below is the list of examples available in the repository.
 
 * [inference-client](./inference-client/)
   * A Python example which implements object detection on a
@@ -49,10 +49,13 @@ Below is the list of examples available in the respository.
   * A C++ example which captures camera frames and properties such as time stamps, zoom, focus etc., through OpenCV.
 
 ### DockerHub Images
-There are two types of Docker images here: the ToolChain (SDK), and the API 3.1. These images can be used as the basis for custom built images for running your applications. The images needed are specified in the docker-compose files. All images are public and free to use for anyone.
-* [Toolchain](https://hub.docker.com/repository/docker/axisecp/acap-toolchain) -  An Ubuntu-based Toolchain bundle with all tools for building and packaging an ACAP 3.1 application included.
-* [API 3.1](https://hub.docker.com/repository/docker/axisecp/acap-api) - An Ubuntu-based API bundle with all API components (header and library files) included.
+There are two types of Docker images here: the ToolChain (SDK), and the API. These images can be used as the basis for custom built images for running your applications. The images needed are specified in the docker-compose files. The docker repos for ACAP 4 has limited access to members of [axisecp](https://hub.docker.com/orgs/axisecp) organisation.
+
+The images needed are specified in the docker-compose files. 
+* [ACAP4-API](https://hub.docker.com/repository/docker/axisecp/acap4-api) - ACAP 4 API image for C and C++ with all API components (header and library files) included.
 * [ACAP4-Toolchain](https://hub.docker.com/repository/docker/axisecp/acap4-toolchain) - The ACAP4 toolchain image contains tools that are useful when developing ACAP applications.
+* [python-tfserving](https://hub.docker.com/repository/docker/axisecp/python-tfserving) - Tensorflow serving api and base image for applications written in python
+* [larod-inference-server)](https://hub.docker.com/repository/docker/axisecp/larod-inference-server) - Inference server implemented on top of Larod API
 
 ### Pre-trained models
 * [COCO SSD MobileNet v1 model](https://www.tensorflow.org/lite/models/object_detection/overview#starter_model)
