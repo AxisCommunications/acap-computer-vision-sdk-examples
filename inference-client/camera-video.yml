@@ -53,7 +53,7 @@ services:
       - /dev/datacache0:/dev/datacache0:rw
 
   inference-server:
-    image: axisecp/larod-inference-server:2.1.0-api.4.0-pre3-armv7hf-ubuntu19.10
+    image: axisecp/larod-inference-server:2.1.1-api.4.0-pre3-armv7hf-ubuntu19.10
     logging:
       driver: "json-file"
       options:
