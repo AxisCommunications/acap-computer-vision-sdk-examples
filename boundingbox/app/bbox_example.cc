@@ -20,6 +20,7 @@
 
 #include <iostream>
 #include <stdexcept>
+
 using namespace std;
 
 /**
@@ -139,11 +140,61 @@ example_multiple_channels()
     bbox_destroy(bbox);
 }
 
+int
+test_known_pattern()
+{
+    int counter = 0;
+    bbox_t* bbox = bbox_new(1u, 1u);
+    if(!bbox)
+        throw runtime_error("Failed to create BBox");
+
+    // This is a NOP on products without video-output!
+    if (!bbox_video_output(bbox, true))
+        throw runtime_error("Failed to enable video-output");
+
+    bbox_color_t col[3u] ={
+        bbox_color_from_rgb(0xff, 0u, 0u),
+        bbox_color_from_rgb(0u, 0xff, 0u),
+        bbox_color_from_rgb(0u, 0u, 0xff),
+    };
+
+    bbox_clear(bbox);
+
+    bbox_thickness_thin(bbox);
+    bbox_thickness_thick(bbox);
+    bbox_style_outline(bbox);
+    bbox_style_corners(bbox);
+
+    const float w = 1920.f;
+    const float h = 1080.f;
+    const float box_w = 100.f / w;
+    const float box_h = 100.f / h;
+    for (size_t loop = 0u; loop < 29u; loop += 1u) {
+        for (size_t i = loop; i < loop + 32u; i += 1u) {
+            float x = (200u) * (i%10u) / w;
+            float y = (200u) * (i/10u) / h;
+            bbox_color(bbox, col[(i + loop)%3u]);
+            bbox_rectangle(bbox, x, y, x + box_w, y + box_h);
+            counter++;
+        }
+        bbox_commit(bbox, 0u);
+        sleep(1);
+        bbox_clear(bbox);
+    }
+    bbox_destroy(bbox);
+    return counter;
+}
+
 int main(void) try
 {
-    example_single_channel();
-    example_multiple_channels();
-
+    cout << "Bounding Box example" << endl;
+    while (true) {
+        cout << "Test Loop" << endl;
+        example_single_channel();
+        example_multiple_channels();
+        int rectangles = test_known_pattern();
+        cout << "Rectangles=" << rectangles << endl;
+    }
     return EXIT_SUCCESS;
 }
 catch(const exception& e)
