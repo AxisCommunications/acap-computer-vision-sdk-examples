@@ -1,6 +1,6 @@
  *Copyright (C) 2020, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
 
-# A boundingbox based ACAP3 application on an edge device
+# A boundingbox based ACAP4 application on an edge device
 This README file explains how to build an ACAP4 application using the boundingbox API. It is achieved by using the containerized Axis API and toolchain images.
 
 Together with this README file, you should be able to find a directory called app. That directory contains the "boundingbox example" application source code which can easily be compiled and run with the help of the tools and step by step below.
@@ -50,7 +50,7 @@ cd acap-application-examples/boundingbox
 export REPO=axisecp
 export VERSION=3.2
 export ARCH=armv7hf
-export UBUNTU_VERSION=19.10
+export UBUNTU_VERSION=20.04
 export APP_IMAGE=docker-sandbox.se.axis.com/axisecp/boundingboxexample:1.0.0-sdk.${VERSION}-${ARCH}-ubuntu${UBUNTU_VERSION}
 docker build . --tag $APP_IMAGE --build-arg REPO --build-arg VERSION --build-arg ARCH --build-arg UBUNTU_VERSION
 docker push $APP_IMAGE

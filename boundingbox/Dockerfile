@@ -3,7 +3,7 @@
 # Currently, only aarch64 is supported
 ARG ARCH=aarch64
 ARG VERSION=3.2
-ARG UBUNTU_VERSION=19.10
+ARG UBUNTU_VERSION=20.04
 ARG REPO=axisecp
 
 FROM ${REPO}/acap-sdk:${VERSION}-${ARCH}-ubuntu${UBUNTU_VERSION} as sdk
