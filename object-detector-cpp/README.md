@@ -29,7 +29,7 @@ object-detector-cpp
 ## Prerequisites
 To get started following system requirements shall be met:
 * Docker version 19.03.5 or higher
-* Debian Stretch or Ubuntu 18.04
+* Debian Stretch or Ubuntu 20.04
 * Firmware: Q1615-MkIII_10.2.0_fimage.bin
 * Docker Daemon installed on the camera
 * Dockerhub ID to pull images (e.g., Inference-server, ssdlite_mobilenet_object etc.)
@@ -45,17 +45,17 @@ The video tutorial shows the code executions steps below:
 
 * To build the object-detector-cpp image.
 ```sh
-# Find build folder 
+# Find build folder
 cd acap-application-examples/object-detector-cpp/app
 
 # Adjust some environment variables to your preference, then build and push to docker repo
 export REPO=axisecp
 export VERSION=4.0-pre3
 export ARCH=armv7hf
-export UBUNTU_VERSION=19.10
-export BUILD_IMAGE=${REPO}/acap4-object-detector-cpp:1.1.1-api.${VERSION}-${ARCH}-ubuntu${UBUNTU_VERSION}
-./build.sh $BUILD_IMAGE
-docker push $BUILD_IMAGE
+export UBUNTU_VERSION=20.04
+export OBJECT_DETECTOR_CPP=$REPO/acap4-object-detector-cpp:1.1.2-api.$VERSION-$ARCH-ubuntu$UBUNTU_VERSION
+./build.sh $OBJECT_DETECTOR_CPP
+docker push $OBJECT_DETECTOR_CPP
 cd ..
 ```
 
@@ -65,7 +65,7 @@ cd ..
 export AXIS_TARGET_IP=<actual camera IP address>
 
 # Clear docker memory on camera
-docker -H tcp://$AXIS_TARGET_IP system prune -a
+docker -H tcp://$AXIS_TARGET_IP system prune -af
 
 # Run on camera
 docker-compose -H tcp://$AXIS_TARGET_IP:2375 up

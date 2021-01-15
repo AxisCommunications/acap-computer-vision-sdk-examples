@@ -1,19 +1,16 @@
-# Specify the architecture at build time: aarch64
-# Should be used for getting API and toolchain images
-# Currently, only aarch64 is supported
-ARG ARCH=aarch64
-ARG VERSION=3.2
+ARG ARCH=armv7hf
+ARG ACAPSDK_VERSION=3.2
 ARG UBUNTU_VERSION=20.04
 ARG REPO=axisecp
 
-FROM ${REPO}/acap-sdk:${VERSION}-${ARCH}-ubuntu${UBUNTU_VERSION} as sdk
+FROM $REPO/acap-sdk:$ACAPSDK_VERSION-$ARCH-ubuntu$UBUNTU_VERSION as sdk
 
 # Building the ACAP application
 COPY ./app /opt/app/
 WORKDIR /opt/app
 RUN . /opt/axis/acapsdk/environment-setup* && make
 
-FROM arm32v7/ubuntu:${UBUNTU_VERSION}
+FROM arm32v7/ubuntu:$UBUNTU_VERSION
 ARG LIB=/opt/axis/acapsdk/sysroots/cortexa9hf-neon-poky-linux-gnueabi/usr/lib
 COPY --from=sdk /opt/app/bbox_example /usr/bin/
 COPY --from=sdk $LIB/libbbox* /usr/lib/

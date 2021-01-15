@@ -2,7 +2,8 @@ version: '3.3'
 
 services:
   object-detector:
-    image: axisecp/acap4-object-detector-cpp:1.1.1-api.4.0-pre3-armv7hf-ubuntu19.10
+    image: axisecp/acap4-object-detector-cpp:1.1.2-api.4.0-pre3-armv7hf-ubuntu20.04
+    privileged: true
     ipc: host
     depends_on:
       - inference-server
@@ -47,9 +48,10 @@ services:
       - /dev/datacache0:/dev/datacache0:rw
 
   inference-server:
-    image: axisecp/larod-inference-server:2.1.1.test-api.4.0-pre3-armv7hf-ubuntu19.10
+    image: axisecp/larod-inference-server:2.1.1.test-api.4.0-pre3-armv7hf-ubuntu20.04
 #    command: /usr/bin/larod-inference-server -p 8501 -j 1
     command: /usr/bin/larod-inference-server -p 8501 -j 1 -c testdata/server.pem -k testdata/server.key
+    privileged: true
     ipc: host
     depends_on:
       - ssdlite_mobilenet_object

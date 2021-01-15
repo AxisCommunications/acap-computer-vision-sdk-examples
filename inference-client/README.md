@@ -60,17 +60,17 @@ The video tutorial shows the steps below how to build and run the code.
 Build a Docker inference-client image, example:
 
 ```sh
-# Find build folder 
+# Find build folder
 cd acap-application-examples/inference-client
 
 # Adjust some environment variables to your preference, then build and push to docker repo
 export REPO=axisecp
 export ARCH=armv7hf
-export UBUNTU_VERSION=19.10
-export BUILD_IMAGE=${REPO}/inference-client:1.1.0-${ARCH}-ubuntu${UBUNTU_VERSION}
-export PYTHON_TFSERVING=axisecp/python-tfserving:1.1.0-armv7hf-ubuntu19.10
-docker build --build-arg PYTHON_TFSERVING -t $BUILD_IMAGE .
-docker push $BUILD_IMAGE
+export UBUNTU_VERSION=20.04
+export INFERENCE_CLIENT=$REPO/inference-client:1.1.0-$ARCH-ubuntu$UBUNTU_VERSION
+export PYTHON_TFSERVING=$REPO/python-tfserving:1.1.0-$ARCH-ubuntu$UBUNTU_VERSION
+docker build --build-arg PYTHON_TFSERVING -t $INFERENCE_CLIENT .
+docker push $INFERENCE_CLIENT
 ```
 
 There are two options available in this example:
@@ -80,7 +80,7 @@ There are two options available in this example:
 export AXIS_TARGET_IP=<actual camera IP address>
 
 # Clear docker memory on camera
-docker -H tcp://$AXIS_TARGET_IP system prune -a
+docker -H tcp://$AXIS_TARGET_IP system prune -af
 
 # **OPT 1** - Use the following command to run the video streaming inference on the camera, example:
 docker-compose -H tcp://$AXIS_TARGET_IP:2375 -f camera-video.yml up
