@@ -3,7 +3,8 @@
 version: '2.0'
 services:
   inference-client:
-    image: axisecp/inference-client:1.1.0-armv7hf-ubuntu19.10
+    image: axisecp/inference-client:1.1.0-armv7hf-ubuntu20.04
+    privileged: true
     logging:
       driver: "json-file"
       options:
@@ -54,7 +55,8 @@ services:
       - /dev/datacache0:/dev/datacache0:rw
 
   inference-server:
-    image: axisecp/larod-inference-server:2.1.1-api.4.0-pre3-armv7hf-ubuntu19.10
+    image: axisecp/larod-inference-server:2.1.1-api.4.0-pre3-armv7hf-ubuntu20.04
+    privileged: true
     logging:
       driver: "json-file"
       options:

@@ -48,12 +48,12 @@ cd acap-application-examples/boundingbox
 
 # Adjust some environment variables to your preference, then build and push to docker repo
 export REPO=axisecp
-export VERSION=3.2
+export ACAPSDK_VERSION=3.2
 export ARCH=armv7hf
 export UBUNTU_VERSION=20.04
-export APP_IMAGE=docker-sandbox.se.axis.com/axisecp/boundingboxexample:1.0.0-sdk.${VERSION}-${ARCH}-ubuntu${UBUNTU_VERSION}
-docker build . --tag $APP_IMAGE --build-arg REPO --build-arg VERSION --build-arg ARCH --build-arg UBUNTU_VERSION
-docker push $APP_IMAGE
+export BOUNDINGBOXEXAMPLE=docker-sandbox.se.axis.com/axisecp/boundingboxexample:1.0.0-sdk.$VERSION-$ARCH-ubuntu$UBUNTU_VERSION
+docker build . --tag $BOUNDINGBOXEXAMPLE --build-arg REPO --build-arg ACAPSDK_VERSION --build-arg ARCH --build-arg UBUNTU_VERSION
+docker push $BOUNDINGBOXEXAMPLE
 ```
 
 ### Install your application
@@ -66,7 +66,7 @@ export AXIS_TARGET_IP=<actual camera IP address>
 docker -H tcp://$AXIS_TARGET_IP system prune -af
 
 # Run on camera
-docker -H tcp://$AXIS_TARGET_IP pull $APP_IMAGE
+docker -H tcp://$AXIS_TARGET_IP pull $BOUNDINGBOXEXAMPLE
 docker-compose -H tcp://$AXIS_TARGET_IP:2375 up
 ```
 

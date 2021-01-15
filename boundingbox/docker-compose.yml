@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   example-app:
-    image: $APP_IMAGE
+    image: $BOUNDINGBOXEXAMPLE
     privileged: true
     volumes:
       - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:rw
