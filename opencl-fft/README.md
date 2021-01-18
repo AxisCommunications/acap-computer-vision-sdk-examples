@@ -5,7 +5,7 @@ The example code performs its calculations on the GPU, which allows faster compu
 
 ## Structure of this example
 Below is the structure of the example with a brief description of its files.
-```shell
+```sh
 opencl-fft
  |- app - directory holding the OpenCL application files
  | |- cl_test.cpp - The main OpenCL application file
@@ -28,27 +28,44 @@ The following items are required to run this example:
 
 ## Running the example
 1. Start by building the image OpenCL containing the OpenCL code. This will compile the OpenCL code to an executable and create an armv7hf container containing the executable, which can be uploaded to and run on the camera.
-  ```shell
-    export APP_IMAGE=<YOUR_IMAGE_NAME>
-    export CAMERA_IP=<YOUR_CAMERA_IP>
-    docker build --build-arg DOCKER_PROXY=$http_proxy -t $APP_IMAGE .
-  ```
-The `APP_IMAGE` variable is the name you want to tag the image with, e.g., `my-opencl-app:1.0`. `CAMERA_IP` should be set to the IP address of the camera running ACAP4. Additionally, the environment variable `APP_COMMAND` may be specified as a positive integer. It refers to the number of iterations of FFT to run.
+```sh
+# Find build folder
+cd acap-application-examples/opencl-fft
+
+# Set your camera IP address
+export AXIS_TARGET_IP=<actual camera IP address>
+
+# Adjust some environment variables to your preference and build the application image
+export REPO=axisecp
+export ACAPSDK_VERSION=3.2
+export ARCH=armv7hf
+export UBUNTU_VERSION=20.04
+export APP_IMAGE=docker-sandbox.se.axis.com/axisecp/opencl-fft:1.0.0-sdk.$ACAPSDK_VERSION-$ARCH-ubuntu$UBUNTU_VERSION
+docker build . --tag $APP_IMAGE --build-arg DOCKER_PROXY=$http_proxy \
+--build-arg REPO --build-arg ACAPSDK_VERSION --build-arg ARCH --build-arg UBUNTU_VERSION
+```
+
+The `APP_IMAGE` variable is the name you want to tag the image with, e.g., `my-opencl-app:1.0`. `AXIS_TARGET_IP` should be set to the IP address of the camera running ACAP4. Additionally, the environment variable `APP_COMMAND` may be specified as a positive integer. It refers to the number of iterations of FFT to run.
 
 2. Getting the image to run on a camera can be done e.g., by pushing it to a registry as seen below. The `-H` flag redirects the command to a remote Docker daemon at the specified IP adress. Push the image to the registry and pull it from the registry to the camera by executing:
-  ```shell
-    docker push $APP_IMAGE
-    docker -H tcp://$CAMERA_IP pull $APP_IMAGE
-  ```
+```sh
+docker push $APP_IMAGE
+
+# Clear docker memory on camera
+docker -H tcp://$AXIS_TARGET_IP system prune -af
+
+# Load application image on camera
+docker -H tcp://$AXIS_TARGET_IP pull $APP_IMAGE
+```
 
 3. Once the image is on the camera, it can be started e.g., through docker-compose. The `docker-compose.yml` file also contains the dependencies that are needed to run OpenCL on this setup. Start the container on the camera by running:
-```shell
-  docker-compose -H tcp://$CAMERA_IP:2375 up
+```sh
+docker-compose -H tcp://$AXIS_TARGET_IP:2375 up
 ```
 
 ### The expected output
 Running the example on the camera should output FFT-related information similar to what's shown below.
-```bash
+```sh
 Creating network "opencl-fft_default" with the default driver
 Creating opencl-fft_opencl-fft_1 ... done
 Attaching to opencl-fft_opencl-fft_1
@@ -73,6 +90,6 @@ Depending on the network, you might need proxy settings in the following file: *
 For reference please see: https://docs.docker.com/network/proxy/.
 
 *Proxy settings can also be added to the edge device:*
-```shell
-  ssh root@$CAMERA_IP
+```sh
+ssh root@$CAMERA_IP
 ```
