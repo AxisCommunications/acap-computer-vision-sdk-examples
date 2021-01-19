@@ -5,6 +5,11 @@ ARG REPO=axisecp
 
 FROM $REPO/acap-sdk:$ACAPSDK_VERSION-$ARCH-ubuntu$UBUNTU_VERSION as sdk
 
+# Setup proxy settings
+ARG DOCKER_PROXY
+ARG http_proxy=$DOCKER_PROXY
+ARG https_proxy=$DOCKER_PROXY
+
 # Building the ACAP application
 COPY ./app /opt/app/
 WORKDIR /opt/app

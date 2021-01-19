@@ -2,6 +2,7 @@ version: '3.3'
 services:
   opencl-fft:
     image: $APP_IMAGE
+    privileged: true
     command: $APP_COMMAND
     devices:
       - /dev/galcore:/dev/galcore:rw
