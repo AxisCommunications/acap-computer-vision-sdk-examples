@@ -2,8 +2,9 @@ version: '3.3'
 
 services:
   capture-example-app:
-    image: axisecp/opencv-application-examples:0.0.1
+    image: $APP_IMAGE
     ipc: "host"
+    privileged: true
     environment:
       - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
       - LD_LIBRARY_PATH=/host/lib
