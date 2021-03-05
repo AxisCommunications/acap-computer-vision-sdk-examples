@@ -28,6 +28,18 @@ LDLIBS += -L $(BASE)/lib \
 LDLIBS += -lm -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -lopencv_videoio
 LDLIBS += -lprotobuf -lz -lgrpc -lgpr -lgrpc++ -lssl -lcrypto -lcares -lprofiler -lrt
 
+# backward compatible for OpenCV 4.2
+# skip vdo libs in this case since we use a dummy videoio lib with no vdo dependency when building
+ifndef OPENCV_VERSION
+$(warning "OPENCV_VERSION is not set. Using OpenCV 4.2")
+else
+ifneq ($(OPENCV_VERSION),4.2)
+LDLIBS += -L /axis/stubs \
+ -L /axis/device-api/lib
+LDLIBS += -lvdostream -lfido -lcapaxis -lstatuscache
+endif
+endif
+
 .PHONY: all clean
 
 all: $(TARGET)

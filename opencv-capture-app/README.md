@@ -4,7 +4,7 @@ It is achieved by using the ACAP API image containing "OpenCV SDK" that
 contains all the essential parts needed. There are tools for building
 an application and running the container image on an edge device.
 
-OpenCV v4.2.0 is used and comes with following modules:
+OpenCV comes with following modules:
 core, imgproc, imgcodecs, videoio,objdetect, python3, video.
 
 Together with this file you should be able to find a directory called
@@ -85,40 +85,6 @@ docker -H tcp://<Camera_IP> pull axisecp/opencv-application-examples
 docker-compose -H tcp://<Camera_IP:2375> -f docker-compose.yml up
 ```
 
-NB. If you want to run the example on FW newer than 10.1 you need to start the example like below
-```
-docker -H tcp://<Camera_IP> run --ipc=host --rm -e DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket \
---device=/dev/datacache0:rw \
--v /var/run/dbus:/var/run/dbus:rw \
--v /usr/lib/libopencv_videoio.so.4.2.0:/usr/lib/libopencv_videoio.so.4.2 \
--v /usr/lib/libdl.so.2:/usr/lib/libdl.so.2 \
--v /usr/lib/libpthread.so.0:/usr/lib/libpthread.so.0 \
--v /usr/lib/librt.so.1:/usr/lib/librt.so.1 \
--v /usr/lib/libsystemd.so.0:/usr/lib/libsystemd.so.0 \
--v /usr/lib/libstatuscache.so.1:/usr/lib/libstatuscache.so.1 \
--v /usr/lib/libvdostream.so.1:/usr/lib/libvdostream.so.1 \
--v /usr/lib/libgobject-2.0.so.0:/usr/lib/libgobject-2.0.so.0 \
--v /usr/lib/libglib-2.0.so.0:/usr/lib/libglib-2.0.so.0 \
--v /usr/lib/libstdc++.so.6:/usr/lib/libstdc++.so.6 \
--v /usr/lib/libgcc_s.so.1:/usr/lib/libgcc_s.so.1 \
--v /usr/lib/libc.so.6:/usr/lib/libc.so.6 \
--v /usr/lib/libcap.so.2:/usr/lib/libcap.so.2 \
--v /usr/lib/libfido.so.1:/usr/lib/libfido.so.1 \
--v /usr/lib/libgio-2.0.so.0:/usr/lib/libgio-2.0.so.0 \
--v /usr/lib/libffi.so.6:/usr/lib/libffi.so.6 \
--v /usr/lib/libffi.so.7:/usr/lib/libffi.so.7 \
--v /usr/lib/libpcre.so.1:/usr/lib/libpcre.so.1 \
--v /usr/lib/libm.so.6:/usr/lib/libm.so.6 \
--v /usr/lib/libgmodule-2.0.so.0:/usr/lib/libgmodule-2.0.so.0 \
--v /usr/lib/libz.so.1:/usr/lib/libz.so.1 \
--v /usr/lib/libresolv.so.2:/usr/lib/libresolv.so.2 \
--v /var/run/statuscache:/var/run/statuscache:rw \
-<The id of the example to run> ---- The id of the example to run.
-
-You can get the id of the example by running:
-docker -H tcp://<Camera_IP> images
-
-```
 #### The expected output:
 ```bash
 Setting Rotation 270: Done
@@ -219,8 +185,8 @@ not when the stream is running:
 * CAP_PROP_CHANNEL
 * CAP_PROP_FRAME_WIDTH
 * CAP_PROP_FRAME_HEIGHT
-* CAP_PROP_UNIMATRIX_ROTATION  
-  Possible rotations include [0,90,180,270].  
+* CAP_PROP_UNIMATRIX_ROTATION
+  Possible rotations include [0,90,180,270].
   Not every camera is required to support every rotation.
 
 These *stream* properties are read-only:
@@ -239,30 +205,30 @@ These *image* properties are read-only:
 * CAP_PROP_UNIMATRIX_FNUMBER
   f-number
 * CAP_PROP_UNIMATRIX_OPTICS_TYPE
-  * CAP_UNIMATRIX_OPTICS_TYPE_MANUAL  
+  * CAP_UNIMATRIX_OPTICS_TYPE_MANUAL
     Manual zoom/focus/iris
-  * CAP_UNIMATRIX_OPTICS_TYPE_DC  
+  * CAP_UNIMATRIX_OPTICS_TYPE_DC
     Manual zoom/focus with DirectControl-iris
-  * CAP_UNIMATRIX_OPTICS_TYPE_P  
+  * CAP_UNIMATRIX_OPTICS_TYPE_P
     Manual zoom/focus with Precise-iris
-  * CAP_UNIMATRIX_OPTICS_TYPE_iCS  
+  * CAP_UNIMATRIX_OPTICS_TYPE_iCS
     Intelligent CS-mount
-  * CAP_UNIMATRIX_OPTICS_TYPE_CAMBLOCK  
+  * CAP_UNIMATRIX_OPTICS_TYPE_CAMBLOCK
     Camblock
 
 These *image* properties are write-only:
 * CAP_PROP_UNIMATRIX_EXPOSURE_MODE
-  * CAP_UNIMATRIX_EXPOSURE_MODE_AUTO  
+  * CAP_UNIMATRIX_EXPOSURE_MODE_AUTO
     Automatic exposure
-  * CAP_UNIMATRIX_EXPOSURE_MODE_HOLD  
+  * CAP_UNIMATRIX_EXPOSURE_MODE_HOLD
     Hold current exposure
-  * CAP_PROP_UNIMATRIX_MAX_EXPOSURE_us  
+  * CAP_PROP_UNIMATRIX_MAX_EXPOSURE_us
     Limit max automatic exposure time (unit: µs)
 
 These *image* properties are read-write:
-* CAP_PROP_UNIMATRIX_TONEMAPPING  
+* CAP_PROP_UNIMATRIX_TONEMAPPING
   ToneMapping [0-100]
-* CAP_PROP_UNIMATRIX_TEMPORAL_FILTER  
+* CAP_PROP_UNIMATRIX_TEMPORAL_FILTER
   Temporal Noise-Filter [0-100]
 
 ## Proxy settings
@@ -295,4 +261,4 @@ ssh root@<Camera_IP>
 **Apache 2.0**
 
 ## References
-* https://docs.opencv.org/4.2.0/
+* https://docs.opencv.org/
