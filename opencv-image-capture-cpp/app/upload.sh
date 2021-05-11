@@ -9,14 +9,14 @@ if [ "${CAMERA_IP:-}" = "" ]; then
   fi
 fi
 
-if [ "${APP_IMAGE:-}" = "" ]; then
+if [ "${APP_NAME:-}" = "" ]; then
   if [ "${2:-}" = "" ]; then
-    echo "Manually set APP_IMAGE or supply it as second argument" 1>&2
+    echo "Manually set APP_NAME or supply it as second argument" 1>&2
     exit 1
   else
-    APP_IMAGE=$2
+    APP_NAME=$2
   fi
 fi
 
-docker push $APP_IMAGE
-docker -H tcp://$CAMERA_IP pull $APP_IMAGE
+docker save $APP_NAME -o app.tar
+docker -H tcp://$CAMERA_IP load -i app.tar

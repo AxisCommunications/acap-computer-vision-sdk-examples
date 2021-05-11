@@ -12,12 +12,10 @@ Lastly, there is a third container that holds the deep learning model, which is 
 
 **larod-inference server**\
 Uses larod service in the camera firmware with model in docker image
-axisecp/acap-dl-models:ssdlite-mobilenet-v2
+`axisecp/acap-dl-models:ssdlite-mobilenet-v2`
 
+The docker image containing the model has a layout as shown below. What model to use is specified by path in the docker-compose file.
 ```bash
-# Extract model from docker image
-docker cp $(docker create axisecp/acap-dl-models:ssdlite-mobilenet-v2):/ .
-
 model
 ├── ssdlite-mobilenet-v2 - model for CPU
 ├── ssdlite-mobilenet-v2-tpu - model for TPU
@@ -27,12 +25,13 @@ model
 ## Example Structure
 Following are the list of files and a brief description of each file in the example
 ```bash
-inference-client
+object-detector-python
+├── app
+├── |- detector.py
+├── |- dog416.png
 ├── camera-image.yml
 ├── camera-video.yml
-├── detector.py
 ├── Dockerfile
-├── dog416.png
 └── README.md
 ```
 
@@ -44,33 +43,33 @@ inference-client
 
 ## Prerequisites
 To get started following system requirements shall be met:
+* Camera: Q1615-MkIII
+* docker-compose version 1.27.4 or higher
 * Docker version 19.03.5 or higher
-* Debian Stretch or Ubuntu 18.04
-* Firmware: Q1615-MkIII_10.2.0_fimage.bin
-* Docker Daemon installed on the camera
-* Dockerhub ID to pull images
+* Firmware: 10.5
+* ACAP4 installed on the camera
 
 ## How to run the code
-The video tutorial shows the steps below how to build and run the code.
-<div align="center">
-      <a href="https://www.youtube.com/embed/h7yjFf0jGhs">
-         <img src="https://img.youtube.com/vi/h7yjFf0jGhs/0.jpg">
-      </a>
-</div>
-Build a Docker inference-client image, example:
+Build a Docker object-detector-python image, example:
 
 ```sh
 # Find build folder
-cd acap-application-examples/inference-client
+cd acap-application-examples/object-detector-python
 
 # Adjust some environment variables to your preference, then build and push to docker repo
 export REPO=axisecp
 export ARCH=armv7hf
 export UBUNTU_VERSION=20.04
-export INFERENCE_CLIENT=$REPO/inference-client:1.1.0-$ARCH-ubuntu$UBUNTU_VERSION
-export PYTHON_TFSERVING=$REPO/python-tfserving:1.1.0-$ARCH-ubuntu$UBUNTU_VERSION
-docker build --build-arg PYTHON_TFSERVING -t $INFERENCE_CLIENT .
-docker push $INFERENCE_CLIENT
+export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
+
+# To allow retrieval of the image from the cloud
+# this should be a repository that you can push to
+# and that your camera can pull from, i.e., substitute
+# axisecp for your own repository
+export APP_NAME=axisecp/acap-object-detector-python
+
+docker build -t $APP_NAME .
+docker push $APP_NAME
 ```
 
 There are two options available in this example:
@@ -100,10 +99,10 @@ object-detector_1           | person
 `docker-compose -H tcp://$AXIS_TARGET_IP:2375 -f camera-image.yml up`
 ```
 ....
-inference-client_1          | 3 Objects found
-inference-client_1          | bicycle
-inference-client_1          | dog
-inference-client_1          | car
+object-detector-python_1          | 3 Objects found
+object-detector-python_1          | bicycle
+object-detector-python_1          | dog
+object-detector-python_1          | car
 ```
 ## License:
 Apache 2.0

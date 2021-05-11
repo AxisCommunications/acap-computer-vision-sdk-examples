@@ -33,22 +33,29 @@ jobs:
     - name: Login to dockerhub axis account
       run: docker login -u ${{ secrets.DOCKERHUB_USER }} --password ${{ secrets.DOCKERHUB_PASS }}
 
-    # Run build script for capture app
-    - name: Bulid capture_app application
+    # Run build script for opencv-image-capture-cpp app
+    - name: Build capture_app application
       run: |
-        cd ./opencv-capture-app/app
+        cd ./opencv-image-capture-cpp/app
         #chmod 777 build.sh
         ./build.sh docker-sandbox.se.axis.com/ecosystem/opencv:latest
 
-    # Run build script for capture app
-    - name: Bulid object-detector-cpp application
+    # Run build object-detector-python
+    - name: Build opencl-fft application
+      run: |
+        cd ./opencl-fft
+        docker build -t axisecp/opencl-fft:1.0.0-armv7hf .
+
+    # Run build script for object-detector-cpp app
+    - name: Build object-detector-cpp application
       run: |
         cd ./object-detector-cpp/app
         ./build.sh docker-sandbox.se.axis.com/rapid/arm32v8/capture_app_test
         
-    # Run build Inference-client
-    - name: Bulid Inference-client application
+    # Run build object-detector-python
+    - name: Build object-detector-python application
       run: |
-        cd ./inference-client
-        docker build -t axisecp/inference-client:1.1.0-armv7hf .
+        cd ./object-detector-python
+        docker build -t axisecp/object-detector-python:1.1.0-armv7hf .
 
+    

@@ -1,16 +1,26 @@
 # An openCV based example application on an edge device
 This readme file explains how to build an openCV application.
-It is achieved by using the ACAP API image containing "OpenCV SDK" that
-contains all the essential parts needed. There are tools for building
-an application and running the container image on an edge device.
+It is achieved by using the ACAP Computer Vision SDK image, which contains
+all the essential parts needed. 
 
-OpenCV comes with following modules:
-core, imgproc, imgcodecs, videoio,objdetect, python3, video.
+The ACAP Computer Vision SDK OpenCV comes with following modules:
+core, imgproc, imgcodecs, videoio,objdetect, python3, video, as well as with Axis VDO integration
+to enable capturing images directly from the camera. If you wish to use another set of modules,
+the Dockerfile used to build the CV SDK's OpenCV module can be found in the [acap-computer-vision-sdk repository](https://github.com/AxisCommunications/acap-computer-vision-sdk/tree/master). 
 
 Together with this file you should be able to find a directory called
-app, that directory contains the "capture.cpp" application which can
+app, which contains the "capture.cpp" application which can
 easily be compiled and run with the help of the tools and step by step
 below.
+
+## Prerequisites
+The following items are required to run this example:
+* Docker Engine version 19.03.5 or higher
+* docker-compose version 1.27.4 or higher
+* Firmware: 10.5
+* Camera: Q1615 Mk3
+* ACAP4 running on the camera
+
 
 ## Getting started
 These instructions below will guide you on how to execute the code. Below is the structure and scripts used in the example:
@@ -20,7 +30,6 @@ opencv-capture-app
 ├── app
 │   ├── Makefile
 │   ├── Dockerfile
-│   ├── sources.list
 │   ├── build.sh
 |   ├── upload.sh
 │   └── src
@@ -29,60 +38,64 @@ opencv-capture-app
 └── README.md
 ```
 * **capture.cpp**        - Example application to capture camera properties such as time stamps, zoom, focus etc.
-* **dockerfile**         - Docker file with the toolchain included to run the example.
+* **Dockerfile**         - Docker file with the toolchain included to run the example.
 * **docker-compose.yml** - Docker compose file contains the latest image of the example from dockerhub.
 * **README.md**          - Step by step instructions on how to run the example.
 * **build.sh**           - Builds and tags the image of objdetect.cpp image e.g., axisecp/acap4-object-detector-cpp:1.0.0-rc.1
-* **upload.sh**          - To push/pull images to the camera with the Docker Daemon ACAP installed and <APP_IMAGE>.
+* **upload.sh**          - To push/pull images to the camera running ACAP4.
 
 ### Limitations
 * OpenCV module choice cannot be made in this version.
 * In order to change the binary name it has to be done in the Makefile
 
 ### How to run the code
-The video tutorial shows the step by step execution of the instructions below.
+Begin by setting up some environment variables.
+Below, we define the camera's IP, the desired app name and the path and version of the ACAP Computer Vision SDK.
+```
+# CV SDK configuration
+export SDK_VERSION=1.0-alpha1
+export ARCH=armv7hf
+export REPO=axisecp
+export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 
-<div align="center">
-      <a href="https://www.youtube.com/embed/4oIgU0JBKD4">
-         <img src="https://img.youtube.com/vi/4oIgU0JBKD4/0.jpg">
-      </a>
-</div>
+# Local configuration
+# To allow retrieval of the image from the cloud
+# this should be a repository that you can push to
+# and that your camera can pull from, i.e., substitute
+# axisecp for your own repository 
+export APP_NAME=axisecp/acap-opencv-image-capture-cpp
 
-If you would like to build your own app, just add your files under the source folder and they will be compiled against the openCV SDK just by running the following command:
+# Set this to your camera's actual IP
+export AXIS_TARGET_IP=192.168.0.90
+```
 
+The image can be built by running:
  ```
-./build.sh <APP_IMAGE>
+./build.sh $APP_NAME
  ```
-*Note:* In some cases, proxy settings on your host machine and the edge device need to be added to be able to pull and push images. Depending on if there is a proxy server setup
-on the network you are running on. Please see [Proxy settings](#proxy-settings)
 
-There are two options to run the capture app.
+There are two options to run the capture app, either save the image locally as a .tar and upload it to the camera (*opt 1*), 
+or push the image to a container registry and pull the image to the camera from the cloud (*opt 2*).
 
 #### [opt 1] Save the image as tarball
-*NOTE:* This option is perhaps not recommended, it's better to involve a registry e.g docker hub, if there is not a strong need for this. Otherwise, please continue to [opt 2].
-
-Save the image to a tarball is one option the other option would be
-to push to a docker repo. Which is described further below.
-
-Install DockerD ACAP prior to running this command
 ```
-docker save -o <application_tarball_name>.tar <opencv_target_application_image>
+docker save -o opencv-app.tar $APP_NAME
 ```
 #### [opt 1] Load the image if it's a tarball
 ```
-docker -H tcp://<Camera_IP> load -i opencv_img.tar
+docker -H tcp://$AXIS_TARGET_IP load -i opencv_app.tar
 ```
-#### [opt 2] push it to a repo/artifactory server.
+#### [opt 2] push it to container registry.
 ```
-docker push axisecp/opencv-application-examples
+docker push your-container-registry-user/$APP_NAME
 ```
-#### [opt 2] pull it from docker hub:
+#### [opt 2] pull it from a container registry:
 ```
-docker -H tcp://<Camera_IP> pull axisecp/opencv-application-examples
+docker -H tcp://$AXIS_TARGET_IP pull your-container-registry-user/$APP_NAME
 ```
 #### Run the container
 ```
-docker-compose -H tcp://<Camera_IP:2375> -f docker-compose.yml up
+docker-compose -H tcp://$AXIS_TARGET_IP:2375 -f docker-compose.yml up
 ```
 
 #### The expected output:
@@ -237,7 +250,7 @@ The file that needs those settings is: *~/.docker/config.json.* For reference pl
 
 *Proxy settings can also be added on the edge device*
 ```
-ssh root@<Camera_IP>
+ssh root@$AXIS_TARGET_IP
 ```
 * **Run on the device:**
 

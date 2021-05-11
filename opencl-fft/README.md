@@ -19,12 +19,10 @@ opencl-fft
 
 ## Prerequisites
 The following items are required to run this example:
-* Docker Engine version 19.03.5 or higher
-* Docker Compose version 1.27.4 or higher
-* Firmware: 10.2
-* Camera: Q1615 Mk3
-* ACAP4 running on the camera
-* DockerHub ID to pull images
+* Camera: Q1615-MkIII
+* Docker version 19.03.5 or higher
+* Firmware: 10.5
+* ACAP4 installed on the camera
 
 ## Running the example
 1. Start by building the image OpenCL containing the OpenCL code. This will compile the OpenCL code to an executable and create an armv7hf container containing the executable, which can be uploaded to and run on the camera.
@@ -37,25 +35,32 @@ export AXIS_TARGET_IP=<actual camera IP address>
 
 # Adjust some environment variables to your preference and build the application image
 export REPO=axisecp
-export ACAPSDK_VERSION=3.2
+export SDK_VERSION=1.0-alpha1
 export ARCH=armv7hf
 export UBUNTU_VERSION=20.04
-export APP_IMAGE=docker-sandbox.se.axis.com/axisecp/opencl-fft:1.0.0-sdk.$ACAPSDK_VERSION-$ARCH-ubuntu$UBUNTU_VERSION
-docker build . --tag $APP_IMAGE --build-arg DOCKER_PROXY=$http_proxy \
---build-arg REPO --build-arg ACAPSDK_VERSION --build-arg ARCH --build-arg UBUNTU_VERSION
+export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
+
+# To allow retrieval of the image from the cloud
+# this should be a repository that you can push to
+# and that your camera can pull from, i.e., substitute
+# axisecp for your own repository 
+export APP_NAME=axisecp/acap-opencl-fft
+
+docker build . --tag $APP_NAME --build-arg DOCKER_PROXY=$http_proxy \
+--build-arg REPO --build-arg SDK_VERSION --build-arg ARCH --build-arg UBUNTU_VERSION
 ```
 
-The `APP_IMAGE` variable is the name you want to tag the image with, e.g., `my-opencl-app:1.0`. `AXIS_TARGET_IP` should be set to the IP address of the camera running ACAP4. Additionally, the environment variable `APP_COMMAND` may be specified as a positive integer. It refers to the number of iterations of FFT to run.
+The `APP_NAME` variable is the name you want to tag the image with, e.g., `my-opencl-app:1.0`. `AXIS_TARGET_IP` should be set to the IP address of the camera running ACAP4. Additionally, the environment variable `APP_COMMAND` may be specified as a positive integer. It refers to the number of iterations of FFT to run.
 
 2. Getting the image to run on a camera can be done e.g., by pushing it to a registry as seen below. The `-H` flag redirects the command to a remote Docker daemon at the specified IP adress. Push the image to the registry and pull it from the registry to the camera by executing:
 ```sh
-docker push $APP_IMAGE
+docker push $APP_NAME
 
 # Clear docker memory on camera
 docker -H tcp://$AXIS_TARGET_IP system prune -af
 
 # Load application image on camera
-docker -H tcp://$AXIS_TARGET_IP pull $APP_IMAGE
+docker -H tcp://$AXIS_TARGET_IP pull $APP_NAME
 ```
 
 3. Once the image is on the camera, it can be started e.g., through docker-compose. The `docker-compose.yml` file also contains the dependencies that are needed to run OpenCL on this setup. Start the container on the camera by running:

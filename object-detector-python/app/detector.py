@@ -28,7 +28,7 @@ class Detector:
         if not success:
             return False, 0, 0, 0
         bounding_boxes, classes, confidences = tuple([np.squeeze(result[key]) for key in [
-            'output0', 'output1', 'output2']])
+            'TFLite_Detection_PostProcess', 'TFLite_Detection_PostProcess:1', 'TFLite_Detection_PostProcess:2']])
 
         for i, confidence in enumerate(confidences):
             if confidence < self.threshold:
@@ -80,7 +80,7 @@ class Detector:
 
     # Run object detection
     def run(self):
-        print(f"inference-client connect to: {os.environ['INFERENCE_HOST']}:{int(os.environ['INFERENCE_PORT'])}")
+        print(f"object-detector-python connect to: {os.environ['INFERENCE_HOST']}:{int(os.environ['INFERENCE_PORT'])}")
         image_path, object_list_path = self.read_enviroment()
         self.read_object_list(object_list_path)
         if image_path is not None:

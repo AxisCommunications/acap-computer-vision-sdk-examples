@@ -12,7 +12,7 @@ cameras or video encoders themselves.
 
 This not only uses the least amount of bandwidth but also significantly reduces
 the cost and complexity of the network. Open application development platforms
-such as Axis Camera Application Platform (ACAP) Facilitate the integration of
+such as Axis Camera Application Platform (ACAP) facilitate the integration of
 compatible third-party solutions, resulting in a quickly growing variety of
 applications – general as well as specialized for different industries. The
 growing number of video analytics applications creates new end-user benefits
@@ -25,41 +25,38 @@ README file in its directory which shows overview, example directory structure a
 step-by-step instructions on how to run applications on the camera.
 
 ## Requirements
-To get started following system requirements shall be met:
+To ensure compatibility with the examples, the following requirements shall be met:
 * Camera: Q1615-MkIII
+* docker-compose version 1.27.4 or higher
 * Docker version 19.03.5 or higher
-* Firmware: 10.2.0
-* Docker Daemon installed on the camera
+* Firmware: 10.5
+* ACAP4 installed on the camera
 
 ## Supported architectures
 The examples support the following architectures.
 * armv7hf
 
 ## Example applications for video analytics
-Below is the list of examples available in the repository.
+Below is a list of examples available in the repository:
 
-* [inference-client](./inference-client/)
+* [object-detector-python](./object-detector-python/)
   * A Python example which implements object detection on a
-    video stream and on still images from the camera.
+    video stream from the camera.
 * [object-detector-cpp](./object-detector-cpp/)
   * A C++ example which runs object detection on the camera.
 * [opencl-fft](./opencl-fft/)
   * A C++ example which demonstrates how to use OpenCL in ACAP4 to speed up calculations. The application runs Fast Fourier Transform on the camera GPU.
-* [opencv-capture-app](./opencv-capture-app/)
+* [opencv-image-capture-cpp](./opencv-image-capture-cpp/)
   * A C++ example which captures camera frames and properties such as time stamps, zoom, focus etc., through OpenCV.
 
-### DockerHub Images
-There are two types of Docker images here: the ToolChain (SDK), and the API. These images can be used as the basis for custom built images for running your applications. The images needed are specified in the docker-compose files. The docker repos for ACAP 4 has limited access to members of [axisecp](https://hub.docker.com/orgs/axisecp) organisation.
+## Dockerhub images
+The examples are based on the [ACAP Computer Vision SDK](https://github.com/AxisCommunications/acap-computer-vision-sdk). 
+This SDK is an image which contains APIs and tooling to build computer vision apps for running on camera, with support for C/C++ and Python. 
+Additionally, there is the [ACAP Native SDK](https://github.com/AxisCommunications/acap-native-sdk), which is more geared towards building ACAPs that uses AXIS-developed APIs directly, and primarily does so using C/C++.  
 
-The images needed are specified in the docker-compose files. 
-* [ACAP4-API](https://hub.docker.com/repository/docker/axisecp/acap4-api) - ACAP 4 API image for C and C++ with all API components (header and library files) included.
-* [ACAP4-Toolchain](https://hub.docker.com/repository/docker/axisecp/acap4-toolchain) - The ACAP4 toolchain image contains tools that are useful when developing ACAP applications.
-* [python-tfserving](https://hub.docker.com/repository/docker/axisecp/python-tfserving) - Tensorflow serving api and base image for applications written in python
-* [larod-inference-server)](https://hub.docker.com/repository/docker/axisecp/larod-inference-server) - Inference server implemented on top of Larod API
-
-### Pre-trained models
-* [COCO SSD MobileNet v1 model](https://www.tensorflow.org/lite/models/object_detection/overview#starter_model)
-
+The examples also use the following images:
+* [larod-inference-server](https://hub.docker.com/repository/docker/axisecp/larod-inference-server) - Inference server implemented on top of Larod API
+* [acap-dl-models](https://hub.docker.com/repository/docker/axisecp/acap-dl-models) - A container containing deep learning models used by the different examples
 
 # How to work with Github repository
 You can help to make this repo a better one using the following commands.

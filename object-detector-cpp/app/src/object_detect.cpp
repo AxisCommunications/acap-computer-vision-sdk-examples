@@ -10,7 +10,7 @@
 #include "serving_client.hpp"
 #include "test_certificate.h"
 
-#define USE_SSL
+//#define USE_SSL
 
 using namespace std;
 using namespace cv;
@@ -90,11 +90,11 @@ void postprocess(PredictResponse &response, const vector<string> &classes) {
   OutMap &outputs = *response.mutable_outputs();
 
   const float *boxes =
-      (const float *)outputs["output0"].tensor_content().data();
+      (const float *)outputs["TFLite_Detection_PostProcess"].tensor_content().data();
   const float *objects =
-      (const float *)outputs["output1"].tensor_content().data();
+      (const float *)outputs["TFLite_Detection_PostProcess:1"].tensor_content().data();
   const float *confidences =
-      (const float *)outputs["output2"].tensor_content().data();
+      (const float *)outputs["TFLite_Detection_PostProcess:2"].tensor_content().data();
   const int nelm = 50;
 
   cout << fixed << setprecision(2);

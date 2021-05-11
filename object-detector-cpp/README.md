@@ -28,34 +28,34 @@ object-detector-cpp
 
 ## Prerequisites
 To get started following system requirements shall be met:
+* Camera: Q1615-MkIII
+* docker-compose version 1.27.4 or higher
 * Docker version 19.03.5 or higher
-* Debian Stretch or Ubuntu 20.04
-* Firmware: Q1615-MkIII_10.2.0_fimage.bin
-* Docker Daemon installed on the camera
-* Dockerhub ID to pull images (e.g., Inference-server, ssdlite_mobilenet_object etc.)
+* Firmware: 10.5
+* ACAP4 installed on the camera
 
 
 ## How to run the code
-The video tutorial shows the code executions steps below:
-<div align="center">
-      <a href="https://www.youtube.com/embed/K2NNb2XljV4">
-         <img src="https://img.youtube.com/vi/K2NNb2XljV4/0.jpg">
-      </a>
-</div>
-
-* To build the object-detector-cpp image.
+### Build the object-detector-cpp image
 ```sh
 # Find build folder
 cd acap-application-examples/object-detector-cpp/app
 
 # Adjust some environment variables to your preference, then build and push to docker repo
 export REPO=axisecp
-export VERSION=4.0-pre3
+export SDK_VERSION=1.0-alpha1
 export ARCH=armv7hf
 export UBUNTU_VERSION=20.04
-export OBJECT_DETECTOR_CPP=$REPO/acap4-object-detector-cpp:1.1.2-api.$VERSION-$ARCH-ubuntu$UBUNTU_VERSION
-./build.sh $OBJECT_DETECTOR_CPP
-docker push $OBJECT_DETECTOR_CPP
+export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
+
+# To allow retrieval of the image from the cloud
+# this should be a repository that you can push to
+# and that your camera can pull from, i.e., substitute
+# axisecp for your own repository 
+export APP_NAME=axisecp/acap-object-detector-cpp
+
+./build.sh $APP_NAME
+docker push $APP_NAME
 cd ..
 ```
 

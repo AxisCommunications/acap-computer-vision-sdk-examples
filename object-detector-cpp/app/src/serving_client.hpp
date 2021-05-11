@@ -156,8 +156,7 @@ ServingClient::callPredict(const std::string &model_name, const cv::Mat &image,
       output = "Call predict OK";
       return response;
     } else {
-      output = "gRPC call return code: " + status.error_code() + string(": ") +
-              status.error_message();
+      output = "gRPC call return code: " + status.error_message();
       return {};
     }
   }
