@@ -37,7 +37,6 @@ export AXIS_TARGET_IP=<actual camera IP address>
 export REPO=axisecp
 export SDK_VERSION=1.0-alpha1
 export ARCH=armv7hf
-export UBUNTU_VERSION=20.04
 export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 
 # To allow retrieval of the image from the cloud
@@ -46,8 +45,8 @@ export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 # axisecp for your own repository 
 export APP_NAME=axisecp/acap-opencl-fft
 
-docker build . --tag $APP_NAME --build-arg DOCKER_PROXY=$http_proxy \
---build-arg REPO --build-arg SDK_VERSION --build-arg ARCH --build-arg UBUNTU_VERSION
+docker build . --tag $APP_NAME --build-arg DOCKER_PROXY=$HTTP_PROXY \
+--build-arg REPO --build-arg SDK_VERSION --build-arg ARCH --build-arg RUNTIME_IMAGE
 ```
 
 The `APP_NAME` variable is the name you want to tag the image with, e.g., `my-opencl-app:1.0`. `AXIS_TARGET_IP` should be set to the IP address of the camera running ACAP4. Additionally, the environment variable `APP_COMMAND` may be specified as a positive integer. It refers to the number of iterations of FFT to run.

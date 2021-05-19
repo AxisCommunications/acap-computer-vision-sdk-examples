@@ -59,7 +59,6 @@ cd acap-application-examples/object-detector-python
 # Adjust some environment variables to your preference, then build and push to docker repo
 export REPO=axisecp
 export ARCH=armv7hf
-export UBUNTU_VERSION=20.04
 export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 
 # To allow retrieval of the image from the cloud
@@ -68,7 +67,7 @@ export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 # axisecp for your own repository
 export APP_NAME=axisecp/acap-object-detector-python
 
-docker build -t $APP_NAME .
+docker build -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE .
 docker push $APP_NAME
 ```
 

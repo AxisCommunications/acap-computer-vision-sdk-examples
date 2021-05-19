@@ -1,17 +1,18 @@
 ARG ARCH=armv7hf
 ARG SDK_VERSION=1.0-alpha1
-ARG UBUNTU_VERSION=20.04
 ARG REPO=axisecp
-ARG RUNTIME_IMAGE=arm32v7/ubuntu:${UBUNTU_VERSION}
+ARG RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 
 # OpenCL libs are linked in from the host (AxOS) so we can use
 # the OpenCL libs from the devel-image of the CV SDK when building.
 FROM $REPO/acap-computer-vision-sdk:$SDK_VERSION-$ARCH-devel AS cv-sdk
 
-# Setup proxy settings
+# Setup proxy configuration
 ARG DOCKER_PROXY
-ARG http_proxy=$DOCKER_PROXY
-ARG https_proxy=$DOCKER_PROXY
+ENV http_proxy=$DOCKER_PROXY
+ENV https_proxy=$DOCKER_PROXY
+ENV HTTP_PROXY=$DOCKER_PROXY
+ENV HTTPS_PROXY=$DOCKER_PROXY
 
 # Get the OpenCL application files
 COPY app/* /app/src/

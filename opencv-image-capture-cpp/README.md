@@ -71,7 +71,7 @@ export AXIS_TARGET_IP=192.168.0.90
 
 The image can be built by running:
  ```
-./build.sh $APP_NAME
+docker build -t $APP_NAME --build-arg SDK_VERSION --build-arg ARCH --build-arg REPO --build-arg RUNTIME_IMAGE --build-arg DOCKER_PROXY=$HTTP_PROXY .
  ```
 
 There are two options to run the capture app, either save the image locally as a .tar and upload it to the camera (*opt 1*), 

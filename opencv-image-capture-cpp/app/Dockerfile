@@ -3,16 +3,18 @@
 # Currently, only armv7hf is supported
 ARG ARCH=armv7hf
 ARG REPO=axisecp
-ARG UBUNTU_VERSION=20.04
 ARG SDK_VERSION=1.0-alpha1
-ARG RUNTIME_IMAGE=arm32v7/ubuntu:${UBUNTU_VERSION}
+ARG RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 
 FROM ${REPO}/acap-computer-vision-sdk:${SDK_VERSION}-${ARCH}-runtime AS cv-sdk-runtime
 FROM ${REPO}/acap-computer-vision-sdk:${SDK_VERSION}-${ARCH}-devel AS cv-sdk-devel
 
+# Setup proxy configuration
 ARG DOCKER_PROXY
-ARG http_proxy=${DOCKER_PROXY}
-ARG https_proxy=${DOCKER_PROXY}
+ENV http_proxy=$DOCKER_PROXY
+ENV https_proxy=$DOCKER_PROXY
+ENV HTTP_PROXY=$DOCKER_PROXY
+ENV HTTPS_PROXY=$DOCKER_PROXY
 
 ENV DEBIAN_FRONTEND=noninteractive
 

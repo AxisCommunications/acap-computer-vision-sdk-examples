@@ -45,7 +45,6 @@ cd acap-application-examples/object-detector-cpp/app
 export REPO=axisecp
 export SDK_VERSION=1.0-alpha1
 export ARCH=armv7hf
-export UBUNTU_VERSION=20.04
 export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 
 # To allow retrieval of the image from the cloud
@@ -54,7 +53,7 @@ export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 # axisecp for your own repository 
 export APP_NAME=axisecp/acap-object-detector-cpp
 
-./build.sh $APP_NAME
+docker build -t $APP_NAME --build-arg DOCKER_PROXY=$HTTP_PROXY --build-arg REPO --build-arg ARCH --build-arg SDK_VERSION --build-arg RUNTIME_IMAGE . 
 docker push $APP_NAME
 cd ..
 ```
