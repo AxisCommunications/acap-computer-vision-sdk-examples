@@ -31,8 +31,8 @@ RUN dpkg --add-architecture armhf &&\
         libglib2.0-dev:armhf \
         libsystemd0:armhf
 
-COPY Makefile /build/
-COPY src/ /build/src/
+COPY app/Makefile /build/
+COPY app/src/ /build/src/
 WORKDIR /build
 RUN make
 

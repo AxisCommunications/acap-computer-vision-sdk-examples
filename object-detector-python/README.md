@@ -29,17 +29,17 @@ object-detector-python
 ├── app
 ├── |- detector.py
 ├── |- dog416.png
-├── camera-image.yml
-├── camera-video.yml
+├── docker-compose.yml
+├── static-image.yml
 ├── Dockerfile
 └── README.md
 ```
 
 * **Dockerfile** - Build Docker image with inference client for camera
 * **detector.py** - The inference client main program
-* **camera-image.yml** - Docker compose file for still image example using larod inference service
-* **camera-video.yml** - Docker compose file for streaming video example using larod inference service
-* **dog416.png** - Example image
+* **docker-compose.yml** - Docker compose file for streaming camera video example using larod inference service
+* **static-image.yml** - Docker compose file for static image debug example using larod inference service
+* **dog416.png** - Static image used with static-image.yml
 
 ## Prerequisites
 To get started following system requirements shall be met:
@@ -53,9 +53,6 @@ To get started following system requirements shall be met:
 Build a Docker object-detector-python image, example:
 
 ```sh
-# Find build folder
-cd acap-application-examples/object-detector-python
-
 # Adjust some environment variables to your preference, then build and push to docker repo
 export REPO=axisecp
 export ARCH=armv7hf
@@ -81,21 +78,21 @@ export AXIS_TARGET_IP=<actual camera IP address>
 docker -H tcp://$AXIS_TARGET_IP system prune -af
 
 # **OPT 1** - Use the following command to run the video streaming inference on the camera, example:
-docker-compose -H tcp://$AXIS_TARGET_IP:2375 -f camera-video.yml up
+docker-compose -H tcp://$AXIS_TARGET_IP:2375 up
 
-# **OPT 2** - Use the following command to run still image inference on the camera, example:
-docker-compose -H tcp://$AXIS_TARGET_IP:2375 -f camera-image.yml up
+# **OPT 2** - Use the following command to run static image inference on the camera, example:
+docker-compose -H tcp://$AXIS_TARGET_IP:2375 -f static-image.yml up
 ```
 
 ### The expected output:
-`docker-compose -H tcp://$AXIS_TARGET_IP:2375 -f camera-video.yml up`
+`docker-compose -H tcp://$AXIS_TARGET_IP:2375 up`
 ```
 ....
 object-detector_1           | 1 Objects found
 object-detector_1           | person
 ```
 
-`docker-compose -H tcp://$AXIS_TARGET_IP:2375 -f camera-image.yml up`
+`docker-compose -H tcp://$AXIS_TARGET_IP:2375 -f static-image.yml up`
 ```
 ....
 object-detector-python_1          | 3 Objects found

@@ -29,12 +29,12 @@ These instructions below will guide you on how to execute the code. Below is the
 opencv-capture-app
 ├── app
 │   ├── Makefile
-│   ├── Dockerfile
 │   ├── build.sh
 |   ├── upload.sh
 │   └── src
 │       └── capture.cpp
 ├── docker-compose.yml
+├── Dockerfile
 └── README.md
 ```
 * **capture.cpp**        - Example application to capture camera properties such as time stamps, zoom, focus etc.

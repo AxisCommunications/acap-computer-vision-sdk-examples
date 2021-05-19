@@ -19,11 +19,11 @@ object-detector-cpp
  | |- src
  | | |- object_detect.cpp - App to capture the video stream using OpenCV in C++ to detect objects.
  | | |- serving_client.hpp - Creates the request and makes the call to the inference-server.
- | |- Dockerfile - Builds the program using an image that contains everything necessary for building, and copies it into another image.
  | |- Makefile - Used by the make tool to build the program
  | |- build.sh - Builds and tags the image of objdetect.cpp image
- |- README.md - How to execute the example
  |- docker-compose.yml - Specifies the group of images used to run the application, and their interdependencies.
+ |- Dockerfile - Specifies how the application is built.
+ |- README.md - How to execute the example
 ```
 
 ## Prerequisites
@@ -38,9 +38,6 @@ To get started following system requirements shall be met:
 ## How to run the code
 ### Build the object-detector-cpp image
 ```sh
-# Find build folder
-cd acap-application-examples/object-detector-cpp/app
-
 # Adjust some environment variables to your preference, then build and push to docker repo
 export REPO=axisecp
 export SDK_VERSION=1.0-alpha1
@@ -55,7 +52,6 @@ export APP_NAME=axisecp/acap-object-detector-cpp
 
 docker build -t $APP_NAME --build-arg DOCKER_PROXY=$HTTP_PROXY --build-arg REPO --build-arg ARCH --build-arg SDK_VERSION --build-arg RUNTIME_IMAGE . 
 docker push $APP_NAME
-cd ..
 ```
 
 * Use the following commands to run the example with images from Docker Hub:

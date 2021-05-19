@@ -36,8 +36,8 @@ RUN apt-get update && apt-get install --reinstall --download-only -o=dir::cache=
 RUN for f in /tmp/libs/archives/*.deb; do dpkg -x $f /target-root; done
 RUN cp -r /target-root/lib/* /target-root/usr/lib/ && rm -rf /target-root/lib
 
-COPY Makefile /build/
-COPY src/ /build/src/
+COPY app/Makefile /build/
+COPY app/src/ /build/src/
 WORKDIR /build
 RUN make
 

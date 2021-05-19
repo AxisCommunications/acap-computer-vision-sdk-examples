@@ -36,7 +36,7 @@ jobs:
     # Run build script for opencv-image-capture-cpp app
     - name: Build capture_app application
       run: |
-        cd ./opencv-image-capture-cpp/app
+        cd ./opencv-image-capture-cpp
         #chmod 777 build.sh
         docker build -t docker-sandbox.se.axis.com/ecosystem/opencv:latest .
 
@@ -49,7 +49,7 @@ jobs:
     # Run build script for object-detector-cpp app
     - name: Build object-detector-cpp application
       run: |
-        cd ./object-detector-cpp/app
+        cd ./object-detector-cpp
         docker build -t docker-sandbox.se.axis.com/rapid/arm32v8/capture_app_test .
         
     # Run build object-detector-python
