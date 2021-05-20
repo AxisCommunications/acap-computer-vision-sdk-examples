@@ -14,8 +14,8 @@ BASE := $(abspath $(patsubst %/,%,$(dir $(firstword $(MAKEFILE_LIST)))))
 OBJECTS := $(patsubst %.cpp, %.o, $(wildcard $(BASE)/src/*.cpp))
 
 CXX = $(TARGET_NAME)-g++
-CXXFLAGS += -I/usr/include -I/usr/include/grpcpp/security -I/axis/tfproto -I/axis/openblas/usr/include -I/axis/opencv/usr/include -I/target-root/usr/include 
-CPPFLAGS = --sysroot=/target-root $(ARCH_CFLAGS) -Os -pipe -std=c++17
+CXXFLAGS += -I/usr/include -I/usr/include/grpcpp/security -I/axis/tfproto -I/axis/openblas/usr/include -I/axis/opencv/usr/include -I/build-root/usr/include 
+CPPFLAGS = --sysroot=/build-root $(ARCH_CFLAGS) -Os -pipe -std=c++17
 STRIP=$(TARGET_NAME)-strip
 
 LDLIBS += -L $(BASE)/lib \
