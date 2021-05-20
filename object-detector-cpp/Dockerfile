@@ -21,8 +21,7 @@ RUN apt-get update && apt-get install -y -f \
     libglib2.0-dev \
     libsystemd0
 
-# Download the libs required by the app and put them in /target-root to
-# separate them, which makes copying them to the runtime environment easier 
+# Download the target libs required for compilation
 RUN mkdir -p /tmp/libs /target-root
 RUN apt-get update && apt-get install --reinstall --download-only -o=dir::cache=/tmp/libs -y -f \
         libglib2.0-dev:$UBUNTU_ARCH \
@@ -43,9 +42,6 @@ RUN make
 
 
 FROM ${RUNTIME_IMAGE}
-# Copy the libs that were downloaded in the previous stage
-COPY --from=cv-sdk-devel /target-root /
-
 # Copy the compiled object detection application
 COPY --from=cv-sdk-devel /build/objdetector /usr/bin/
 
