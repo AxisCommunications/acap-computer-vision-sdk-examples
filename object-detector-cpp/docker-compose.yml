@@ -29,9 +29,9 @@ services:
       - /dev/datacache0:/dev/datacache0:rw
 
   inference-server:
-    image: axisecp/larod-inference-server:2.3.0-api.4.0pre5-armv7hf-ubuntu20.04
+    image: axisecp/larod-inference-server:2.3.0.test-api.4.0pre5-armv7hf-ubuntu20.04
     network_mode: bridge
-    command: /usr/bin/larod-inference-server -p 8501 -j 4
+    command: /usr/bin/larod-inference-server -p 8501 -j 4 -c testdata/server.pem -k testdata/server.key
     privileged: true
     ipc: host
     depends_on:

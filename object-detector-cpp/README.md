@@ -29,15 +29,17 @@ object-detector-cpp
 ## Prerequisites
 To get started following system requirements shall be met:
 * Camera: Q1615-MkIII
+* Firmware: 10.5
 * docker-compose version 1.27.4 or higher
 * Docker version 19.03.5 or higher
-* Firmware: 10.5
 * ACAP4 installed on the camera
-
+* Docker using extra memory card
 
 ## How to run the code
 ### Build the object-detector-cpp image
 ```sh
+cd object-detector-cpp
+
 # Adjust some environment variables to your preference, then build and push to docker repo
 export REPO=axisecp
 export SDK_VERSION=1.0-alpha1
@@ -47,10 +49,10 @@ export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 # To allow retrieval of the image from the cloud
 # this should be a repository that you can push to
 # and that your camera can pull from, i.e., substitute
-# axisecp for your own repository 
-export APP_NAME=axisecp/acap-object-detector-cpp
+# axisecp for your own repository
+export APP_NAME=axisecp/acap4-object-detector-cpp:1.2.0-$ARCH
 
-docker build -t $APP_NAME --build-arg DOCKER_PROXY=$HTTP_PROXY --build-arg REPO --build-arg ARCH --build-arg SDK_VERSION --build-arg RUNTIME_IMAGE . 
+docker build . -t $APP_NAME --build-arg DOCKER_PROXY=$HTTP_PROXY --build-arg REPO --build-arg ARCH --build-arg SDK_VERSION --build-arg RUNTIME_IMAGE
 docker push $APP_NAME
 ```
 
@@ -130,4 +132,3 @@ This example uses larod-inference-server for video inference processing by using
 
 ## License
 **Apache License 2.0**
-

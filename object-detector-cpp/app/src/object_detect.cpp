@@ -10,7 +10,7 @@
 #include "serving_client.hpp"
 #include "test_certificate.h"
 
-//#define USE_SSL
+#define USE_SSL
 
 using namespace std;
 using namespace cv;
