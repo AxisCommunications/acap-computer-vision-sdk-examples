@@ -64,7 +64,7 @@ export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 # axisecp for your own repository
 export APP_NAME=axisecp/acap-object-detector-python
 
-docker build -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE .
+docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE
 docker push $APP_NAME
 ```
 

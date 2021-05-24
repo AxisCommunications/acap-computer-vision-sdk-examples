@@ -44,7 +44,7 @@ vector<string> get_classes_from_file() {
 VideoCapture setup_capture(int nbr_buffers) {
   // Start a stream from 'CAP_PROP_CHANNEL: 1'
   VideoCapture cap(1);
-  cap.set(CAP_PROP_FPS, 30);
+  cap.set(CAP_PROP_FPS, 5);
   cap.set(CAP_PROP_FRAME_WIDTH, IMG_WIDTH);
   cap.set(CAP_PROP_FRAME_HEIGHT, IMG_HEIGHT);
   cap.set(CAP_PROP_FOURCC, VideoWriter::fourcc('R', 'G', 'B', '3'));
