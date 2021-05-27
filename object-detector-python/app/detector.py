@@ -90,7 +90,7 @@ class Detector:
         cap = cv2.VideoCapture(1)
         cap.set(cv2.CAP_PROP_FPS, 5)
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 480)
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 320)
         cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"RGB3"))
         while True:
             _, frame = cap.read()

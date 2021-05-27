@@ -18,7 +18,7 @@ using namespace chrono;
 using namespace grpc;
 
 const int IMG_WIDTH = 480;
-const int IMG_HEIGHT = 360;
+const int IMG_HEIGHT = 320;
 constexpr size_t IMG_NBR_BYTES = IMG_WIDTH * IMG_HEIGHT;
 const float CONFIDENCE_CUTOFF = 0.3;
 
