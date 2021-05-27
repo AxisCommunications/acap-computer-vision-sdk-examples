@@ -38,6 +38,8 @@ To get started following system requirements shall be met:
 ## How to run the code
 ### Build the object-detector-cpp image
 ```sh
+cd object-detector-cpp
+
 # Adjust some environment variables to your preference, then build and push to docker repo
 export REPO=axisecp
 export SDK_VERSION=1.0-alpha1
@@ -52,6 +54,16 @@ export APP_NAME=axisecp/acap-object-detector-cpp
 
 docker build . -t $APP_NAME --build-arg DOCKER_PROXY=$HTTP_PROXY --build-arg REPO --build-arg ARCH --build-arg SDK_VERSION --build-arg RUNTIME_IMAGE
 docker push $APP_NAME
+```
+* Build docker container with inference models:
+```sh
+# To allow retrieval of the image from the cloud
+# this should be a repository that you can push to
+# and that your camera can pull from, i.e., substitute
+# axisecp for your own repository
+export MODEL_NAME=axisecp/acap-dl-models:1.0
+docker build . -f Dockerfile.model -t $MODEL_NAME
+docker push $MODEL_NAME
 ```
 
 * Use the following commands to run the example with images from Docker Hub:
@@ -68,20 +80,14 @@ docker-compose -H tcp://$AXIS_TARGET_IP:2375 up
 
 ### The expected output:
 ```
-object-detector_1           | Caught frame 78 640x360
-object-detector_1           | Connecting to: inference-server:8501
-object-detector_1           | Waiting for response
-object-detector_1           | Call predict OK
-object-detector_1           | Object: car, Confidence: 0.58, Box: [0.71, 0.02, 0.98, 0.46]
-object-detector_1           | Object: car, Confidence: 0.42, Box: [0.70, 0.16, 0.90, 0.45]
-object-detector_1           | Object: car, Confidence: 0.42, Box: [0.75, 0.46, 0.79, 0.52]
-object-detector_1           | Object: bicycle, Confidence: 0.34, Box: [0.77, 0.87, 0.89, 0.97]
-object-detector_1           | Object: car, Confidence: 0.34, Box: [0.70, 0.01, 0.85, 0.23]
-object-detector_1           | Object: car, Confidence: 0.34, Box: [0.70, 0.01, 0.75, 0.13]
-object-detector_1           | Capture: 3 ms
-object-detector_1           | Preprocess: 7 ms
-object-detector_1           | Inference grpc call: 38 ms
-object-detector_1           | Postprocess: 0 ms
+object-detector_1   | Caught frame  2 480x320
+object-detector_1   | Connecting to: inference-server:8501
+object-detector_1   | Waiting for response Z
+object-detector_1   | Call predict OK
+object-detector_1   | Object: 51  banana, Confidence: 0.91, Box: [-0.00, -0.00, 0.98, 0.93]
+object-detector_1   | Capture: 90 ms
+object-detector_1   | Inference grpc call: 35 ms
+object-detector_1   | Postprocess: 0 ms
 ```
 ## Proxy settings
 Depending on the network, you might need proxy settings in the following file: *~/.docker/config.json.*

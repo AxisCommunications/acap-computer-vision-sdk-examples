@@ -17,7 +17,7 @@ using namespace cv;
 using namespace chrono;
 using namespace grpc;
 
-const int IMG_WIDTH = 640;
+const int IMG_WIDTH = 480;
 const int IMG_HEIGHT = 360;
 constexpr size_t IMG_NBR_BYTES = IMG_WIDTH * IMG_HEIGHT;
 const float CONFIDENCE_CUTOFF = 0.3;
@@ -32,10 +32,19 @@ vector<string> get_classes_from_file() {
     exit(EXIT_FAILURE);
   }
 
-  getline(file, str); // Ignore the first line
+  int expect = 0;
+  char unknown[40];
   while (getline(file, str)) {
-    if (str.size() > 0)
+    int pos = str.find(" ");
+    if (pos > 0) {
+      int id = atoi(str.substr(0, pos).c_str());
+      while (expect < id) {
+        snprintf(unknown, sizeof(unknown), "%d  unknown", expect++);
+        classes.push_back(unknown);
+      }
       classes.push_back(str);
+      expect++;
+    }
   }
 
   return classes;
@@ -66,24 +75,6 @@ VideoCapture setup_capture(int nbr_buffers) {
   }
 
   return cap;
-}
-
-void preprocess(cv::Mat &image, cv::Size inpSize) {
-  float scale_x = float(inpSize.width) / image.cols;
-  float scale_y = float(inpSize.height) / image.rows;
-  float scale = min(scale_x, scale_y);
-
-  if (scale != 1.0) {
-    cv::resize(image, image, Size(), scale, scale);
-  }
-
-  int padding_x = max(inpSize.width - image.cols, 0);
-  int padding_y = max(inpSize.height - image.rows, 0);
-
-  if (padding_x != 0 || padding_y != 0) {
-    cv::copyMakeBorder(image, image, padding_y, 0, padding_x, 0,
-                       BORDER_CONSTANT, Scalar(0, 0, 0));
-  }
 }
 
 void postprocess(PredictResponse &response, const vector<string> &classes) {
@@ -123,15 +114,12 @@ inline int64_t ms_time(steady_clock::time_point start,
 
 void output_timing_info(steady_clock::time_point start,
                         steady_clock::time_point framecapture_end,
-                        steady_clock::time_point preprocess_end,
                         steady_clock::time_point grpc_end,
                         steady_clock::time_point postprocess_end) {
 
   cout << "Capture: " << ms_time(start, framecapture_end) << " ms"
        << endl;
-  cout << "Preprocess: " << ms_time(framecapture_end, preprocess_end) << " ms"
-       << endl;
-  cout << "Inference grpc call: " << ms_time(preprocess_end, grpc_end) << " ms"
+  cout << "Inference grpc call: " << ms_time(framecapture_end, grpc_end) << " ms"
        << endl;
   cout << "Postprocess: " << ms_time(grpc_end, postprocess_end) << " ms"
        << endl;
@@ -161,12 +149,6 @@ int main(int argc, char *argv[]) try {
 
   string model(getenv("MODEL_PATH"));
 
-  const string s(getenv("MODEL_INPUT_SIZE"));
-  size_t delim_pos = s.find("x");
-  int width = std::stoi(s.substr(0, delim_pos));
-  int height = std::stoi(s.substr(delim_pos + 1, std::string::npos));
-  cv::Size model_input_size(width, height);
-
   int frame_idx = 0;
   for (;;) {
     Mat &mat = frame[frame_idx++ % BUFFERS];
@@ -187,11 +169,6 @@ int main(int argc, char *argv[]) try {
     cout << "Caught frame " << setw(2) << seqnum << " " << mat.cols << "x"
          << mat.rows << endl;
 
-    // Preprocess image
-    preprocess(mat, model_input_size);
-
-    auto time_preprocess_end = steady_clock::now();
-
     cout << "Connecting to: " << connect_string << endl;
 
     string output;
@@ -210,8 +187,8 @@ int main(int argc, char *argv[]) try {
 
     auto time_postprocess_end = steady_clock::now();
 
-    output_timing_info(time_start, time_framecapture_end, time_preprocess_end,
-                       time_grpc_end, time_postprocess_end);
+    output_timing_info(time_start, time_framecapture_end,
+      time_grpc_end, time_postprocess_end);
 
     cout << endl;
   }

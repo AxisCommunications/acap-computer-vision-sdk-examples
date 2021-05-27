@@ -53,6 +53,8 @@ To get started following system requirements shall be met:
 Build a Docker object-detector-python image, example:
 
 ```sh
+cd object-detector-python
+
 # Adjust some environment variables to your preference, then build and push to docker repo
 export REPO=axisecp
 export ARCH=armv7hf
@@ -63,9 +65,19 @@ export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 # and that your camera can pull from, i.e., substitute
 # axisecp for your own repository
 export APP_NAME=axisecp/acap-object-detector-python
-
 docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE
 docker push $APP_NAME
+```
+
+* Build docker container with inference models:
+```sh
+# To allow retrieval of the image from the cloud
+# this should be a repository that you can push to
+# and that your camera can pull from, i.e., substitute
+# axisecp for your own repository
+export MODEL_NAME=axisecp/acap-dl-models:1.0
+docker build . -f Dockerfile.model -t $MODEL_NAME
+docker push $MODEL_NAME
 ```
 
 There are two options available in this example:

@@ -13,15 +13,12 @@ class Detector:
         self.debug = None
         self.detection_type = None
         self.inference_client = None
-        self.model_input_height = None
-        self.model_input_width = None
         self.model_path = None
         self.object_list = None
         self.threshold = None
 
     # Do object detection on image
     def detect(self, image):
-        image, width_mul, height_mul = rescale(image, self.model_input_width, self.model_input_height)
         image = np.expand_dims(image, axis=0)
         image = image.astype(np.uint8)
         success, result = self.inference_client.infer({'data': image}, self.model_path)
@@ -34,19 +31,19 @@ class Detector:
             if confidence < self.threshold:
                 print('{} {} found'.format(i, self.detection_type))
                 return True, \
-                    bounding_boxes[:i] * np.array([height_mul, width_mul, height_mul, width_mul]), \
+                    bounding_boxes[:i], \
                     classes[:i], \
                     confidences[:i]
         return True, bounding_boxes, classes, confidences
 
     # Load object labels from file
     def read_object_list(self, object_list_path):
-        self.object_list = None
+        self.object_list = {}
         self.detection_type = 'Objects'
-        if object_list_path is not None:
-            object_list_file = open(object_list_path, 'r')
-            self.object_list = object_list_file.read().splitlines()
-            self.detection_type = self.object_list[0]
+        for row in open(object_list_path, 'r'):
+            (classID, label) = row.strip().split(" ", maxsplit=1)
+            label = label.strip().split(",", maxsplit=1)[0]
+            self.object_list[int(classID)] = label
 
     # Draw bounding boxes on image
     def draw_bounding_boxes(self, image, bounding_boxes, obj_classes, color=(1, 190, 200)):
@@ -59,13 +56,13 @@ class Detector:
                           2)
             if self.object_list is not None:
                 cv2.putText(image,
-                            self.object_list[int(np.asscalar(obj_class)) + 1],
+                            self.object_list[int(np.asscalar(obj_class))],
                             (int(bounding_box[1] * width), int(bounding_box[0] * height - 10)),
                             cv2.FONT_HERSHEY_SIMPLEX,
                             1,
                             color,
                             2)
-                print(self.object_list[int(np.asscalar(obj_class)) + 1])
+                print(self.object_list[int(np.asscalar(obj_class))])
         return image
 
     # Read environment variables
@@ -73,7 +70,6 @@ class Detector:
         self.threshold = float(os.environ.get('DETECTION_THRESHOLD', 0.5))
         self.inference_client = InferenceClient(os.environ['INFERENCE_HOST'], int(os.environ['INFERENCE_PORT']))
         self.model_path = os.environ['MODEL_PATH']
-        self.model_input_width, self.model_input_height = [int(i) for i in os.environ['MODEL_INPUT_SIZE'].split('x')]
         image_path = os.environ.get('IMAGE_PATH')
         object_list_path = os.environ.get('OBJECT_LIST_PATH')
         return image_path, object_list_path
@@ -93,7 +89,7 @@ class Detector:
     def run_camera_source(self):
         cap = cv2.VideoCapture(1)
         cap.set(cv2.CAP_PROP_FPS, 5)
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 480)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
         cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"RGB3"))
         while True:
@@ -116,29 +112,6 @@ class Detector:
         image = self.draw_bounding_boxes(image, bounding_boxes, obj_classes)
         cv2.imwrite('/output/{}-detector.jpg'.format(self.detection_type), image)
         print(f'Total time for image inference: {1000 * (t1 - t0):.0f} ms')
-
-
-# Rescale image to desired size
-def rescale(image, width, height, maintain_ratio=True):
-    if not maintain_ratio:
-        return cv2.resize(image, (width, height))
-    org_height, org_width = image.shape[:2]
-    width_ratio = float(width) / org_width
-    height_ratio = float(height) / org_height
-    if width_ratio < height_ratio:
-        tmp_width = width
-        tmp_height = int(org_height * width_ratio)
-        bottom, right = height - tmp_height, 0
-        width_mul, height_mul = 1, float(height) / tmp_height
-    elif width_ratio > height_ratio:
-        tmp_width = int(org_width * height_ratio)
-        tmp_height = height
-        bottom, right = 0, width - tmp_width
-        width_mul, height_mul = float(width) / tmp_width, 1
-    else:
-        return cv2.resize(image, (width, height)), 1, 1
-    image = cv2.resize(image, (tmp_width, tmp_height))
-    return cv2.copyMakeBorder(image, 0, bottom, 0, right, cv2.BORDER_CONSTANT, value=(0, 0, 0)), width_mul, height_mul
 
 
 # Main program
