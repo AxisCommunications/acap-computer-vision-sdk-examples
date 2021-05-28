@@ -26,7 +26,7 @@ The following items are required to run this example:
 These instructions below will guide you on how to execute the code. Below is the structure and scripts used in the example:
 
 ```bash
-opencv-capture-app
+opencv-image-capture-cpp
 ├── app
 │   ├── Makefile
 │   ├── build.sh
