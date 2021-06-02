@@ -32,29 +32,29 @@ object-detector-python
 ├── docker-compose.yml
 ├── static-image.yml
 ├── Dockerfile
+├── Dockerfile.model
 └── README.md
 ```
 
-* **Dockerfile** - Build Docker image with inference client for camera
 * **detector.py** - The inference client main program
+* **dog416.png** - Static image used with static-image.yml
 * **docker-compose.yml** - Docker compose file for streaming camera video example using larod inference service
 * **static-image.yml** - Docker compose file for static image debug example using larod inference service
-* **dog416.png** - Static image used with static-image.yml
+* **Dockerfile** - Build Docker image with inference client for camera
+* **Dockerfile.model** - Build Docker image with inference model
 
 ## Prerequisites
 To get started following system requirements shall be met:
 * Camera: Q1615-MkIII
 * docker-compose version 1.27.4 or higher
 * Docker version 19.03.5 or higher
-* Firmware: 10.5
+* Firmware: 10.6
 * ACAP4 installed on the camera
 
 ## How to run the code
 Build a Docker object-detector-python image, example:
 
 ```sh
-cd object-detector-python
-
 # Adjust some environment variables to your preference, then build and push to docker repo
 export REPO=axisecp
 export ARCH=armv7hf

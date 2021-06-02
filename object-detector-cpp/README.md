@@ -23,13 +23,14 @@ object-detector-cpp
  | |- build.sh - Builds and tags the image of objdetect.cpp image
  |- docker-compose.yml - Specifies the group of images used to run the application, and their interdependencies.
  |- Dockerfile - Specifies how the application is built.
+ |- Dockerfile.model - Specifies how the inference model is built.
  |- README.md - How to execute the example
 ```
 
 ## Prerequisites
 To get started following system requirements shall be met:
 * Camera: Q1615-MkIII
-* Firmware: 10.5
+* Firmware: 10.6
 * docker-compose version 1.27.4 or higher
 * Docker version 19.03.5 or higher
 * ACAP4 installed on the camera
@@ -38,8 +39,6 @@ To get started following system requirements shall be met:
 ## How to run the code
 ### Build the object-detector-cpp image
 ```sh
-cd object-detector-cpp
-
 # Adjust some environment variables to your preference, then build and push to docker repo
 export REPO=axisecp
 export SDK_VERSION=1.0-alpha1
