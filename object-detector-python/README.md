@@ -32,21 +32,23 @@ object-detector-python
 ├── docker-compose.yml
 ├── static-image.yml
 ├── Dockerfile
+├── Dockerfile.model
 └── README.md
 ```
 
-* **Dockerfile** - Build Docker image with inference client for camera
 * **detector.py** - The inference client main program
+* **dog416.png** - Static image used with static-image.yml
 * **docker-compose.yml** - Docker compose file for streaming camera video example using larod inference service
 * **static-image.yml** - Docker compose file for static image debug example using larod inference service
-* **dog416.png** - Static image used with static-image.yml
+* **Dockerfile** - Build Docker image with inference client for camera
+* **Dockerfile.model** - Build Docker image with inference model
 
 ## Prerequisites
 To get started following system requirements shall be met:
 * Camera: Q1615-MkIII
 * docker-compose version 1.27.4 or higher
 * Docker version 19.03.5 or higher
-* Firmware: 10.5
+* Firmware: 10.6
 * ACAP4 installed on the camera
 
 ## How to run the code
@@ -63,9 +65,19 @@ export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 # and that your camera can pull from, i.e., substitute
 # axisecp for your own repository
 export APP_NAME=axisecp/acap-object-detector-python
-
 docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE
 docker push $APP_NAME
+```
+
+* Build docker container with inference models:
+```sh
+# To allow retrieval of the image from the cloud
+# this should be a repository that you can push to
+# and that your camera can pull from, i.e., substitute
+# axisecp for your own repository
+export MODEL_NAME=axisecp/acap-dl-models:1.0
+docker build . -f Dockerfile.model -t $MODEL_NAME
+docker push $MODEL_NAME
 ```
 
 There are two options available in this example:
