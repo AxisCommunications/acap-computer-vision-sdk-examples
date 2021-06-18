@@ -1,37 +1,18 @@
-#-- ACAP SDK configuration --#
-ARG REPO=axisecp
-ARG ACAP_SDK_IMAGE=acap-native-sdk
-ARG ACAP_SDK_VERSION=1.0_alpha1
-ARG AXIS_ARCH=armv7hf
 ARG UBUNTU_VERSION=20.04
-ARG ACAP_SDK_TAG=$ACAP_SDK_VERSION-$AXIS_ARCH-ubuntu$UBUNTU_VERSION
-ARG BUILD_ROOT=/build-root
-
-# The ACAP Native SDK is used to get certain libs and headers
-FROM $REPO/$ACAP_SDK_IMAGE:$ACAP_SDK_TAG AS acap-native-sdk
-# libs: /opt/axis/acapsdk/sysroots/$AXIS_ARCH/usr/lib/
-# headers: /opt/axis/acapsdk/sysroots/$AXIS_ARCH/usr/include/
-
-# A base image with common tools for crosscompilation
-FROM ubuntu:$UBUNTU_VERSION AS build-base
-
-# Setup environment variables
-ENV DEBIAN_FRONTEND=noninteractive
-ARG BUILD_ROOT
 ARG http_proxy
 ARG https_proxy
 
-## Build environment
-ENV CC="arm-linux-gnueabihf-gcc -mthumb -mfpu=neon -mfloat-abi=hard -mcpu=cortex-a9"
-ENV CXX="arm-linux-gnueabihf-g++ -mthumb -mfpu=neon -mfloat-abi=hard -mcpu=cortex-a9"
-ENV CPP="arm-linux-gnueabihf-gcc -E -mthumb -mfpu=neon -mfloat-abi=hard -mcpu=cortex-a9"
-ENV LIB=/usr/lib/arm-linux-gnueabihf
-ENV PKG_CONFIG_LIBDIR=$PKG_CONFIG_LIBDIR:$LIB/pkgconfig
+# A base image for crosscompilation
+FROM ubuntu:$UBUNTU_VERSION AS build-base
 
 # To support DOCKER_BUILDKIT=0, base ARGs are converted to ENVs to allow propagation
-ENV BUILD_ROOT=$BUILD_ROOT
 ENV http_proxy=$http_proxy
 ENV https_proxy=$https_proxy
+
+# Setup environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+ENV BUILD_ROOT=/build-root
+ENV CC="arm-linux-gnueabihf-gcc -mthumb -mfpu=neon -mfloat-abi=hard -mcpu=cortex-a9"
 
 # Add source for target arch
 RUN echo \
@@ -51,24 +32,40 @@ RUN dpkg --add-architecture armhf &&\
     git \
     make \
     cmake \
+    pkg-config \
     g++-arm-linux-gnueabihf \
     libc-dev:armhf
 
+# Build server and library
 WORKDIR $BUILD_ROOT
-RUN git clone -b v1.6.9 https://github.com/monkey/monkey &&\
+RUN git clone -b v1.5.6 https://github.com/monkey/monkey &&\
     cd monkey &&\
     mkdir -p build &&\
-    ./configure\
-        --local\
-        --static-lib-mode\
-        --static-plugins=auth,fastcgi,tls,dirlisting,cheetah,liana,logger\
-        --disable-plugins=cgi,cheetah,mandril &&\
-    cd build &&\
-    make
+    ./configure \
+        --enable-shared \
+        --prefix=/usr/local \
+        --plugdir=/usr/local/lib \
+        --pidfile=/usr/local/logs/monkey.pid \
+        --incdir=/usr/local/include/monkey \
+        --systemddir=/usr/lib/systemd/system \
+        --default-port=80 &&\
+    make &&\
+    make install
 
-FROM arm32v7/ubuntu:$UBUNTU_VERSION as release
-ARG BUILD_ROOT
-COPY ./etc /etc
-COPY ./var /var
-COPY --from=build-base $BUILD_ROOT/monkey/build/monkey /usr/bin
-CMD /usr/bin/monkey -c /etc/monkey -p 80
+# Build examples
+ARG PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+RUN cd monkey/examples &&\
+    sed -i 's/LDFLAGS/LDLIBS/g' Makefile &&\
+    make &&\
+    cp hello list quiz /usr/local/bin/
+
+# Create target image
+FROM arm32v7/ubuntu:$UBUNTU_VERSION
+ENV LD_LIBRARY_PATH=/usr/local/lib
+COPY --from=build-base /usr/local /usr/local
+
+# Prepare data for examples
+RUN mkdir -p /tmp/mydir && touch /tmp/myfile
+
+# Start Monkey server
+CMD monkey
