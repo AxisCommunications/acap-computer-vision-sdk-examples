@@ -2,11 +2,11 @@
 This document explains briefly how to build and use [Monkey Web Server](https://github.com/monkey/monkey) in ACAP4. Monkey is a fast and lightweight Web Server for Linux. It has been designed to be very scalable with low memory and CPU consumption, the perfect solution for Embedded Linux and high end production environments. Besides the common features as HTTP server, it expose a flexible C API which aims to behave as a fully HTTP development framework, so it can be extended as desired through the plugins interface. The Monkey Web Server [documentation](http://monkey-project.com/documentation/1.5) describes the configuration in detail.
 
 ## Structure of this application
-Below is the structure of the example with a brief description of its files.
+Below is the structure of the application with a brief description of its files.
 ```sh
 web-server
- |- Dockerfile - Specifications on how to build the camera docker image
- |- README.md - Instructions on how to build and run the application
+├── Dockerfile - Specifications on how to build the camera docker image
+└── README.md - Instructions on how to build and run the application
 ```
 
 ## Prerequisites
@@ -33,7 +33,6 @@ EOF
 systemctl restart httpd
 ```
 
-
 ## Build and run the Web Server
 Start by building the image containing the Web Server code with examples. This will compile the code to an executable and create an armv7hf container containing the executable, which can be uploaded to and run on the camera. After the Web Server is started it can be accessed from a web browser by specifying the web address: http://mycamera/monkey or http://mycamera:8080
 ```sh
@@ -51,7 +50,7 @@ docker push $APP
 
 # Start Web Server on the camera
 docker -H tcp://$AXIS_TARGET_IP system prune -af
-docker -H tcp://$AXIS_TARGET_IP run --rm -p 8080:80 --privileged -it $APP
+docker -H tcp://$AXIS_TARGET_IP run --rm -p 8080:80 -it $APP
 ```
 
 ### The expected output
@@ -71,13 +70,13 @@ Home  : http://monkey-project.com
 Some C API examples are included in the Web Server container that has been built. The commands below show how to run the examples on the camera. To see the result, use a web browser and web address: http://mycamera/monkey/demo or http://mycamera:2001
 ```sh
 # Run the hello example
-docker -H tcp://$AXIS_TARGET_IP run --rm -p 2001:2001 --privileged -it $APP hello
+docker -H tcp://$AXIS_TARGET_IP run --rm -p 2001:2001 -it $APP hello
 
 # Run the list directory example
-docker -H tcp://$AXIS_TARGET_IP run --rm -p 2001:2001 --privileged -it $APP list
+docker -H tcp://$AXIS_TARGET_IP run --rm -p 2001:2001 -it $APP list
 
 # Run the quiz example
-docker -H tcp://$AXIS_TARGET_IP run --rm -p 2001:2001 --privileged -it $APP quiz
+docker -H tcp://$AXIS_TARGET_IP run --rm -p 2001:2001 -it $APP quiz
 ```
 
 
