@@ -1,0 +1,15 @@
+version: '3.3'
+
+services:
+  qr-decoder-app:
+    image: $APP_NAME
+    privileged: true
+    environment:
+      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - /usr/lib/libstatuscache.so.1:/usr/lib/libstatuscache.so
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:rw
+      - /var/run/statuscache:/var/run/statuscache:rw
+    devices:
+      - /dev/datacache0:/dev/datacache0:rw
