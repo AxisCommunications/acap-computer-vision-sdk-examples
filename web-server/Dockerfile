@@ -43,6 +43,7 @@ RUN git clone -b v1.5.6 https://github.com/monkey/monkey &&\
     mkdir -p build &&\
     ./configure \
         --enable-shared \
+        --malloc-libc \
         --prefix=/usr/local \
         --plugdir=/usr/local/lib \
         --pidfile=/usr/local/logs/monkey.pid \
@@ -65,7 +66,7 @@ ENV LD_LIBRARY_PATH=/usr/local/lib
 COPY --from=build-base /usr/local /usr/local
 
 # Prepare data for examples
-RUN mkdir -p /tmp/mydir && touch /tmp/myfile
+COPY . /tmp/
 
 # Start Monkey server
 CMD monkey
