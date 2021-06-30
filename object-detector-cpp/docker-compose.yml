@@ -6,6 +6,7 @@ services:
     links:
       - inference-server
     privileged: true
+    ipc: host
     environment:
       - INFERENCE_HOST=inference-server
       - INFERENCE_PORT=8501
