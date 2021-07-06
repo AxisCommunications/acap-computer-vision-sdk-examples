@@ -1,5 +1,5 @@
 ARG ARCH=armv7hf
-ARG SDK_VERSION=1.0-alpha1
+ARG SDK_VERSION=1.0-beta1
 ARG REPO=axisecp
 ARG RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 

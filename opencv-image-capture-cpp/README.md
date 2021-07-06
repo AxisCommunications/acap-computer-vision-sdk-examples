@@ -1,12 +1,12 @@
 # An openCV based example application on an edge device
 This readme file explains how to build an openCV application.
 It is achieved by using the ACAP Computer Vision SDK image, which contains
-all the essential parts needed. 
+all the essential parts needed.
 
 The ACAP Computer Vision SDK OpenCV comes with following modules:
 core, imgproc, imgcodecs, videoio,objdetect, python3, video, as well as with Axis VDO integration
 to enable capturing images directly from the camera. If you wish to use another set of modules,
-the Dockerfile used to build the CV SDK's OpenCV module can be found in the [acap-computer-vision-sdk repository](https://github.com/AxisCommunications/acap-computer-vision-sdk/tree/master). 
+the Dockerfile used to build the CV SDK's OpenCV module can be found in the [acap-computer-vision-sdk repository](https://github.com/AxisCommunications/acap-computer-vision-sdk/tree/master).
 
 Together with this file you should be able to find a directory called
 app, which contains the "capture.cpp" application which can
@@ -17,7 +17,7 @@ below.
 The following items are required to run this example:
 * Docker Engine version 19.03.5 or higher
 * docker-compose version 1.27.4 or higher
-* Firmware: 10.5
+* Firmware: 10.6
 * Camera: Q1615 Mk3
 * ACAP4 running on the camera
 
@@ -53,7 +53,6 @@ Begin by setting up some environment variables.
 Below, we define the camera's IP, the desired app name and the path and version of the ACAP Computer Vision SDK.
 ```
 # CV SDK configuration
-export SDK_VERSION=1.0-alpha1
 export ARCH=armv7hf
 export REPO=axisecp
 export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
@@ -62,19 +61,19 @@ export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 # To allow retrieval of the image from the cloud
 # this should be a repository that you can push to
 # and that your camera can pull from, i.e., substitute
-# axisecp for your own repository 
+# axisecp for your own repository
 export APP_NAME=axisecp/acap-opencv-image-capture-cpp
 
-# Set this to your camera's actual IP
-export AXIS_TARGET_IP=192.168.0.90
+# Set your camera IP address
+export AXIS_TARGET_IP=<actual camera IP address>
 ```
 
 The image can be built by running:
  ```
-docker build -t $APP_NAME --build-arg SDK_VERSION --build-arg ARCH --build-arg REPO --build-arg RUNTIME_IMAGE --build-arg DOCKER_PROXY=$HTTP_PROXY .
+docker build -t $APP_NAME --build-arg ARCH --build-arg REPO --build-arg RUNTIME_IMAGE --build-arg DOCKER_PROXY=$HTTP_PROXY .
  ```
 
-There are two options to run the capture app, either save the image locally as a .tar and upload it to the camera (*opt 1*), 
+There are two options to run the capture app, either save the image locally as a .tar and upload it to the camera (*opt 1*),
 or push the image to a container registry and pull the image to the camera from the cloud (*opt 2*).
 
 #### [opt 1] Save the image as tarball
@@ -87,11 +86,11 @@ docker -H tcp://$AXIS_TARGET_IP load -i opencv_app.tar
 ```
 #### [opt 2] push it to container registry.
 ```
-docker push your-container-registry-user/$APP_NAME
+docker push $APP_NAME
 ```
 #### [opt 2] pull it from a container registry:
 ```
-docker -H tcp://$AXIS_TARGET_IP pull your-container-registry-user/$APP_NAME
+docker -H tcp://$AXIS_TARGET_IP $APP_NAME
 ```
 #### Run the container
 ```

@@ -41,7 +41,6 @@ To get started following system requirements shall be met:
 ```sh
 # Adjust some environment variables to your preference, then build and push to docker repo
 export REPO=axisecp
-export SDK_VERSION=1.0-alpha1
 export ARCH=armv7hf
 export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 
@@ -51,7 +50,7 @@ export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 # axisecp for your own repository
 export APP_NAME=axisecp/acap-object-detector-cpp
 
-docker build . -t $APP_NAME --build-arg DOCKER_PROXY=$HTTP_PROXY --build-arg REPO --build-arg ARCH --build-arg SDK_VERSION --build-arg RUNTIME_IMAGE
+docker build . -t $APP_NAME --build-arg HTTP_PROXY --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE
 docker push $APP_NAME
 ```
 * Build docker container with inference models:

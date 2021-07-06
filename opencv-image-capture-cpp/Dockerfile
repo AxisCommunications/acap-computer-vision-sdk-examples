@@ -3,7 +3,7 @@
 # Currently, only armv7hf is supported
 ARG ARCH=armv7hf
 ARG REPO=axisecp
-ARG SDK_VERSION=1.0-alpha1
+ARG SDK_VERSION=1.0-beta1
 ARG RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 
 FROM ${REPO}/acap-computer-vision-sdk:${SDK_VERSION}-${ARCH}-runtime AS cv-sdk-runtime

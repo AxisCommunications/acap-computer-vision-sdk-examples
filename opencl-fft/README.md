@@ -21,32 +21,28 @@ opencl-fft
 The following items are required to run this example:
 * Camera: Q1615-MkIII
 * Docker version 19.03.5 or higher
-* Firmware: 10.5
+* Firmware: 10.6
 * ACAP4 installed on the camera
 
 ## Running the example
 1. Start by building the image OpenCL containing the OpenCL code. This will compile the OpenCL code to an executable and create an armv7hf container containing the executable, which can be uploaded to and run on the camera.
 ```sh
-# Find build folder
-cd acap-application-examples/opencl-fft
-
 # Set your camera IP address
 export AXIS_TARGET_IP=<actual camera IP address>
 
 # Adjust some environment variables to your preference and build the application image
 export REPO=axisecp
-export SDK_VERSION=1.0-alpha1
 export ARCH=armv7hf
 export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 
 # To allow retrieval of the image from the cloud
 # this should be a repository that you can push to
 # and that your camera can pull from, i.e., substitute
-# axisecp for your own repository 
+# axisecp for your own repository
 export APP_NAME=axisecp/acap-opencl-fft
 
 docker build . --tag $APP_NAME --build-arg DOCKER_PROXY=$HTTP_PROXY \
---build-arg REPO --build-arg SDK_VERSION --build-arg ARCH --build-arg RUNTIME_IMAGE
+--build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE
 ```
 
 The `APP_NAME` variable is the name you want to tag the image with, e.g., `my-opencl-app:1.0`. `AXIS_TARGET_IP` should be set to the IP address of the camera running ACAP4. Additionally, the environment variable `APP_COMMAND` may be specified as a positive integer. It refers to the number of iterations of FFT to run.

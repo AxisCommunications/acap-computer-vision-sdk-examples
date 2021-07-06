@@ -1,17 +1,17 @@
 ## OpenCV QR Decoder
-This example shows a minimal QR code detector and decoder application written in Python. 
+This example shows a minimal QR code detector and decoder application written in Python.
 It involves using OpenCV to create a video stream, NumPy to preprocess
 the images and OpenCV to detect and decode any QR codes within the image. The example uses the
 [ACAP Computer Vision SDK](https://github.com/AxisCommunications/acap-computer-vision-sdk) to get
 OpenCV with VDO integration, allowing capture of a video stream through OpenCV's standard
-VideoCapture class. Additionally, Python, NumPy and OpenBLAS are also copied 
+VideoCapture class. Additionally, Python, NumPy and OpenBLAS are also copied
 from the Computer Vision SDK.
 
 ## Prerequisites
 The following items are required to run this example:
 * Docker Engine version 19.03.5 or higher
 * docker-compose version 1.27.4 or higher
-* Firmware: 10.5
+* Firmware: 10.6
 * ACAP4 running on the camera
 
 ## Application layout
@@ -32,7 +32,6 @@ Begin by setting up some environment variables.
 Below, we define the camera's IP, the desired app name and the path and version of the ACAP Computer Vision SDK.
 ```
 # CV SDK configuration
-export SDK_VERSION=1.0-alpha1
 export ARCH=armv7hf
 export REPO=axisecp
 export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
@@ -41,16 +40,16 @@ export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 # To allow retrieval of the image from the cloud
 # this should be a repository that you can push to
 # and that your camera can pull from, i.e., substitute
-# axisecp for your own repository 
+# axisecp for your own repository
 export APP_NAME=axisecp/acap-opencv-qr-decoder-python
 
-# Set this to your camera's actual IP
-export AXIS_TARGET_IP=192.168.0.90
+# Set your camera IP address
+export AXIS_TARGET_IP=<actual camera IP address>
 ```
 
 With the environment setup, the application image can be built by running:
  ```
-docker build -t $APP_NAME --build-arg SDK_VERSION --build-arg ARCH --build-arg REPO --build-arg RUNTIME_IMAGE --build-arg DOCKER_PROXY=$HTTP_PROXY .
+docker build -t $APP_NAME --build-arg ARCH --build-arg REPO --build-arg RUNTIME_IMAGE --build-arg DOCKER_PROXY=$HTTP_PROXY .
  ```
 
 To run the image, it needs to be available to the camera. This is either done by pushing it

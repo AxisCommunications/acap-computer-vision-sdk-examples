@@ -1,5 +1,5 @@
 ARG ARCH=armv7hf
-ARG SDK_VERSION=1.0-alpha1
+ARG SDK_VERSION=1.0-beta1
 ARG REPO=axisecp
 ARG RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 
@@ -21,7 +21,7 @@ RUN mkdir -p /app/build
 
 # ARCH_CFLAGS and TARGET_NAME are defined in the CV SDK
 # They corresponds to the platform's C compilation flags
-# and the platform's name     
+# and the platform's name
 ENV CXX="$TARGET_NAME-g++ $ARCH_CFLAGS"
 
 # Compile the OpenCL application for our target platform
