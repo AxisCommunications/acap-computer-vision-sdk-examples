@@ -29,7 +29,6 @@ These instructions below will guide you on how to execute the code. Below is the
 opencv-image-capture-cpp
 ├── app
 │   ├── Makefile
-│   ├── build.sh
 |   ├── upload.sh
 │   └── src
 │       └── capture.cpp
@@ -41,7 +40,6 @@ opencv-image-capture-cpp
 * **Dockerfile**         - Docker file with the toolchain included to run the example.
 * **docker-compose.yml** - Docker compose file contains the latest image of the example from dockerhub.
 * **README.md**          - Step by step instructions on how to run the example.
-* **build.sh**           - Builds and tags the image of objdetect.cpp image e.g., axisecp/acap4-object-detector-cpp:1.0.0-rc.1
 * **upload.sh**          - To push/pull images to the camera running ACAP4.
 
 ### Limitations

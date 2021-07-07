@@ -19,8 +19,8 @@ object-detector-cpp
  | |- src
  | | |- object_detect.cpp - App to capture the video stream using OpenCV in C++ to detect objects.
  | | |- serving_client.hpp - Creates the request and makes the call to the inference-server.
+ | | |- test_certificate.h - Certificate for accessing the inference-server using SSL/TLS.
  | |- Makefile - Used by the make tool to build the program
- | |- build.sh - Builds and tags the image of objdetect.cpp image
  |- docker-compose.yml - Specifies the group of images used to run the application, and their interdependencies.
  |- Dockerfile - Specifies how the application is built.
  |- Dockerfile.model - Specifies how the inference model is built.

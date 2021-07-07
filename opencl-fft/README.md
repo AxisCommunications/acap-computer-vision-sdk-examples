@@ -13,8 +13,8 @@ opencl-fft
  | |- clutil.h - Headers for the utility functions
  | |- fft.cl - The OpenCL code for the application
  |- Dockerfile - Specifications on how to build the camera image
+ |- docker-compose.yml - Specifies the group of images used to run the application, and their interdependencies.
  |- README.md - Instructions on how to run the application
- |- sources.list - Additional sources for retrieving armhf packages when building image
 ```
 
 ## Prerequisites

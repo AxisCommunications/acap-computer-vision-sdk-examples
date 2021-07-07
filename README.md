@@ -29,7 +29,7 @@ To ensure compatibility with the examples, the following requirements shall be m
 * Camera: Q1615-MkIII
 * docker-compose version 1.27.4 or higher
 * Docker version 19.03.5 or higher
-* Firmware: 10.5
+* Firmware: 10.6
 * ACAP4 installed on the camera
 
 ## Supported architectures
@@ -48,11 +48,13 @@ Below is a list of examples available in the repository:
   * A C++ example which demonstrates how to use OpenCL in ACAP4 to speed up calculations. The application runs Fast Fourier Transform on the camera GPU.
 * [opencv-image-capture-cpp](./opencv-image-capture-cpp/)
   * A C++ example which captures camera frames and properties such as time stamps, zoom, focus etc., through OpenCV.
+* [opencv-qr-decoder-python](./opencv-qr-decoder-python/)
+  * A Python example which detects and decodes QR codes in the video stream using OpenCV.
 
 ## Dockerhub images
-The examples are based on the [ACAP Computer Vision SDK](https://github.com/AxisCommunications/acap-computer-vision-sdk). 
-This SDK is an image which contains APIs and tooling to build computer vision apps for running on camera, with support for C/C++ and Python. 
-Additionally, there is the [ACAP Native SDK](https://github.com/AxisCommunications/acap-native-sdk), which is more geared towards building ACAPs that uses AXIS-developed APIs directly, and primarily does so using C/C++.  
+The examples are based on the [ACAP Computer Vision SDK](https://github.com/AxisCommunications/acap-computer-vision-sdk).
+This SDK is an image which contains APIs and tooling to build computer vision apps for running on camera, with support for C/C++ and Python.
+Additionally, there is the [ACAP Native SDK](https://github.com/AxisCommunications/acap-native-sdk), which is more geared towards building ACAPs that uses AXIS-developed APIs directly, and primarily does so using C/C++.
 
 The examples also use the following images:
 * [larod-inference-server](https://hub.docker.com/repository/docker/axisecp/larod-inference-server) - Inference server implemented on top of Larod API
