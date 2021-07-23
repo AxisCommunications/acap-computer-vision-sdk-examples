@@ -30,7 +30,7 @@ object-detector-cpp
 ## Prerequisites
 To get started following system requirements shall be met:
 * Camera: Q1615-MkIII
-* Firmware: 10.6
+* Firmware: CVP 21.27.3.1
 * docker-compose version 1.27.4 or higher
 * Docker version 19.03.5 or higher
 * ACAP4 installed on the camera

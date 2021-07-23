@@ -9,7 +9,7 @@ services:
       - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
       - DEBUG=y
     volumes:
-      - /usr/lib/libstatuscache.so.1:/usr/lib/libstatuscache.so
+      - /usr/lib/libvdostream.so.1:/usr/lib/libvdostream.so.1
       - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:rw
       - /var/run/statuscache:/var/run/statuscache:rw
     devices:

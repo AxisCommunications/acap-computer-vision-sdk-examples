@@ -17,7 +17,7 @@ below.
 The following items are required to run this example:
 * Docker Engine version 19.03.5 or higher
 * docker-compose version 1.27.4 or higher
-* Firmware: 10.6
+* Firmware: CVP 21.27.3.1
 * Camera: Q1615 Mk3
 * ACAP4 running on the camera
 
@@ -49,7 +49,7 @@ opencv-image-capture-cpp
 ### How to run the code
 Begin by setting up some environment variables.
 Below, we define the camera's IP, the desired app name and the path and version of the ACAP Computer Vision SDK.
-```
+```sh
 # CV SDK configuration
 export ARCH=armv7hf
 export REPO=axisecp
@@ -67,7 +67,7 @@ export AXIS_TARGET_IP=<actual camera IP address>
 ```
 
 The image can be built by running:
- ```
+ ```sh
 docker build -t $APP_NAME --build-arg ARCH --build-arg REPO --build-arg RUNTIME_IMAGE --build-arg DOCKER_PROXY=$HTTP_PROXY .
  ```
 
@@ -75,23 +75,23 @@ There are two options to run the capture app, either save the image locally as a
 or push the image to a container registry and pull the image to the camera from the cloud (*opt 2*).
 
 #### [opt 1] Save the image as tarball
-```
+```sh
 docker save -o opencv-app.tar $APP_NAME
 ```
 #### [opt 1] Load the image if it's a tarball
-```
+```sh
 docker -H tcp://$AXIS_TARGET_IP load -i opencv_app.tar
 ```
 #### [opt 2] push it to container registry.
-```
+```sh
 docker push $APP_NAME
 ```
 #### [opt 2] pull it from a container registry:
-```
-docker -H tcp://$AXIS_TARGET_IP $APP_NAME
+```sh
+docker -H tcp://$AXIS_TARGET_IP pull $APP_NAME
 ```
 #### Run the container
-```
+```sh
 docker-compose -H tcp://$AXIS_TARGET_IP:2375 -f docker-compose.yml up
 ```
 

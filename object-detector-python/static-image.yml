@@ -3,9 +3,6 @@ services:
   object-detector-python:
     image: $APP_NAME
     privileged: true
-    network_mode: bridge
-    links:
-      - inference-server
     logging:
       driver: "json-file"
       options:
@@ -18,14 +15,14 @@ services:
       - OBJECT_LIST_PATH=/models/coco_labels.txt
       - IMAGE_PATH=dog416.png
     volumes:
+      - /usr/lib/libvdostream.so.1:/usr/lib/libvdostream.so.1
       - acap_dl-models:/models:ro
       - /tmp:/output
       - /var/run/dbus:/var/run/dbus:rw
 
   inference-server:
-    image: axisecp/larod-inference-server:2.4.0-api.4.0-pre6-armv7hf-ubuntu20.04
+    image: axisecp/larod-inference-server:2.5.0-api.3.4-armv7hf-ubuntu20.04
     privileged: true
-    network_mode: bridge
     logging:
       driver: "json-file"
       options:
@@ -33,6 +30,7 @@ services:
         max-size: "100k"
     command: /usr/bin/larod-inference-server -p 8501 -j 4
     volumes:
+      - /usr/acap-root/lib:/host/lib
       - acap_dl-models:/models:ro
       - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
 

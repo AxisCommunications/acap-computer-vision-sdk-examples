@@ -11,7 +11,7 @@ from the Computer Vision SDK.
 The following items are required to run this example:
 * Docker Engine version 19.03.5 or higher
 * docker-compose version 1.27.4 or higher
-* Firmware: 10.6
+* Firmware: CVP 21.27.3.1
 * ACAP4 running on the camera
 
 ## Application layout
