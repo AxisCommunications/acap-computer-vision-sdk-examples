@@ -15,6 +15,9 @@ The following items are required to run this example:
 * ACAP4 Docker version 19.03.5 or higher
 * Camera Firmware: 10.2
 
+## Limitations
+* Apache Reverse Proxy does not work with content, i.e. images, in the HTML page
+
 ## Configure Camera Apache Web Server to forward web requests
 The Web Server can be accessed from a Web Browser eighter directly using a port number (i.e. http://mycamera:8080) or through the Apache Server in the camera using an extension to the camera web URL (i.e http://mycamera/monkey). To configure the Apache Server as a Reverse Proxy Server, use the procedure shown below.
 ```sh
@@ -23,10 +26,10 @@ ssh root@<CAMERA_IP>
 
 # Add Reverse Proxy configuration to the Apache Server, example:
 cat >> /etc/apache2/httpd.conf <<EOF
-ProxyPass "/monkey/demo" "http://localhost:2001"
-ProxyPassReverse "/monkey/demo" "http://localhost:2001"
-ProxyPass "/monkey" "http://localhost:8080"
-ProxyPassReverse "/monkey" "http://localhost:8080"
+ProxyPass /monkey/demo http://localhost:2001
+ProxyPassReverse /monkey/demo http://localhost:2001
+ProxyPass /monkey http://localhost:8080
+ProxyPassReverse /monkey http://localhost:8080
 EOF
 
 # Restart the Apache Server
@@ -34,7 +37,7 @@ systemctl restart httpd
 ```
 
 ## Build and run the Web Server
-Start by building the image containing the Web Server code with examples. This will compile the code to an executable and create an armv7hf container containing the executable, which can be uploaded to and run on the camera. After the Web Server is started it can be accessed from a web browser by specifying the web address: http://mycamera/monkey or http://mycamera:8080
+Start by building the image containing the Web Server code with examples. This will compile the code to an executable and create an armv7hf container containing the executable, which can be uploaded to and run on the camera. After the Web Server is started it can be accessed from a web browser by specifying the web address: http://mycamera/monkey/ or http://mycamera:8080
 ```sh
 # Set your camera IP address
 export AXIS_TARGET_IP=<actual camera IP address>
@@ -67,7 +70,7 @@ Home  : http://monkey-project.com
 ```
 
 ## C API Examples
-Some C API examples are included in the Web Server container that has been built. The commands below show how to run the examples on the camera. To see the result, use a web browser and web address: http://mycamera/monkey/demo or http://mycamera:2001
+Some C API examples are included in the Web Server container that has been built. The commands below show how to run the examples on the camera. To see the result, use a web browser and web address: http://mycamera/monkey/demo/ or http://mycamera:2001
 ```sh
 # Run the hello example
 docker -H tcp://$AXIS_TARGET_IP run --rm -p 2001:2001 -it $APP hello
@@ -79,7 +82,6 @@ docker -H tcp://$AXIS_TARGET_IP run --rm -p 2001:2001 -it $APP list
 docker -H tcp://$AXIS_TARGET_IP run --rm -p 2001:2001 -it $APP quiz
 ```
 
-
 ## Proxy settings
 Depending on the network, you might need proxy settings in the following file: *~/.docker/config.json.*
 
@@ -89,3 +91,6 @@ For reference please see: https://docs.docker.com/network/proxy/.
 ```sh
 ssh root@<CAMERA_IP>
 ```
+
+## License
+**Apache License 2.0**
