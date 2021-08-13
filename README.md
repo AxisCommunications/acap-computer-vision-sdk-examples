@@ -50,6 +50,8 @@ Below is a list of examples available in the repository:
   * A C++ example which captures camera frames and properties such as time stamps, zoom, focus etc., through OpenCV.
 * [opencv-qr-decoder-python](./opencv-qr-decoder-python/)
   * A Python example which detects and decodes QR codes in the video stream using OpenCV.
+* [web-server](./web-server/)
+  * A C++ example which runs a Monkey web server on the camera.
 
 ## Dockerhub images
 The examples are based on the [ACAP Computer Vision SDK](https://github.com/AxisCommunications/acap-computer-vision-sdk).
