@@ -56,11 +56,16 @@ jobs:
       run: |
         cd ./object-detector-cpp
         docker build -t axisecp/acap-object-detector-cpp:latest .
-        
+
     # Run build object-detector-python
     - name: Build object-detector-python application
       run: |
         cd ./object-detector-python
         docker build -t axisecp/object-detector-python:latest .
 
-    
+    # Run build web-server
+    - name: Build web-server application
+      run: |
+        cd ./web-server
+        docker build -t axisecp/web-server:latest .
+
