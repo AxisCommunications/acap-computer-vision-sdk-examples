@@ -1,4 +1,6 @@
-# How to use Web Server in ACAP 4
+ *Copyright (C) 2021, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
+
+ # How to use Web Server in ACAP 4
 This document explains briefly how to build and use [Monkey Web Server](https://github.com/monkey/monkey) in ACAP4. Monkey is a fast and lightweight Web Server for Linux. It has been designed to be very scalable with low memory and CPU consumption, the perfect solution for Embedded Linux and high end production environments. Besides the common features as HTTP server, it expose a flexible C API which aims to behave as a fully HTTP development framework, so it can be extended as desired through the plugins interface. The Monkey Web Server [documentation](http://monkey-project.com/documentation/1.5) describes the configuration in detail.
 
 ## Structure of this application
@@ -16,7 +18,7 @@ The following items are required to run this example:
 * Camera Firmware: 10.2
 
 ## Limitations
-* Apache Reverse Proxy does not work with content, i.e. images, in the HTML page
+* Apache Reverse Proxy can not translate content with absolute addresses (i.e. /image.png) in the HTML page. Use only relative content (i.e. image.png or ../image.png)). More information how to handle relative urls correctly with a reverse proxy [here](https://serverfault.com/questions/561892/how-to-handle-relative-urls-correctly-with-a-reverse-proxy).
 
 ## Configure Camera Apache Web Server to forward web requests
 The Web Server can be accessed from a Web Browser eighter directly using a port number (i.e. http://mycamera:8080) or through the Apache Server in the camera using an extension to the camera web URL (i.e http://mycamera/monkey). To configure the Apache Server as a Reverse Proxy Server, use the procedure shown below.
