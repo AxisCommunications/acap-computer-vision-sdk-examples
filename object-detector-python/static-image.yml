@@ -21,7 +21,7 @@ services:
       - /var/run/dbus:/var/run/dbus:rw
 
   inference-server:
-    image: axisecp/larod-inference-server:2.5.0-api.3.4-armv7hf-ubuntu20.04
+    image: axisecp/larod-inference-server:2.5.1-api.3.4-armv7hf-ubuntu20.04
     privileged: true
     logging:
       driver: "json-file"

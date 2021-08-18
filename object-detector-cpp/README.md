@@ -123,7 +123,7 @@ When SSL/TLS is activated, a certificate and private key for your organization m
 ```sh
 # Generate TSL/SSL test certificate
 # Press default for all input except: Common Name (e.g. server FQDN or YOUR name) []:localhost
- openssl req -x509 -newkey rsa:4096 -nodes -days 365 -out testdata/server.pem -keyout testdata/server.key
+openssl req -x509 -newkey rsa:4096 -nodes -writerand ~/.rnd -out server.pem -keyout server.key
 ```
 The inference server must be started by specifying the certificate and the private key in the file docker-compose.yml:
 ```sh
