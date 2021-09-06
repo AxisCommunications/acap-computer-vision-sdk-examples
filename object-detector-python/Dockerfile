@@ -11,6 +11,6 @@ COPY --from=cv-sdk /axis/python-tfserving /
 COPY --from=cv-sdk /axis/opencv /
 COPY --from=cv-sdk /axis/openblas /
 
-WORKDIR /usr/lib/python3.8/dist-packages/object-detector-python
-COPY app/* ./
+WORKDIR /app
+COPY app/* /app
 CMD ["python3", "detector.py"]
