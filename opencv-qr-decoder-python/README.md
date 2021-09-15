@@ -1,3 +1,5 @@
+*Copyright (C) 2021, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
+
 ## OpenCV QR Decoder
 This example shows a minimal QR code detector and decoder application written in Python.
 It involves using OpenCV to create a video stream, NumPy to preprocess
@@ -73,9 +75,9 @@ Once the application image is available to the camera, running it is as easy as:
 docker-compose -H tcp://$AXIS_TARGET_IP:2375 up
 ```
 
-
 ## License
-**Apache 2.0**
+**[Apache License 2.0](../LICENSE)**
+
 
 ## References
 * https://docs.opencv.org/

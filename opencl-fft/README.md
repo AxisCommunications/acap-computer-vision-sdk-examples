@@ -1,3 +1,5 @@
+*Copyright (C) 2021, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
+
 # How to use OpenCL in ACAP 4
 This example explains briefly how to use OpenCL in ACAP4. The example code application is written in C++ and OpenCL. The supplied OpenCL application performs hardware accelerated Fast Fourier Transform (FFT).
 
@@ -93,3 +95,6 @@ For reference please see: https://docs.docker.com/network/proxy/.
 ```sh
 ssh root@$CAMERA_IP
 ```
+
+## License
+**[Apache License 2.0](../LICENSE)**

@@ -1,3 +1,5 @@
+*Copyright (C) 2021, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
+
 # An inference example application on an edge device
 This example is written in Python and implements the following object detection scenarios:
  - Run a video streaming inference on camera
@@ -112,5 +114,6 @@ object-detector-python_1          | bicycle
 object-detector-python_1          | dog
 object-detector-python_1          | car
 ```
-## License:
-Apache 2.0
+
+## License
+**[Apache License 2.0](../LICENSE)**

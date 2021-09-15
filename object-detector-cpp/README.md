@@ -1,3 +1,5 @@
+*Copyright (C) 2021, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
+
 # An object detection application in C++ on an edge device
 The example code is written in C++ for object detection on the camera using docker. The example uses the following technologies.
 * OpenCV
@@ -133,4 +135,4 @@ The inference server must be started by specifying the certificate and the priva
 This example uses larod-inference-server for video inference processing by using gRPC API. The inference server supports multiple clients at the same time. Models are normally loaded when the inference server is starting up, but models can also be loaded by specifying the model file path over gRPC. Please note the model path specified must be accessible by the inference server.
 
 ## License
-**Apache License 2.0**
+**[Apache License 2.0](../LICENSE)**

@@ -1,3 +1,5 @@
+*Copyright (C) 2021, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
+
 # An openCV based example application on an edge device
 This readme file explains how to build an openCV application.
 It is achieved by using the ACAP Computer Vision SDK image, which contains
@@ -267,8 +269,10 @@ ssh root@$AXIS_TARGET_IP
 
   exit
 ```
+
 ## License
-**Apache 2.0**
+**[Apache License 2.0](../LICENSE)**
+
 
 ## References
 * https://docs.opencv.org/
