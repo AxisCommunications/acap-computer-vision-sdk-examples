@@ -13,7 +13,7 @@ ENV https_proxy=$HTTP_PROXY
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# TARGET_NAME is defined as the platform arch string
+# TARGET_TOOLCHAIN is defined as the platform arch string
 # i.e., arm-linux-gnueabihf for the ARTPEC-7 platform
 RUN apt-get update && apt-get install -y -f \
     libglib2.0-dev \
