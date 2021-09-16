@@ -30,7 +30,8 @@ RUN apt-get update && apt-get install --reinstall --download-only -o=dir::cache=
         libc-ares-dev:$UBUNTU_ARCH \
         libgoogle-perftools-dev:$UBUNTU_ARCH \
         libssl-dev:$UBUNTU_ARCH \
-        libcrypto++-dev:$UBUNTU_ARCH
+        libcrypto++-dev:$UBUNTU_ARCH \
+        libgcrypt20:$UBUNTU_ARCH
 RUN for f in /tmp/devel/archives/*.deb; do dpkg -x $f /build-root; done
 RUN cp -r /build-root/lib/* /build-root/usr/lib/ && rm -rf /build-root/lib
 
