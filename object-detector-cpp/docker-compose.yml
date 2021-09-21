@@ -1,0 +1,33 @@
+version: '3.3'
+services:
+  object-detector:
+    image: $APP_NAME
+    privileged: true
+    ipc: host
+    environment:
+      - INFERENCE_HOST=inference-server
+      - INFERENCE_PORT=8501
+      - MODEL_PATH=/models/ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite
+      - OBJECT_LIST_PATH=/models/coco_labels.txt
+    volumes:
+      - /usr/lib/libvdostream.so.1:/usr/lib/libvdostream.so.1
+      - acap_dl-models:/models:ro
+      - /var/run/dbus:/var/run/dbus:rw
+
+  inference-server:
+    image: axisecp/larod-inference-server:2.5.1.test-api.3.4-armv7hf-ubuntu20.04
+    command: /usr/bin/larod-inference-server -p 8501 -j 4 -c testdata/server.pem -k testdata/server.key
+    privileged: true
+    ipc: host
+    volumes:
+      - /usr/acap-root/lib:/host/lib
+      - acap_dl-models:/models
+      - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
+
+  acap_dl-models:
+    image: $MODEL_NAME
+    volumes:
+      - acap_dl-models:/models
+
+volumes:
+  acap_dl-models: {}

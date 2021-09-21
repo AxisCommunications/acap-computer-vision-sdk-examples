@@ -1,0 +1,16 @@
+version: '3.3'
+services:
+  opencl-fft:
+    image: $APP_NAME
+    privileged: true
+    command: $APP_COMMAND
+    devices:
+      - /dev/galcore:/dev/galcore:rw
+    volumes:
+      - /usr/lib/libCLC.so:/usr/lib/libCLC.so
+      - /usr/lib/libEGL.so:/usr/lib/libEGL.so.1
+      - /usr/lib/libGAL.so:/usr/lib/libGAL.so
+      - /usr/lib/libVSC.so:/usr/lib/libVSC.so
+      - /usr/lib/libGLESv2.so:/usr/lib/libGLESv2.so
+      - /usr/lib/libOpenCL.so:/usr/lib/libOpenCL.so.1.2.0
+      - /etc/OpenCL/vendors/:/etc/OpenCL/vendors/
