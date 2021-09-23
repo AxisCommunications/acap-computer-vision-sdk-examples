@@ -29,14 +29,14 @@ object-detector-cpp
  |- README.md - How to execute the example
 ```
 
-## Prerequisites
-To get started following system requirements shall be met:
-* Camera: Q1615-MkIII
-* Firmware: CVP 21.27.3.1
-* docker-compose version 1.27.4 or higher
-* Docker version 19.03.5 or higher
-* ACAP4 installed on the camera
-* Docker using extra memory card
+## Requirements
+To ensure compatibility with the examples, the following requirements shall be met:
+* Camera: ARTPEC-7 DLPU devices (e.g., Q1615 MkIII)
+* docker-compose version 1.29 or higher
+* Docker version 20.10.8 or higher
+* Firmware: 10.7
+* docker-acap installed on the camera
+* docker-acap set to use external memory card
 
 ## How to run the code
 ### Build the object-detector-cpp image

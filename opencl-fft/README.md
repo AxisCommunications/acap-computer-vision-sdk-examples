@@ -19,12 +19,14 @@ opencl-fft
  |- README.md - Instructions on how to run the application
 ```
 
-## Prerequisites
-The following items are required to run this example:
-* Camera: Q1615-MkIII
-* Docker version 19.03.5 or higher
-* Firmware: 10.6
-* ACAP4 installed on the camera
+## Requirements
+To ensure compatibility with the examples, the following requirements shall be met:
+* Camera: ARTPEC-7 DLPU devices (e.g., Q1615 MkIII)
+* docker-compose version 1.29 or higher
+* Docker version 20.10.8 or higher
+* Firmware: 10.7
+* docker-acap installed on the camera
+* docker-acap set to use external memory card
 
 ## Running the example
 1. Start by building the image OpenCL containing the OpenCL code. This will compile the OpenCL code to an executable and create an armv7hf container containing the executable, which can be uploaded to and run on the camera.

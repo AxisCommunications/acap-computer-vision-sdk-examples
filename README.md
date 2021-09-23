@@ -26,11 +26,12 @@ step-by-step instructions on how to run applications on the camera.
 
 ## Requirements
 To ensure compatibility with the examples, the following requirements shall be met:
-* Camera: Q1615-MkIII
-* docker-compose version 1.27.4 or higher
-* Docker version 19.03.5 or higher
-* Firmware: 10.6
-* ACAP4 installed on the camera
+* Camera: ARTPEC-7 DLPU devices (e.g., Q1615 MkIII)
+* docker-compose version 1.29 or higher
+* Docker version 20.10.8 or higher
+* Firmware: 10.7
+* docker-acap installed on the camera
+* docker-acap set to use external memory card
 
 ## Supported architectures
 The examples support the following architectures.

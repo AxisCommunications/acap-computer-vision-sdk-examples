@@ -9,12 +9,14 @@ OpenCV with VDO integration, allowing capture of a video stream through OpenCV's
 VideoCapture class. Additionally, Python, NumPy and OpenBLAS are also copied
 from the Computer Vision SDK.
 
-## Prerequisites
-The following items are required to run this example:
-* Docker Engine version 19.03.5 or higher
-* docker-compose version 1.27.4 or higher
-* Firmware: CVP 21.27.3.1
-* ACAP4 running on the camera
+## Requirements
+To ensure compatibility with the examples, the following requirements shall be met:
+* Camera: ARTPEC-7 DLPU devices (e.g., Q1615 MkIII)
+* docker-compose version 1.29 or higher
+* Docker version 20.10.8 or higher
+* Firmware: 10.7
+* docker-acap installed on the camera
+* docker-acap set to use external memory card
 
 ## Application layout
 ```bash

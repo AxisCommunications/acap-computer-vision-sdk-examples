@@ -15,14 +15,14 @@ app, which contains the "capture.cpp" application which can
 easily be compiled and run with the help of the tools and step by step
 below.
 
-## Prerequisites
-The following items are required to run this example:
-* Docker Engine version 19.03.5 or higher
-* docker-compose version 1.27.4 or higher
-* Firmware: CVP 21.27.3.1
-* Camera: Q1615 Mk3
-* ACAP4 running on the camera
-
+## Requirements
+To ensure compatibility with the examples, the following requirements shall be met:
+* Camera: ARTPEC-7 DLPU devices (e.g., Q1615 MkIII)
+* docker-compose version 1.29 or higher
+* Docker version 20.10.8 or higher
+* Firmware: 10.7
+* docker-acap installed on the camera
+* docker-acap set to use external memory card
 
 ## Getting started
 These instructions below will guide you on how to execute the code. Below is the structure and scripts used in the example:
