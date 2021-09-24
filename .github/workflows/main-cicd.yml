@@ -45,12 +45,6 @@ jobs:
         cd ./opencv-qr-decoder-python
         docker build -t axisecp/acap-opencv-qr-decoder-python:latest .
 
-    # Run build opencl-fft
-    - name: Build opencl-fft application
-      run: |
-        cd ./opencl-fft
-        docker build -t axisecp/acap-opencl-fft:latest .
-
     # Run build script for object-detector-cpp app
     - name: Build object-detector-cpp application
       run: |

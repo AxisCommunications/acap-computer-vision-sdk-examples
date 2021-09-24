@@ -12,5 +12,5 @@ COPY --from=cv-sdk /axis/opencv /
 COPY --from=cv-sdk /axis/openblas /
 
 WORKDIR /app
-COPY app/* /app
+COPY app/* /app/
 CMD ["python3", "detector.py"]
