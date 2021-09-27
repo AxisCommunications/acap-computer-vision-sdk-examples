@@ -45,8 +45,6 @@ Below is a list of examples available in the repository:
     video stream from the camera.
 * [object-detector-cpp](./object-detector-cpp/)
   * A C++ example which runs object detection on the camera.
-* [opencl-fft](./opencl-fft/)
-  * A C++ example which demonstrates how to use OpenCL in ACAP4 to speed up calculations. The application runs Fast Fourier Transform on the camera GPU.
 * [opencv-image-capture-cpp](./opencv-image-capture-cpp/)
   * A C++ example which captures camera frames and properties such as time stamps, zoom, focus etc., through OpenCV.
 * [opencv-qr-decoder-python](./opencv-qr-decoder-python/)
