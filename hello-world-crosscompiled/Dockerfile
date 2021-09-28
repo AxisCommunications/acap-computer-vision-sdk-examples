@@ -1,7 +1,7 @@
 # Specify the architecture at build time: mipsis32r2el/armv7hf/aarch64
 ARG ARCH=armv7hf
 ARG REPO=axisecp
-ARG SDK_VERSION=1.0-beta3
+ARG SDK_VERSION=1.0
 ARG RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 
 FROM ${REPO}/acap-computer-vision-sdk:${SDK_VERSION}-${ARCH}-runtime AS cv-sdk-runtime
