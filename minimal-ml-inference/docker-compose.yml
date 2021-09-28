@@ -1,0 +1,31 @@
+version: '3.3'
+services:
+  simple-inference-client-app:
+    image: $APP_NAME
+    build: .
+    environment:
+      - PYTHONUNBUFFERED=1
+      - INFERENCE_HOST=inference-server
+      - INFERENCE_PORT=8501
+      - MODEL_PATH=/models/ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite
+    volumes:
+      - /usr/lib/libvdostream.so.1:/usr/lib/libvdostream.so.1
+      - acap_dl-models:/models:ro
+      - /tmp:/output
+      - /var/run/dbus:/var/run/dbus:rw
+
+  inference-server:
+    image: $INFERENCE_SERVER
+    command: /usr/bin/larod-inference-server -p 8501 -j 4
+    volumes:
+      - /usr/acap-root/lib:/host/lib
+      - acap_dl-models:/models:ro
+      - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
+
+  acap_dl-models:
+    image: $MODEL_VOLUME
+    volumes:
+      - acap_dl-models:/models
+
+volumes:
+  acap_dl-models: {}
