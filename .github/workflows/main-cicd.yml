@@ -29,10 +29,6 @@ jobs:
     #  env:
     #    SHELLCHECK_OPTS: -e SC2153 -e SC2148 -e SC2086
 
-    # Runs a single command using the runners shell
-    - name: Login to dockerhub axis account
-      run: docker login -u ${{ secrets.DOCKERHUB_USER }} --password ${{ secrets.DOCKERHUB_PASS }}
-
     # Run build script for opencv-image-capture-cpp app
     - name: Build capture_app application
       run: |
