@@ -25,9 +25,6 @@
 #include <opencv2/videoio.hpp>
 
 #include "serving_client.hpp"
-#include "test_certificate.h"
-
-#define USE_SSL
 
 using namespace std;
 using namespace cv;
@@ -142,76 +139,103 @@ void output_timing_info(steady_clock::time_point start,
        << endl;
 }
 
-int main(int argc, char *argv[]) try {
-  // Number of outstanding zero-copy buffers (This is a very precious resource)
-  constexpr size_t BUFFERS = 2;
-  Mat frame[BUFFERS];
-
-  cout << "Start: " << argv[0] << endl;
-  vector<string> classes = get_classes_from_file();
-  VideoCapture cap = setup_capture(BUFFERS);
-  string connect_string = string(getenv("INFERENCE_HOST")) + string(":") +
-                          string(getenv("INFERENCE_PORT"));
-
-#ifdef USE_SSL
-  SslCredentialsOptions ssl_opts = {test_certificate, "", ""};
-  shared_ptr<ChannelCredentials> creds = grpc::SslCredentials(ssl_opts);
-  grpc::ChannelArguments args;
-  args.SetSslTargetNameOverride("localhost");
-  ServingClient client(grpc::CreateCustomChannel(connect_string, creds, args));
-#else
-  shared_ptr<ChannelCredentials> creds = InsecureChannelCredentials();
-  ServingClient client(grpc::CreateChannel(connect_string, creds));
-#endif
-
-  string model(getenv("MODEL_PATH"));
-
-  int frame_idx = 0;
-  for (;;) {
-    Mat &mat = frame[frame_idx++ % BUFFERS];
-
-    auto time_start = steady_clock::now();
-
-    // Blocking read
-    cap.read(mat);
-
-    auto time_framecapture_end = steady_clock::now();
-
-    // Make sure capture succeeded
-    if (mat.empty())
-      throw std::runtime_error("Failed to fetch frame");
-
-    uint32_t seqnum = cap.get(CAP_PROP_POS_FRAMES);
-    // Write info about frame
-    cout << "Caught frame " << setw(2) << seqnum << " " << mat.cols << "x"
-         << mat.rows << endl;
-
-    cout << "Connecting to: " << connect_string << endl;
-
-    string output;
-    // Call the inference server
-    auto maybe_response = client.callPredict(model, mat, output);
-
-    auto time_grpc_end = steady_clock::now();
-
-    cout << output << endl;
-
-    // Run postprocessing if we got a valid result
-    if (maybe_response) {
-      auto response = maybe_response.value();
-      postprocess(response, classes);
-    }
-
-    auto time_postprocess_end = steady_clock::now();
-
-    output_timing_info(time_start, time_framecapture_end,
-      time_grpc_end, time_postprocess_end);
-
-    cout << endl;
+string read_text(const char* path)
+{
+  FILE* fptr = fopen(path, "r");
+  if (fptr == nullptr) {
+    throw std::runtime_error(strerror(errno) + string(": ") + path);
   }
 
-  return 0;
+  fseek(fptr, 0, SEEK_END);
+  size_t len = ftell(fptr);
+  fseek(fptr, 0, SEEK_SET);
+  string content(len + 1, '\0');
+  size_t size = fread(&content[0], 1, len, fptr);
+  fclose(fptr);
+  return content;
+}
 
-} catch (const exception &e) {
-  cerr << "Exception: " << e.what() << endl;
+int main(int argc, char *argv[]) {
+  try {
+      // Number of outstanding zero-copy buffers (This is a very precious resource)
+      constexpr size_t BUFFERS = 2;
+      Mat frame[BUFFERS];
+
+      cout << "Start:";
+      for (int i=0; i < argc; i++) {
+        cout << " " << argv[i];
+      }
+      cout << endl;
+
+      vector<string> classes = get_classes_from_file();
+      VideoCapture cap = setup_capture(BUFFERS);
+      string connect_string = string(getenv("INFERENCE_HOST")) + string(":") +
+                              string(getenv("INFERENCE_PORT"));
+
+      shared_ptr<Channel> channel;
+      if (argc < 2) {
+        shared_ptr<ChannelCredentials> creds = InsecureChannelCredentials();
+        channel = grpc::CreateChannel(connect_string, creds);
+      }
+      else
+      {
+        string root_cert = read_text(argv[1]);
+        SslCredentialsOptions ssl_opts = {root_cert.c_str(), "", ""};
+        shared_ptr<ChannelCredentials> creds = grpc::SslCredentials(ssl_opts);
+        grpc::ChannelArguments args;
+        args.SetSslTargetNameOverride("localhost");
+        channel = grpc::CreateCustomChannel(connect_string, creds, args);
+      }
+      ServingClient client(channel);
+
+      string model(getenv("MODEL_PATH"));
+
+      int frame_idx = 0;
+      for (;;) {
+        Mat &mat = frame[frame_idx++ % BUFFERS];
+
+        auto time_start = steady_clock::now();
+
+        // Blocking read
+        cap.read(mat);
+
+        auto time_framecapture_end = steady_clock::now();
+
+        // Make sure capture succeeded
+        if (mat.empty())
+          throw std::runtime_error("Failed to fetch frame");
+
+        uint32_t seqnum = cap.get(CAP_PROP_POS_FRAMES);
+        // Write info about frame
+        cout << "Caught frame " << setw(2) << seqnum << " " << mat.cols << "x"
+            << mat.rows << endl;
+
+        cout << "Connecting to: " << connect_string << endl;
+
+        string output;
+        // Call the inference server
+        auto maybe_response = client.callPredict(model, mat, output);
+
+        auto time_grpc_end = steady_clock::now();
+
+        cout << output << endl;
+
+        // Run postprocessing if we got a valid result
+        if (maybe_response) {
+          auto response = maybe_response.value();
+          postprocess(response, classes);
+        }
+
+        auto time_postprocess_end = steady_clock::now();
+
+        output_timing_info(time_start, time_framecapture_end,
+          time_grpc_end, time_postprocess_end);
+
+        cout << endl;
+      }
+
+      return 0;
+  } catch (const exception &e) {
+    cerr << "Exception: " << e.what() << endl;
+  }
 }

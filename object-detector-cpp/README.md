@@ -50,9 +50,9 @@ export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 # this should be a repository that you can push to
 # and that your camera can pull from, i.e., substitute
 # axisecp for your own repository
-export APP_NAME=axisecp/acap-object-detector-cpp
+export APP_NAME=axisecp/acap4-object-detector-cpp
 
-docker build . -t $APP_NAME --build-arg HTTP_PROXY --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE
+docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE
 docker push $APP_NAME
 ```
 * Build docker container with inference models:
@@ -61,7 +61,7 @@ docker push $APP_NAME
 # this should be a repository that you can push to
 # and that your camera can pull from, i.e., substitute
 # axisecp for your own repository
-export MODEL_NAME=axisecp/acap-dl-models:1.0
+export MODEL_NAME=axisecp/acap-dl-models:1.1
 docker build . -f Dockerfile.model -t $MODEL_NAME
 docker push $MODEL_NAME
 ```
@@ -117,19 +117,15 @@ This example uses larod-inference-server for video inference processing by using
 #define ZEROCOPY
 ```
 ## Server Authentication
-This example uses larod-inference-server for video inference processing. The API uses an insecure gRPC communication channel, but it is possible to activate SSL/TLS server authentication and encryption by activating following define statement in file src/object_detect.cpp:
-```c++
-#define USE_SSL
-```
-When SSL/TLS is activated, a certificate and private key for your organization must be provided to the inference server. Here is an example how to generate a temporary test certificate:
+This example uses larod-inference-server for video inference processing. The API uses an insecure gRPC communication channel when no certificate is provided and it uses SSL/TLS server authentication and encryption when a server certificate is provided as the first parameter to object detector:
+
 ```sh
-# Generate TSL/SSL test certificate
-# Press default for all input except: Common Name (e.g. server FQDN or YOUR name) []:localhost
-openssl req -x509 -newkey rsa:4096 -nodes -writerand ~/.rnd -out server.pem -keyout server.key
+objdetector server.pem
 ```
-The inference server must be started by specifying the certificate and the private key in the file docker-compose.yml:
+
+The inference server must then be started by specifying the server certificate and the private key in the file docker-compose.yml:
 ```sh
-/usr/bin/larod-inference-server -c certificate.pem -k private.key
+larod-inference-server -c server.pem -k private.key
 ```
 ## Model over gRPC
 This example uses larod-inference-server for video inference processing by using gRPC API. The inference server supports multiple clients at the same time. Models are normally loaded when the inference server is starting up, but models can also be loaded by specifying the model file path over gRPC. Please note the model path specified must be accessible by the inference server.
