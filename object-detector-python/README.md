@@ -52,62 +52,51 @@ To ensure compatibility with the examples, the following requirements shall be m
 * Docker version 20.10.8 or higher
 * Firmware: 10.7
 * docker-acap installed on the camera
-* docker-acap set to use external memory card
+* docker-acap set to use TLS and external memory card
 
 ## How to run the code
 Build a Docker object-detector-python image, example:
 
 ```sh
-# Adjust some environment variables to your preference, then build and push to docker repo
+# Set your camera IP address and clear docker memory
+export AXIS_TARGET_IP=<actual camera IP address>
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 system prune -af
+
+# Set environment variables
 export REPO=axisecp
 export ARCH=armv7hf
 export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
+export APP_NAME=acap-object-detector-python
+export MODEL_NAME=acap-dl-models
 
-# To allow retrieval of the image from the cloud
-# this should be a repository that you can push to
-# and that your camera can pull from, i.e., substitute
-# axisecp for your own repository
-export APP_NAME=axisecp/acap-object-detector-python
+# Build the application and load on camera
 docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE
-docker push $APP_NAME
-```
+docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
 
-* Build docker container with inference models:
-```sh
-# To allow retrieval of the image from the cloud
-# this should be a repository that you can push to
-# and that your camera can pull from, i.e., substitute
-# axisecp for your own repository
-export MODEL_NAME=axisecp/acap-dl-models:1.0
+# Build the inference models and load on camera
 docker build . -f Dockerfile.model -t $MODEL_NAME
-docker push $MODEL_NAME
-```
+docker save $MODEL_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
 
-There are two options available in this example:
+# There are two options available in this example:
+# **OPT 1** - Use the following command to run the video streaming inference on the camera
+docker-compose --tlsverify  -H tcp://$AXIS_TARGET_IP:2376 up
 
-```sh
-# Set your camera IP address
-export AXIS_TARGET_IP=<actual camera IP address>
+# **OPT 2** - Use the following command to run static image inference on the camera
+docker-compose --tlsverify  -H tcp://$AXIS_TARGET_IP:2376 -f static-image.yml up
 
-# Clear docker memory on camera
-docker -H tcp://$AXIS_TARGET_IP system prune -af
-
-# **OPT 1** - Use the following command to run the video streaming inference on the camera, example:
-docker-compose -H tcp://$AXIS_TARGET_IP:2375 up
-
-# **OPT 2** - Use the following command to run static image inference on the camera, example:
-docker-compose -H tcp://$AXIS_TARGET_IP:2375 -f static-image.yml up
+# Terminate with ctrl-C and cleanup
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:2376 down -v
 ```
 
 ### The expected output:
-`docker-compose -H tcp://$AXIS_TARGET_IP:2375 up`
+`docker-compose --tlsverify  -H tcp://$AXIS_TARGET_IP:2376 up`
 ```
 ....
 object-detector_1           | 1 Objects found
 object-detector_1           | person
 ```
 
-`docker-compose -H tcp://$AXIS_TARGET_IP:2375 -f static-image.yml up`
+`docker-compose --tlsverify  -H tcp://$AXIS_TARGET_IP:2376 -f static-image.yml up`
 ```
 ....
 object-detector-python_1          | 3 Objects found

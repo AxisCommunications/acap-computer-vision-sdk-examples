@@ -16,7 +16,7 @@ To ensure compatibility with the examples, the following requirements shall be m
 * Docker version 20.10.8 or higher
 * Firmware: 10.7
 * docker-acap installed on the camera
-* docker-acap set to use external memory card
+* docker-acap set to use TLS and external memory card
 
 ## Application layout
 ```bash
@@ -34,47 +34,26 @@ opencv-qr-decoder-python
 ### Running the application
 Begin by setting up some environment variables.
 Below, we define the camera's IP, the desired app name and the path and version of the ACAP Computer Vision SDK.
-```
-# CV SDK configuration
+```sh
+# CV SDK configuration# Set your camera IP address and clear docker memory
+export AXIS_TARGET_IP=<actual camera IP address>
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 system prune -af
+
+# Set environment variables
 export ARCH=armv7hf
 export REPO=axisecp
 export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
+export APP_NAME=acap-opencv-qr-decoder-python
 
-# Local configuration
-# To allow retrieval of the image from the cloud
-# this should be a repository that you can push to
-# and that your camera can pull from, i.e., substitute
-# axisecp for your own repository
-export APP_NAME=axisecp/acap-opencv-qr-decoder-python
+# Build and load the application on the camera
+docker build . -t $APP_NAME --build-arg ARCH --build-arg REPO --build-arg RUNTIME_IMAGE
+docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
 
-# Set your camera IP address
-export AXIS_TARGET_IP=<actual camera IP address>
-```
+# Run the application on the camera
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:2376 up
 
-With the environment setup, the application image can be built by running:
- ```
-docker build -t $APP_NAME --build-arg ARCH --build-arg REPO --build-arg RUNTIME_IMAGE --build-arg DOCKER_PROXY=$HTTP_PROXY .
- ```
-
-To run the image, it needs to be available to the camera. This is either done by pushing it
-to a container registry and pulling it from there (option 1), or saving it to a compressed
-`.tar` file and uploading it directly to the camera (option 2).
-
-Option 1: Pushing the image to cloud and pulling it to the camera
-```
-docker push $APP_NAME
-docker -H tcp://$AXIS_TARGET_IP pull $APP_NAME
-```
-
-Option 2: Saving the image to file and uploading directly to the camera
-```
-docker save $APP_NAME -o app.tar
-docker -H tcp://$AXIS_TARGET_IP load -i app.tar
-```
-
-Once the application image is available to the camera, running it is as easy as:
-```
-docker-compose -H tcp://$AXIS_TARGET_IP:2375 up
+# Terminate with ctrl-C and cleanup
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:2376 down -v
 ```
 
 ## License

@@ -22,7 +22,7 @@ To ensure compatibility with the examples, the following requirements shall be m
 * Docker version 20.10.8 or higher
 * Firmware: 10.7
 * docker-acap installed on the camera
-* docker-acap set to use external memory card
+* docker-acap set to use TLS and external memory card
 
 ## Getting started
 These instructions below will guide you on how to execute the code. Below is the structure and scripts used in the example:
@@ -52,49 +52,26 @@ opencv-image-capture-cpp
 Begin by setting up some environment variables.
 Below, we define the camera's IP, the desired app name and the path and version of the ACAP Computer Vision SDK.
 ```sh
-# CV SDK configuration
+# Set your camera IP address and clear docker memory
+export AXIS_TARGET_IP=<actual camera IP address>
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 system prune -af
+
+# Set environment variables
 export ARCH=armv7hf
 export REPO=axisecp
 export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
+export APP_NAME=acap-opencv-image-capture-cpp
 
-# Local configuration
-# To allow retrieval of the image from the cloud
-# this should be a repository that you can push to
-# and that your camera can pull from, i.e., substitute
-# axisecp for your own repository
-export APP_NAME=axisecp/acap-opencv-image-capture-cpp
-
-# Set your camera IP address
-export AXIS_TARGET_IP=<actual camera IP address>
-```
-
-The image can be built by running:
- ```sh
-docker build -t $APP_NAME --build-arg ARCH --build-arg REPO --build-arg RUNTIME_IMAGE --build-arg DOCKER_PROXY=$HTTP_PROXY .
- ```
-
-There are two options to run the capture app, either save the image locally as a .tar and upload it to the camera (*opt 1*),
-or push the image to a container registry and pull the image to the camera from the cloud (*opt 2*).
-
-#### [opt 1] Save the image as tarball
-```sh
-docker save -o opencv-app.tar $APP_NAME
-```
-#### [opt 1] Load the image if it's a tarball
-```sh
-docker -H tcp://$AXIS_TARGET_IP load -i opencv_app.tar
-```
-#### [opt 2] push it to container registry.
-```sh
-docker push $APP_NAME
-```
-#### [opt 2] pull it from a container registry:
-```sh
-docker -H tcp://$AXIS_TARGET_IP pull $APP_NAME
+# Build and upload the application
+docker build . -t $APP_NAME --build-arg ARCH --build-arg REPO --build-arg RUNTIME_IMAGE
+docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
 ```
 #### Run the container
 ```sh
-docker-compose -H tcp://$AXIS_TARGET_IP:2375 -f docker-compose.yml up
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:2376 -f docker-compose.yml up
+
+# Cleanup
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:2376 -f docker-compose.yml down -v
 ```
 
 #### The expected output:
@@ -246,29 +223,6 @@ These *image* properties are read-write:
 ## Proxy settings
 Depending on the network you are connected to.
 The file that needs those settings is: *~/.docker/config.json.* For reference please see: https://docs.docker.com/network/proxy/.
-
-*Proxy settings can also be added on the edge device*
-```
-ssh root@$AXIS_TARGET_IP
-```
-* **Run on the device:**
-
-```bash
-  #!/bin/sh
-
-  # Setup proxy for dockerd
-  cat >> /etc/systemd/system/sdkrun_dockerd.service <<EOF
-  [Service]
-  Environment="HTTP_PROXY=http://<myproxy.com>:<port>"
-  Environment="HTTPS_PROXY=http://<myproxy>:<port>"
-  Environment="NO_PROXY=localhost,127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,.<domain>"
-  EOF
-
-  systemctl daemon-reload
-  systemctl restart sdkrun_dockerd
-
-  exit
-```
 
 ## License
 **[Apache License 2.0](../LICENSE)**

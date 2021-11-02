@@ -1,13 +1,7 @@
 ARG UBUNTU_VERSION=20.04
-ARG http_proxy
-ARG https_proxy
 
 # A base image for crosscompilation
 FROM ubuntu:$UBUNTU_VERSION AS build-base
-
-# To support DOCKER_BUILDKIT=0, base ARGs are converted to ENVs to allow propagation
-ENV http_proxy=$http_proxy
-ENV https_proxy=$https_proxy
 
 # Setup environment variables
 ENV DEBIAN_FRONTEND=noninteractive

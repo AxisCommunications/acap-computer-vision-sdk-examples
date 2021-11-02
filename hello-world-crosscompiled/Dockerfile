@@ -8,11 +8,9 @@ FROM ${REPO}/acap-computer-vision-sdk:${SDK_VERSION}-${ARCH}-runtime AS cv-sdk-r
 FROM ${REPO}/acap-computer-vision-sdk:${SDK_VERSION}-${ARCH}-devel AS cv-sdk-devel
 
 # Setup proxy configuration
-ARG DOCKER_PROXY
-ENV http_proxy=$DOCKER_PROXY
-ENV https_proxy=$DOCKER_PROXY
-ENV HTTP_PROXY=$DOCKER_PROXY
-ENV HTTPS_PROXY=$DOCKER_PROXY
+ARG HTTP_PROXY
+ENV http_proxy=$HTTP_PROXY
+ENV https_proxy=$HTTP_PROXY
 
 ENV DEBIAN_FRONTEND=noninteractive
 
