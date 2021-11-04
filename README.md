@@ -31,7 +31,7 @@ To ensure compatibility with the examples, the following requirements shall be m
 * Docker version 20.10.8 or higher
 * Firmware: 10.7
 * docker-acap installed on the camera
-* docker-acap set to use external memory card
+* docker-acap set to TLS and external memory card
 
 ## Supported architectures
 The examples support the following architectures.

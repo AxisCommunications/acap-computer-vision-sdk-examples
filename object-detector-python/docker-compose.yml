@@ -2,7 +2,6 @@ version: '3.3'
 services:
   object-detector-python:
     image: $APP_NAME
-    privileged: true
     logging:
       driver: "json-file"
       options:
@@ -21,8 +20,7 @@ services:
       - /var/run/dbus:/var/run/dbus:rw
 
   inference-server:
-    image: axisecp/larod-inference-server:2.5.1-api.3.4-armv7hf-ubuntu20.04
-    privileged: true
+    image: axisecp/larod-inference-server:2.6.0-api.4.0-armv7hf-ubuntu20.04
     logging:
       driver: "json-file"
       options:

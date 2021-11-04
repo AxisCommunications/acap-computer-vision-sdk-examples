@@ -41,41 +41,30 @@ To ensure compatibility with the examples, the following requirements shall be m
 ## How to run the code
 ### Build the object-detector-cpp image
 ```sh
-# Adjust some environment variables to your preference, then build and push to docker repo
+# Set your camera IP address and clear docker memory
+export AXIS_TARGET_IP=<actual camera IP address>
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 system prune -af
+
+# Set environment variables
 export REPO=axisecp
 export ARCH=armv7hf
 export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
+export APP_NAME=acap4-object-detector-cpp
+export MODEL_NAME=acap-dl-models
 
-# To allow retrieval of the image from the cloud
-# this should be a repository that you can push to
-# and that your camera can pull from, i.e., substitute
-# axisecp for your own repository
-export APP_NAME=axisecp/acap-object-detector-cpp
+# Build and upload object detector
+docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE
+docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
 
-docker build . -t $APP_NAME --build-arg HTTP_PROXY --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE
-docker push $APP_NAME
-```
-* Build docker container with inference models:
-```sh
-# To allow retrieval of the image from the cloud
-# this should be a repository that you can push to
-# and that your camera can pull from, i.e., substitute
-# axisecp for your own repository
-export MODEL_NAME=axisecp/acap-dl-models:1.0
+# Build and upload inference models
 docker build . -f Dockerfile.model -t $MODEL_NAME
-docker push $MODEL_NAME
-```
+docker save $MODEL_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
 
-* Use the following commands to run the example with images from Docker Hub:
-```sh
-# Set your camera IP address
-export AXIS_TARGET_IP=<actual camera IP address>
+# Use the following command to run the example on the camera
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:2376 up
 
-# Clear docker memory on camera
-docker -H tcp://$AXIS_TARGET_IP system prune -af
-
-# Run on camera
-docker-compose -H tcp://$AXIS_TARGET_IP:2375 up
+# Terminate with ctrl-C and cleanup
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:2376 down -v
 ```
 
 ### The expected output:
@@ -90,46 +79,25 @@ object-detector_1   | Inference grpc call: 35 ms
 object-detector_1   | Postprocess: 0 ms
 ```
 ## Proxy settings
-Depending on the network, you might need proxy settings in the following file: *~/.docker/config.json.*
+Depending on the network, you might need proxy settings in the following file: *~/.docker/config.json
 
 For reference please see: https://docs.docker.com/network/proxy/.
 
-*Proxy settings can also be added on the edge device*
-```sh
-  ssh root@<CAMERA_IP>
-```
-**Run on the device:**
-```sh
-  #!/bin/sh
-  cat >> /etc/systemd/system/sdkrun_dockerd.service <<EOF
-  [Service]
-  Environment="HTTP_PROXY=http://<myproxy.com>:<port>"
-  Environment="HTTPS_PROXY=http://<myproxy>:<port>"
-  Environment="NO_PROXY=localhost,127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,.<domain>"
-  EOF
-
-  systemctl daemon-reload
-  systemctl restart sdkrun_dockerd
-```
 ## Zero copy
 This example uses larod-inference-server for video inference processing by using gRPC API. In case this client and the inference server is located on the same camera, it is possible to speed up inference by using shared memory to pass the video image to the inference server by activating following define statement in file src/serving_client.hpp:
 ```c++
 #define ZEROCOPY
 ```
 ## Server Authentication
-This example uses larod-inference-server for video inference processing. The API uses an insecure gRPC communication channel, but it is possible to activate SSL/TLS server authentication and encryption by activating following define statement in file src/object_detect.cpp:
-```c++
-#define USE_SSL
-```
-When SSL/TLS is activated, a certificate and private key for your organization must be provided to the inference server. Here is an example how to generate a temporary test certificate:
+This example uses larod-inference-server for video inference processing. The API uses an insecure gRPC communication channel when no certificate is provided and it uses SSL/TLS server authentication and encryption when a server certificate is provided as the first parameter to object detector:
+
 ```sh
-# Generate TSL/SSL test certificate
-# Press default for all input except: Common Name (e.g. server FQDN or YOUR name) []:localhost
-openssl req -x509 -newkey rsa:4096 -nodes -writerand ~/.rnd -out server.pem -keyout server.key
+objdetector server.pem
 ```
-The inference server must be started by specifying the certificate and the private key in the file docker-compose.yml:
+
+The inference server must then be started by specifying the server certificate and the private key in the file docker-compose.yml:
 ```sh
-/usr/bin/larod-inference-server -c certificate.pem -k private.key
+larod-inference-server -c server.pem -k private.key
 ```
 ## Model over gRPC
 This example uses larod-inference-server for video inference processing by using gRPC API. The inference server supports multiple clients at the same time. Models are normally loaded when the inference server is starting up, but models can also be loaded by specifying the model file path over gRPC. Please note the model path specified must be accessible by the inference server.

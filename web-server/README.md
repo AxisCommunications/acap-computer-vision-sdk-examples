@@ -16,6 +16,8 @@ The following items are required to run this example:
 * Camera: Q1615-MkIII
 * ACAP4 Docker version 19.03.5 or higher
 * Camera Firmware: 10.2
+* docker-acap installed on the camera
+* docker-acap set to use TLS and external memory card
 
 ## Limitations
 * Apache Reverse Proxy can not translate content with absolute addresses (i.e. /image.png) in the HTML page. Use only relative content (i.e. image.png or ../image.png)). More information how to handle relative urls correctly with a reverse proxy [here](https://serverfault.com/questions/561892/how-to-handle-relative-urls-correctly-with-a-reverse-proxy).
@@ -41,21 +43,19 @@ systemctl restart httpd
 ## Build and run the Web Server
 Start by building the image containing the Web Server code with examples. This will compile the code to an executable and create an armv7hf container containing the executable, which can be uploaded to and run on the camera. After the Web Server is started it can be accessed from a web browser by specifying the web address: http://mycamera/monkey/ or http://mycamera:8080
 ```sh
-# Set your camera IP address
+# Set your camera IP address and clear docker memory
 export AXIS_TARGET_IP=<actual camera IP address>
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 system prune -af
 
-# To allow retrieval of the image from the cloud
-# this should be a repository that you can push to
-# and that your camera can pull from, i.e., substitute
-# axisecp for your own repository
-export APP=axisecp/monkey
+# Set environment variables
+export APP_NAME=monkey
 
-docker build . --build-arg http_proxy --build-arg https_proxy -t $APP
-docker push $APP
+# Build the application and load on camera
+docker build . -t $APP_NAME
+docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
 
 # Start Web Server on the camera
-docker -H tcp://$AXIS_TARGET_IP system prune -af
-docker -H tcp://$AXIS_TARGET_IP run --rm -p 8080:80 -it $APP
+docker --tlsverify  -H tcp://$AXIS_TARGET_IP:2376 run --rm -p 8080:80 -it $APP_NAME
 ```
 
 ### The expected output
@@ -75,23 +75,19 @@ Home  : http://monkey-project.com
 Some C API examples are included in the Web Server container that has been built. The commands below show how to run the examples on the camera. To see the result, use a web browser and web address: http://mycamera/monkey/demo/ or http://mycamera:2001
 ```sh
 # Run the hello example
-docker -H tcp://$AXIS_TARGET_IP run --rm -p 2001:2001 -it $APP hello
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 run --rm -p 2001:2001 -it $APP_NAME hello
 
 # Run the list directory example
-docker -H tcp://$AXIS_TARGET_IP run --rm -p 2001:2001 -it $APP list
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 run --rm -p 2001:2001 -it $APP_NAME list
 
 # Run the quiz example
-docker -H tcp://$AXIS_TARGET_IP run --rm -p 2001:2001 -it $APP quiz
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 run --rm -p 2001:2001 -it $APP_NAME quiz
 ```
 
 ## Proxy settings
 Depending on the network, you might need proxy settings in the following file: *~/.docker/config.json.*
 
 For reference please see: https://docs.docker.com/network/proxy/.
-
-*Proxy settings can also be added to the edge device:*
-```sh
-ssh root@<CAMERA_IP>
 ```
 
 ## License
