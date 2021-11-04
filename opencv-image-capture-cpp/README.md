@@ -31,7 +31,6 @@ These instructions below will guide you on how to execute the code. Below is the
 opencv-image-capture-cpp
 ├── app
 │   ├── Makefile
-|   ├── upload.sh
 │   └── src
 │       └── capture.cpp
 ├── docker-compose.yml
@@ -42,7 +41,6 @@ opencv-image-capture-cpp
 * **Dockerfile**         - Docker file with the toolchain included to run the example.
 * **docker-compose.yml** - Docker compose file contains the latest image of the example from dockerhub.
 * **README.md**          - Step by step instructions on how to run the example.
-* **upload.sh**          - To push/pull images to the camera running ACAP4.
 
 ### Limitations
 * OpenCV module choice cannot be made in this version.
