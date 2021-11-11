@@ -12,12 +12,14 @@ Following are the list of files and a brief description of each file in the exam
 hello-world
 ├── simple_inference.py
 ├── Dockerfile
+├── Dockerfile.model
 ├── docker-compose.yml
 └── README.md
 ```
 
 * **simple_inference.py** - A Python script that captures an image and send an inference call to the model server
 * **Dockerfile** - Build instructions for the application image that is run on the camera
+* **Dockerfile.model** - Build instructions for the inference model
 * **docker-compose.yml** - A docker-compose file that specifies how the application is run (mounts, environment variables, etc.,)
 
 ## Requirements
@@ -42,20 +44,21 @@ docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 system prune -af
 # ARCH defines what architecture to use (e.g., armv7hf, aarch64)
 # RUNTIME_IMAGE defines what base image should be used for the application image
 # INFERENCE_SERVER is the image of the model server
-# MODEL_VOLUME is the image holding the model data
+# MODEL_NAME is the image holding the inference model
 export REPO=axisecp
 export ARCH=armv7hf
 export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 export INFERENCE_SERVER=axisecp/larod-inference-server:2.6.0-api.4.0-armv7hf-ubuntu20.04
-export MODEL_VOLUME=axisecp/acap-dl-models:1.1
 export APP_NAME=minimal-ml-inference
+export MODEL_NAME=acap-dl-models
 ```
 
-With the environment setup, the `minimal-ml-inference` image can be built. Additionally, the inference server and model volume images need to be pulled from dockerhub. The environment variables are supplied as build arguments to the `docker build` command such that they are made available to docker during the build process:
+With the environment setup, the `minimal-ml-inference` image and inference models can be built. Additionally, the inference server need to be pulled from dockerhub. The environment variables are supplied as build arguments to the `docker build` command such that they are made available to docker during the build process:
 
 ```sh
 docker-compose pull
 docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE
+docker build . -f Dockerfile.model -t $MODEL_NAME
 ```
 
 Next, the build and pulled images needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
@@ -63,7 +66,7 @@ Next, the build and pulled images needs to be uploaded to the device. This can b
 ```sh
 docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
 docker save $INFERENCE_SERVER | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
-docker save $MODEL_VOLUME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
+docker save $MODEL_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
 ```
 
 With the application image, inference server and model image on the device, the application can be started. As the example uses OpenCV, the OpenCV requirements will be included in `docker-compose.yml`, which is used to run the application:
