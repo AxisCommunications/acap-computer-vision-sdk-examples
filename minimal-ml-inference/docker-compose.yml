@@ -23,7 +23,8 @@ services:
       - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
 
   acap_dl-models:
-    image: $MODEL_VOLUME
+    image: $MODEL_NAME
+    build: .
     volumes:
       - acap_dl-models:/models
 
