@@ -73,25 +73,25 @@ With the environment setup, the `minimal-ml-inference` image and inference model
 
 ```sh
 docker-compose --env-file ./config/env.$ARCH pull
-docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE
-docker build . -f Dockerfile.model -t $MODEL_NAME
+docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE --build-arg SDK_VERSION
+docker build . -f Dockerfile.model -t $MODEL_NAME --build-arg MODEL_IMAGE
 ```
 
 Next, the build and pulled images needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
 
 ```sh
-docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
-docker save $INFERENCE_SERVER | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
-docker save $MODEL_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
+docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
+docker save $INFERENCE_SERVER | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
+docker save $MODEL_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
 ```
 
 With the application image, inference server and model image on the device, the application can be started. As the example uses OpenCV, the OpenCV requirements will be included in `docker-compose.yml`, which is used to run the application:
 
 ```sh
-docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:2376 up
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  --env-file ./config/env.$ARCH  up
 
 # Terminate with ctrl-C and cleanup
-docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:2376 down -v
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  down -v
 ```
 
 The expected output from the application is the raw predictions from the model specified in the environment variable.
