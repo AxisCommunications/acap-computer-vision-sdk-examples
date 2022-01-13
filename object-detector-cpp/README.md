@@ -23,6 +23,9 @@ object-detector-cpp
  | | |- serving_client.hpp - Creates the request and makes the call to the inference-server.
  | | |- test_certificate.h - Certificate for accessing the inference-server using SSL/TLS.
  | |- Makefile - Used by the make tool to build the program
+ |- config
+ | |- .env.aarch64 - Configuration file to run docker-compose on an arm64 device
+ | |- .env.armv7hf - Configuration file to run docker-compose on an arm32 device
  |- docker-compose.yml - Specifies the group of images used to run the application, and their interdependencies.
  |- Dockerfile - Specifies how the application is built.
  |- Dockerfile.model - Specifies how the inference model is built.
@@ -31,7 +34,7 @@ object-detector-cpp
 
 ## Requirements
 To ensure compatibility with the examples, the following requirements shall be met:
-* Camera: ARTPEC-7 DLPU devices (e.g., Q1615 MkIII)
+* Camera: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
 * docker-compose version 1.29 or higher
 * Docker version 20.10.8 or higher
 * Firmware: 10.7
@@ -39,11 +42,12 @@ To ensure compatibility with the examples, the following requirements shall be m
 * docker-acap set to use external memory card
 
 ## How to run the code
-### Build the object-detector-cpp image
+### Export environment variables for arm32 cameras
 ```sh
 # Set your camera IP address and clear docker memory
 export AXIS_TARGET_IP=<actual camera IP address>
-docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 system prune -af
+export DOCKER_PORT=2375
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 
 # Set environment variables
 export REPO=axisecp
@@ -51,20 +55,42 @@ export ARCH=armv7hf
 export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 export APP_NAME=acap4-object-detector-cpp
 export MODEL_NAME=acap-dl-models
+export SDK_VERSION=1.0
+export MODEL_IMAGE=arm32v7/alpine
+```
 
+### Export environment variables for arm64 cameras
+```sh
+# Set your camera IP address and clear docker memory
+export AXIS_TARGET_IP=<actual camera IP address>
+export DOCKER_PORT=2375
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
+
+# Set environment variables
+export REPO=axisecp
+export ARCH=aarch64
+export RUNTIME_IMAGE=arm64v8/ubuntu:20.04
+export APP_NAME=acap4-object-detector-cpp
+export MODEL_NAME=acap-dl-models
+export SDK_VERSION=latest
+export MODEL_IMAGE=arm64v8/alpine
+```
+
+### Build the object-detector-cpp image
+```sh
 # Build and upload object detector
-docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE
-docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
+docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE --build-arg SDK_VERSION
+docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
 
 # Build and upload inference models
-docker build . -f Dockerfile.model -t $MODEL_NAME
-docker save $MODEL_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
+docker build . -f Dockerfile.model -t $MODEL_NAME --build-arg MODEL_IMAGE
+docker save $MODEL_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
 
 # Use the following command to run the example on the camera
-docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:2376 up
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./config/env.$ARCH  up
 
 # Terminate with ctrl-C and cleanup
-docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:2376 down -v
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT down -v
 ```
 
 ### The expected output:

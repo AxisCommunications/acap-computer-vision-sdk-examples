@@ -10,7 +10,7 @@ services:
     environment:
       - INFERENCE_HOST=inference-server
       - INFERENCE_PORT=8501
-      - MODEL_PATH=/models/ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite
+      - MODEL_PATH=${MODEL_PATH}
       - OBJECT_LIST_PATH=/models/coco_labels.txt
     volumes:
       - /usr/lib/libvdostream.so.1:/usr/lib/libvdostream.so.1
@@ -18,8 +18,8 @@ services:
       - /var/run/dbus:/var/run/dbus:rw
 
   inference-server:
-    image: axisecp/larod-inference-server:2.6.0-api.4.0-armv7hf-ubuntu20.04
-    command: /usr/bin/larod-inference-server -p 8501 -j 4 -c /models/server.pem -k /models/server.key
+    image: ${INFERENCE_SERVER_IMAGE}
+    command: ${INFERENCE_SERVER_COMMAND}
     depends_on:
       - acap_dl-models
     ipc: host
