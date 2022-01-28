@@ -11,7 +11,7 @@ services:
       - PYTHONUNBUFFERED=1
       - INFERENCE_HOST=inference-server
       - INFERENCE_PORT=8501
-      - MODEL_PATH=/models/ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite
+      - MODEL_PATH=${MODEL_PATH}
       - OBJECT_LIST_PATH=/models/coco_labels.txt
     volumes:
       - /usr/lib/libvdostream.so.1:/usr/lib/libvdostream.so.1
@@ -20,13 +20,13 @@ services:
       - /var/run/dbus:/var/run/dbus:rw
 
   inference-server:
-    image: axisecp/larod-inference-server:2.6.0-api.4.0-armv7hf-ubuntu20.04
+    image: ${INFERENCE_SERVER_IMAGE}
     logging:
       driver: "json-file"
       options:
         max-file: "5"
         max-size: "100k"
-    command: /usr/bin/larod-inference-server -p 8501 -j 4
+    command: ${INFERENCE_SERVER_COMMAND}
     volumes:
       - /usr/acap-root/lib:/host/lib
       - acap_dl-models:/models:ro
