@@ -50,7 +50,7 @@ To ensure compatibility with the examples, the following requirements shall be m
 * Camera: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
 * docker-compose version 1.29 or higher
 * Docker version 20.10.8 or higher
-* Firmware: 10.7
+* Firmware: 10.9
 * docker-acap installed on the camera
 * docker-acap set to use external memory card
 
