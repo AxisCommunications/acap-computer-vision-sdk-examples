@@ -47,48 +47,67 @@ object-detector-python
 
 ## Requirements
 To ensure compatibility with the examples, the following requirements shall be met:
-* Camera: ARTPEC-7 DLPU devices (e.g., Q1615 MkIII)
+* Camera: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
 * docker-compose version 1.29 or higher
 * Docker version 20.10.8 or higher
-* Firmware: 10.7
+* Firmware: 10.9
 * docker-acap installed on the camera
-* docker-acap set to use TLS and external memory card
+* docker-acap set to use external memory card
 
 ## How to run the code
-Build a Docker object-detector-python image, example:
-
+### Export environment variables for arm32 cameras
 ```sh
 # Set your camera IP address and clear docker memory
 export AXIS_TARGET_IP=<actual camera IP address>
-docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 system prune -af
+export DOCKER_PORT=2375
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 
 # Set environment variables
 export REPO=axisecp
 export ARCH=armv7hf
 export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
-export APP_NAME=acap-object-detector-python
+export APP_NAME=acap4-object-detector-python
 export MODEL_NAME=acap-dl-models
+export SDK_VERSION=1.1
+export MODEL_IMAGE=arm32v7/alpine
+```
 
-# Build the application and load on camera
-docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE
-docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
+### Export environment variables for arm64 cameras
+```sh
+# Set your camera IP address and clear docker memory
+export AXIS_TARGET_IP=<actual camera IP address>
+export DOCKER_PORT=2375
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 
-# Build the inference models and load on camera
-docker build . -f Dockerfile.model -t $MODEL_NAME
-docker save $MODEL_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
+# Set environment variables
+export REPO=axisecp
+export ARCH=aarch64
+export RUNTIME_IMAGE=arm64v8/ubuntu:20.04
+export APP_NAME=acap4-object-detector-python
+export MODEL_NAME=acap-dl-models
+export SDK_VERSION=1.1
+export MODEL_IMAGE=arm64v8/alpine
+```
 
-# There are two options available in this example:
-# **OPT 1** - Use the following command to run the video streaming inference on the camera
-docker-compose --tlsverify  -H tcp://$AXIS_TARGET_IP:2376 up
+### Build the object-detector-python image
+```sh
+# Build and upload object detector
+docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE --build-arg SDK_VERSION
+docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
 
-# **OPT 2** - Use the following command to run static image inference on the camera
-docker-compose --tlsverify  -H tcp://$AXIS_TARGET_IP:2376 -f static-image.yml up
+# Build and upload inference models
+docker build . -f Dockerfile.model -t $MODEL_NAME --build-arg MODEL_IMAGE
+docker save $MODEL_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
+
+# Use the following command to run the example on the camera
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./config/env.$ARCH  up
 
 # Terminate with ctrl-C and cleanup
-docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:2376 down -v
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT down -v
 ```
 
 ### The expected output:
+```sh
 `docker-compose --tlsverify  -H tcp://$AXIS_TARGET_IP:2376 up`
 ```
 ....

@@ -7,7 +7,7 @@ services:
       - PYTHONUNBUFFERED=1
       - INFERENCE_HOST=inference-server
       - INFERENCE_PORT=8501
-      - MODEL_PATH=/models/ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite
+      - MODEL_PATH=${MODEL_PATH}
     volumes:
       - /usr/lib/libvdostream.so.1:/usr/lib/libvdostream.so.1
       - acap_dl-models:/models:ro
@@ -16,7 +16,7 @@ services:
 
   inference-server:
     image: $INFERENCE_SERVER
-    command: /usr/bin/larod-inference-server -p 8501 -j 4
+    command: ${INFERENCE_SERVER_COMMAND}
     volumes:
       - /usr/acap-root/lib:/host/lib
       - acap_dl-models:/models:ro

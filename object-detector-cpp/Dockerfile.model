@@ -1,3 +1,5 @@
+ARG MODEL_IMAGE=arm32v7/alpine
+
 FROM ubuntu:20.04 as local
 
 RUN apt-get update && apt-get install -y -f \
@@ -6,7 +8,7 @@ RUN apt-get update && apt-get install -y -f \
 # Generate TSL/SSL test certificate
 RUN openssl req -x509 -batch -subj '/CN=localhost' -days 10000 -newkey rsa:4096 -nodes -out server.pem -keyout server.key
 
-FROM arm32v7/alpine
+FROM ${MODEL_IMAGE}
 
 # Get SSD Mobilenet V2
 ADD https://github.com/google-coral/edgetpu/raw/master/test_data/ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite models/
