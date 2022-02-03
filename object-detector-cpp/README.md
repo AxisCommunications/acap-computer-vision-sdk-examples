@@ -50,12 +50,10 @@ export DOCKER_PORT=2375
 docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 
 # Set environment variables
-export REPO=axisecp
 export ARCH=armv7hf
 export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 export APP_NAME=acap4-object-detector-cpp
 export MODEL_NAME=acap-dl-models
-export SDK_VERSION=1.1
 export MODEL_IMAGE=arm32v7/alpine
 ```
 
@@ -67,19 +65,17 @@ export DOCKER_PORT=2375
 docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 
 # Set environment variables
-export REPO=axisecp
 export ARCH=aarch64
 export RUNTIME_IMAGE=arm64v8/ubuntu:20.04
 export APP_NAME=acap4-object-detector-cpp
 export MODEL_NAME=acap-dl-models
-export SDK_VERSION=1.1
 export MODEL_IMAGE=arm64v8/alpine
 ```
 
 ### Build the object-detector-cpp image
 ```sh
 # Build and upload object detector
-docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE --build-arg SDK_VERSION
+docker build . -t $APP_NAME --build-arg ARCH --build-arg RUNTIME_IMAGE --build-arg SDK_VERSION
 docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
 
 # Build and upload inference models
