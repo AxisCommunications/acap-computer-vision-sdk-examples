@@ -44,39 +44,33 @@ docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ### Export environment variables for arm32 cameras
 ```sh
 # Set environment variables
-# REPO defines where to get the ACAP Computer Vision SDK
 # ARCH defines what architecture to use (e.g., armv7hf, aarch64)
 # RUNTIME_IMAGE defines what base image should be used for the application image 
 # INFERENCE_SERVER is the image of the model server
 # MODEL_NAME is the image holding the inference model
-
-export REPO=axisecp
 export ARCH=armv7hf
 export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
-export INFERENCE_SERVER=axisecp/larod-inference-server:2.6.0-api.4.0-armv7hf-ubuntu20.04
+export INFERENCE_SERVER=axisecp/acap-runtime:0.6-armv7hf
 export APP_NAME=minimal-ml-inference
 export MODEL_NAME=acap-dl-models
-export SDK_VERSION=1.1
 export MODEL_IMAGE=arm32v7/alpine
 ```
 
 
 ### Export environment variables for arm64 cameras
 ```sh
-export REPO=axisecp
 export ARCH=aarch64
 export RUNTIME_IMAGE=arm64v8/ubuntu:20.04
 export INFERENCE_SERVER=axisecp/acap-runtime:0.6-aarch64
 export APP_NAME=minimal-ml-inference
 export MODEL_NAME=acap-dl-models
-export SDK_VERSION=1.1
 export MODEL_IMAGE=arm64v8/alpine
 ```
 With the environment setup, the `minimal-ml-inference` image and inference models can be built. Additionally, the inference server need to be pulled from dockerhub. The environment variables are supplied as build arguments to the `docker build` command such that they are made available to docker during the build process:
 
 ```sh
 docker-compose --env-file ./config/env.$ARCH pull
-docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE --build-arg SDK_VERSION
+docker build . -t $APP_NAME --build-arg ARCH --build-arg RUNTIME_IMAGE
 docker build . -f Dockerfile.model -t $MODEL_NAME --build-arg MODEL_IMAGE
 ```
 
