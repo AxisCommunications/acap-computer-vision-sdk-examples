@@ -29,33 +29,60 @@ jobs:
     #  env:
     #    SHELLCHECK_OPTS: -e SC2153 -e SC2148 -e SC2086
 
+    # Run build script for hello-world app
+    - name: Build hello-world application
+      run: |
+        cd ./hello-world
+        docker build -t axisecp/hello-world:armv7h7 --build-arg ARCH=armv7hf --build-arg RUNTIME_IMAGE=arm32v7/ubuntu:20.04 .
+        docker build -t axisecp/hello-world:aarch64 --build-arg ARCH=aarch64 --build-arg RUNTIME_IMAGE=arm64v8/ubuntu:20.04 .
+
+    # Run build script for hello-world-crosscompiled app
+    - name: Build hello-world-crosscompiled application
+      run: |
+        cd ./hello-world-crosscompiled
+        docker build -t axisecp/hello-world-crosscompiled:armv7h7 --build-arg ARCH=armv7hf --build-arg RUNTIME_IMAGE=arm32v7/ubuntu:20.04 .
+        docker build -t axisecp/hello-world-crosscompiled:aarch64 --build-arg ARCH=aarch64 --build-arg RUNTIME_IMAGE=arm64v8/ubuntu:20.04 .
+
     # Run build script for opencv-image-capture-cpp app
     - name: Build capture_app application
       run: |
         cd ./opencv-image-capture-cpp
-        docker build -t axisecp/acap-opencv-image-capture-cpp:latest .
+        docker build -t axisecp/acap-opencv-image-capture-cpp:armv7h7 --build-arg ARCH=armv7hf --build-arg RUNTIME_IMAGE=arm32v7/ubuntu:20.04 .
+        docker build -t axisecp/acap-opencv-image-capture-cpp:aarch64 --build-arg ARCH=aarch64 --build-arg RUNTIME_IMAGE=arm64v8/ubuntu:20.04 .
 
     # Run build script for opencv-qr-decoder-python app
     - name: Build qr-decoder application
       run: |
         cd ./opencv-qr-decoder-python
-        docker build -t axisecp/acap-opencv-qr-decoder-python:latest .
+        docker build -t axisecp/acap-opencv-qr-decoder-python:armv7h7 --build-arg ARCH=armv7hf --build-arg RUNTIME_IMAGE=arm32v7/ubuntu:20.04 .
+        docker build -t axisecp/acap-opencv-qr-decoder-python:aarch64 --build-arg ARCH=aarch64 --build-arg RUNTIME_IMAGE=arm64v8/ubuntu:20.04 .
+
+    # Run build script for minimal-ml-inference app
+    - name: Build minimal-ml-inference application
+      run: |
+        cd ./minimal-ml-inference
+        docker build -t axisecp/minimal-ml-inference:armv7h7 --build-arg ARCH=armv7hf --build-arg RUNTIME_IMAGE=arm32v7/ubuntu:20.04 --build-arg MODEL_NAME=acap-dl-models --build-arg MODEL_IMAGE=arm32v7/alpine --build-arg INFERENCE_SERVER=axisecp/acap-runtime:0.6-armv7hf . 
+        docker build -t axisecp/minimal-ml-inference:aarch64 --build-arg ARCH=aarch64 --build-arg RUNTIME_IMAGE=arm64v8/ubuntu:20.04 --build-arg MODEL_NAME=acap-dl-models --build-arg MODEL_IMAGE=arm64v8/alpine --build-arg INFERENCE_SERVER=axisecp/acap-runtime:0.6-aarch64 . 
 
     # Run build script for object-detector-cpp app
     - name: Build object-detector-cpp application
       run: |
         cd ./object-detector-cpp
-        docker build -t axisecp/acap-object-detector-cpp:latest .
+        docker build -t axisecp/acap-object-detector-cpp:armv7h7 --build-arg ARCH=armv7hf --build-arg RUNTIME_IMAGE=arm32v7/ubuntu:20.04 --build-arg MODEL_NAME=acap-dl-models --build-arg MODEL_IMAGE=arm32v7/alpine .
+        docker build -t axisecp/acap-object-detector-cpp:aarch64 --build-arg ARCH=aarch64 --build-arg RUNTIME_IMAGE=arm64v8/ubuntu:20.04 --build-arg MODEL_NAME=acap-dl-models --build-arg MODEL_IMAGE=arm64v8/alpine .
 
     # Run build object-detector-python
     - name: Build object-detector-python application
       run: |
         cd ./object-detector-python
-        docker build -t axisecp/object-detector-python:latest .
+        docker build -t axisecp/object-detector-python:armv7h7 --build-arg ARCH=armv7hf --build-arg RUNTIME_IMAGE=arm32v7/ubuntu:20.04 --build-arg MODEL_NAME=acap-dl-models --build-arg MODEL_IMAGE=arm32v7/alpine .
+        docker build -t axisecp/object-detector-python:aarch64 --build-arg ARCH=aarch64 --build-arg RUNTIME_IMAGE=arm64v8/ubuntu:20.04 --build-arg MODEL_NAME=acap-dl-models --build-arg MODEL_IMAGE=arm64v8/alpine .
 
     # Run build web-server
     - name: Build web-server application
       run: |
         cd ./web-server
-        docker build -t axisecp/web-server:latest .
+        docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
+        docker build -t axisecp/web-server:armv7h7 --build-arg ARCH=armv7hf --build-arg RUNTIME_IMAGE=arm32v7/ubuntu:20.04 .
+        docker build -t axisecp/web-server:aarch64 --build-arg ARCH=aarch64 --build-arg RUNTIME_IMAGE=arm64v8/ubuntu:20.04 .
 
