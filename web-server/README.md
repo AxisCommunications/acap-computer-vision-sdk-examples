@@ -11,11 +11,12 @@ web-server
 └── README.md - Instructions on how to build and run the application
 ```
 
-## Prerequisites
-The following items are required to run this example:
-* Camera: Q1615-MkIII
-* ACAP4 Docker version 19.03.5 or higher
-* Camera Firmware: 10.2
+## Requirements
+To ensure compatibility with the examples, the following requirements shall be met:
+* Camera: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
+* docker-compose version 1.29 or higher
+* Docker version 20.10.8 or higher
+* Firmware: 10.9
 * docker-acap installed on the camera
 * docker-acap set to use TLS and external memory card
 
@@ -45,17 +46,37 @@ Start by building the image containing the Web Server code with examples. This w
 ```sh
 # Set your camera IP address and clear docker memory
 export AXIS_TARGET_IP=<actual camera IP address>
-docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 system prune -af
-
+export DOCKER_PORT=2375
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
+```
+### Export environment variables for arm32 cameras
+```sh
 # Set environment variables
+# ARCH defines what architecture to use (e.g., armv7hf, aarch64)
+# RUNTIME_IMAGE defines what base image should be used for the application image 
+
+
+export ARCH=armv7hf
+export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
+export APP_NAME=monkey
+```
+### Export environment variables for arm64 cameras
+```sh
+export ARCH=aarch64
+export RUNTIME_IMAGE=arm64v8/ubuntu:20.04
 export APP_NAME=monkey
 
-# Build the application and load on camera
-docker build . -t $APP_NAME
-docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
+```
 
+
+# Build the application and load on camera
+```sh
+docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE
+docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
+```
 # Start Web Server on the camera
-docker --tlsverify  -H tcp://$AXIS_TARGET_IP:2376 run --rm -p 8080:80 -it $APP_NAME
+```sh
+docker --tlsverify  -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT run --rm -p 8080:80 -it $APP_NAME
 ```
 
 ### The expected output
@@ -75,13 +96,13 @@ Home  : http://monkey-project.com
 Some C API examples are included in the Web Server container that has been built. The commands below show how to run the examples on the camera. To see the result, use a web browser and web address: http://mycamera/monkey/demo/ or http://mycamera:2001
 ```sh
 # Run the hello example
-docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 run --rm -p 2001:2001 -it $APP_NAME hello
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  run --rm -p 2001:2001 -it $APP_NAME hello
 
 # Run the list directory example
-docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 run --rm -p 2001:2001 -it $APP_NAME list
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  run --rm -p 2001:2001 -it $APP_NAME list
 
 # Run the quiz example
-docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 run --rm -p 2001:2001 -it $APP_NAME quiz
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  run --rm -p 2001:2001 -it $APP_NAME quiz
 ```
 
 ## Proxy settings
