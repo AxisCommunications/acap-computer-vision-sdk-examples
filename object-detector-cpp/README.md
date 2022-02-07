@@ -75,7 +75,7 @@ export MODEL_IMAGE=arm64v8/alpine
 ### Build the object-detector-cpp image
 ```sh
 # Build and upload object detector
-docker build . -t $APP_NAME --build-arg ARCH --build-arg RUNTIME_IMAGE --build-arg SDK_VERSION
+docker build . -t $APP_NAME --build-arg ARCH --build-arg RUNTIME_IMAGE
 docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
 
 # Build and upload inference models

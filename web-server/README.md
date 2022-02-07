@@ -71,7 +71,7 @@ export APP_NAME=monkey
 
 # Build the application and load on camera
 ```sh
-docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE
+docker build . -t $APP_NAME --build-arg ARCH --build-arg RUNTIME_IMAGE
 docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
 ```
 # Start Web Server on the camera
