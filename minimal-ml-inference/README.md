@@ -1,4 +1,4 @@
-*Copyright (C) 2021, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
+*Copyright (C) 2022, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
 
 
 # A minimal, machine learning inference application
@@ -9,7 +9,10 @@ The example largely consists of three parts: the Python script [simple_inference
 ## Example Structure
 Following are the list of files and a brief description of each file in the example
 ```bash
-hello-world
+minimal-ml-inference
+├── config
+│   ├── env.aarch64
+│   └── env.armv7hf
 ├── simple_inference.py
 ├── Dockerfile
 ├── Dockerfile.model
@@ -17,6 +20,7 @@ hello-world
 └── README.md
 ```
 
+* **config/*** - Environment configuration files
 * **simple_inference.py** - A Python script that captures an image and send an inference call to the model server
 * **Dockerfile** - Build instructions for the application image that is run on the camera
 * **Dockerfile.model** - Build instructions for the inference model
@@ -56,7 +60,6 @@ export MODEL_NAME=acap-dl-models
 export MODEL_IMAGE=arm32v7/alpine
 ```
 
-
 ### Export environment variables for arm64 cameras
 ```sh
 export ARCH=aarch64
@@ -66,29 +69,28 @@ export APP_NAME=minimal-ml-inference
 export MODEL_NAME=acap-dl-models
 export MODEL_IMAGE=arm64v8/alpine
 ```
-With the environment setup, the `minimal-ml-inference` image and inference models can be built. Additionally, the inference server need to be pulled from dockerhub. The environment variables are supplied as build arguments to the `docker build` command such that they are made available to docker during the build process:
+
+With the environment setup, the `minimal-ml-inference` image and inference models can be built:
 
 ```sh
-docker-compose --env-file ./config/env.$ARCH pull
 docker build . -t $APP_NAME --build-arg ARCH --build-arg RUNTIME_IMAGE
 docker build . -f Dockerfile.model -t $MODEL_NAME --build-arg MODEL_IMAGE
 ```
 
-Next, the build and pulled images needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
+Next, the build images needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's Docker client:
 
 ```sh
-docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
-docker save $INFERENCE_SERVER | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
-docker save $MODEL_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
+docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
+docker save $MODEL_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
 ```
 
-With the application image, inference server and model image on the device, the application can be started. As the example uses OpenCV, the OpenCV requirements will be included in `docker-compose.yml`, which is used to run the application:
+The following command pulls the inference server image from Docker Hub and starts the application. The environment variables are supplied as build arguments to the `docker-compose` command such that they are made available to Docker during the build process. As the example uses OpenCV, the OpenCV requirements will be included in `docker-compose.yml`, which is used to run the application:
 
 ```sh
-docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  --env-file ./config/env.$ARCH  up
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./config/env.$ARCH up
 
 # Terminate with ctrl-C and cleanup
-docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  down -v
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT down -v
 ```
 
 The expected output from the application is the raw predictions from the model specified in the environment variable.
