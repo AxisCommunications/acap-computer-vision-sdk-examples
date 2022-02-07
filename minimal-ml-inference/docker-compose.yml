@@ -16,7 +16,7 @@ services:
 
   inference-server:
     image: $INFERENCE_SERVER
-    command: ${INFERENCE_SERVER_COMMAND}
+    command: $INFERENCE_SERVER_COMMAND
     volumes:
       - /usr/acap-root/lib:/host/lib
       - acap_dl-models:/models:ro
