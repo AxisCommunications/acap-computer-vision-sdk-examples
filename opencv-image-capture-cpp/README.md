@@ -17,10 +17,10 @@ below.
 
 ## Requirements
 To ensure compatibility with the examples, the following requirements shall be met:
-* Camera: ARTPEC-7 DLPU devices (e.g., Q1615 MkIII)
+* Camera: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
 * docker-compose version 1.29 or higher
 * Docker version 20.10.8 or higher
-* Firmware: 10.7
+* Firmware: 10.9
 * docker-acap installed on the camera
 * docker-acap set to use TLS and external memory card
 
@@ -52,24 +52,38 @@ Below, we define the camera's IP, the desired app name and the path and version 
 ```sh
 # Set your camera IP address and clear docker memory
 export AXIS_TARGET_IP=<actual camera IP address>
-docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 system prune -af
-
+export DOCKER_PORT=2375
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
+```
+### Export environment variables for arm32 cameras
+```sh
 # Set environment variables
+# ARCH defines what architecture to use (e.g., armv7hf, aarch64)
+# RUNTIME_IMAGE defines what base image should be used for the application image 
 export ARCH=armv7hf
-export REPO=axisecp
 export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 export APP_NAME=acap-opencv-image-capture-cpp
+```
+### Export environment variables for arm64 cameras
+```sh
+export ARCH=aarch64
+export RUNTIME_IMAGE=arm64v8/ubuntu:20.04
+export APP_NAME=acap-opencv-image-capture-cpp
+```
 
 # Build and upload the application
-docker build . -t $APP_NAME --build-arg ARCH --build-arg REPO --build-arg RUNTIME_IMAGE
-docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
+```sh
+docker build . -t $APP_NAME --build-arg ARCH --build-arg RUNTIME_IMAGE 
+
+
+docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
 ```
 #### Run the container
 ```sh
-docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:2376 -f docker-compose.yml up
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT -f docker-compose.yml up
 
 # Cleanup
-docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:2376 -f docker-compose.yml down -v
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT -f docker-compose.yml down -v
 ```
 
 #### The expected output:

@@ -17,22 +17,45 @@ ENV https_proxy=$HTTP_PROXY
 ENV DEBIAN_FRONTEND=noninteractive
 
 ## Install dependencies
+ARG ARCH
 RUN apt-get update && apt-get install -y -f \
-    g++-arm-linux-gnueabihf \
-    make\
-    pkg-config \
-    libglib2.0-dev \
-    libsystemd0
+        make\
+        pkg-config \
+        libglib2.0-dev \
+        libsystemd0
 
-RUN dpkg --add-architecture armhf &&\
-    apt-get update && apt-get install -y  \
+RUN if [ "$ARCH" = armv7hf ]; then \
+        apt-get install -y -f \
+        g++-arm-linux-gnueabihf &&\
+        dpkg --add-architecture armhf &&\
+        apt-get update && apt-get install -y  \
         libglib2.0-dev:armhf \
-        libsystemd0:armhf
+        libsystemd0:armhf; \
+    elif [ "$ARCH" = aarch64 ]; then \
+        apt-get install -y -f \
+        g++-aarch64-linux-gnu &&\
+        dpkg --add-architecture arm64 &&\
+        apt-get update && apt-get install -y  \
+        libglib2.0-dev:arm64 \
+        libsystemd0:arm64; \
+    else \
+        printf "Error: '%s' is not a valid value for the ARCH variable\n", "$ARCH"; \
+        exit 1; \
+    fi
 
 COPY app/Makefile /build/
 COPY app/src/ /build/src/
 WORKDIR /build
-RUN make
+
+RUN if [ "$ARCH" = armv7hf ]; then \
+        make CXX=arm-linux-gnueabihf-g++ CC=arm-linux-gnueabihf-gcc  STRIP=arm-linux-gnueabihf-strip;\
+    elif [ "$ARCH" = aarch64 ]; then \
+        make  CXX=/usr/bin/aarch64-linux-gnu-g++ CC=/usr/bin/aarch64-linux-gnu-gcc STRIP=aarch64-linux-gnu-strip;\
+    else \
+        printf "Error: '%s' is not a valid value for the ARCH variable\n", "$ARCH"; \
+        exit 1; \
+    fi
+    
 
 FROM ${RUNTIME_IMAGE}
 COPY --from=cv-sdk-devel /build/capture_app /usr/bin/
