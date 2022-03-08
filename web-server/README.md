@@ -106,10 +106,9 @@ docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  run --rm -p 2001:2001 
 ```
 
 ## Proxy settings
-Depending on the network, you might need proxy settings in the following file: *~/.docker/config.json.*
+Depending on the network, you might need proxy settings in the following file: `~/.docker/config.json`.
 
 For reference please see: https://docs.docker.com/network/proxy/.
-```
 
 ## License
 **[Apache License 2.0](../LICENSE)**

@@ -6,7 +6,7 @@ This example demonstrates how to create a simple Python application using the AC
 
 Going from zero to a Python application running on an AXIS device is quite easy. First, the application script is written, as in the hello-world script in [app/simply_hello.py](app/simply_hello.py). Next, the [Dockerfile](Dockerfile) which build the application image is constructed. This needs to pull in packages from the ACAP Computer Vision SDK, as is done using the `COPY` commands. Finally, the application needs to be built and uploaded, as is specified below.
 
-## Example Structure
+## Example structure
 Following are the list of files and a brief description of each file in the example
 ```bash
 hello-world

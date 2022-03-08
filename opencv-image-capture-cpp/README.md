@@ -1,7 +1,7 @@
 *Copyright (C) 2021, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
 
-# An openCV based example application on an edge device
-This readme file explains how to build an openCV application.
+# An OpenCV based example application on an edge device
+This readme file explains how to build an OpenCV application.
 It is achieved by using the ACAP Computer Vision SDK image, which contains
 all the essential parts needed.
 
@@ -78,6 +78,7 @@ docker build . -t $APP_NAME --build-arg ARCH --build-arg RUNTIME_IMAGE
 
 docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
 ```
+
 #### Run the container
 ```sh
 docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT -f docker-compose.yml up
@@ -130,6 +131,7 @@ iteration[1] gain: 191.000000   expo: 503.000000   zoom: 1.862427   focus: 0.902
 iteration[2] gain: 191.000000   expo: 503.000000   zoom: 1.862427   focus: 0.902723   f-number: 1.718091
 Queried settings 3 times in 15344µs
 ```
+
 #### OpenCV-VideoIO UniMatrix extensions
 
 These extensions facilitate inter-process zero-copy by allowing buffers
@@ -233,12 +235,12 @@ These *image* properties are read-write:
   Temporal Noise-Filter [0-100]
 
 ## Proxy settings
-Depending on the network you are connected to.
-The file that needs those settings is: *~/.docker/config.json.* For reference please see: https://docs.docker.com/network/proxy/.
+Depending on the network, you might need proxy settings in the following file: `~/.docker/config.json`.
+
+For reference please see: https://docs.docker.com/network/proxy/.
 
 ## License
 **[Apache License 2.0](../LICENSE)**
-
 
 ## References
 * https://docs.opencv.org/

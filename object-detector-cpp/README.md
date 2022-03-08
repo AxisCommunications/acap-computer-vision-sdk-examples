@@ -13,7 +13,7 @@ The first container contains the actual program being built here, which uses Ope
 
 Lastly, there is a third container that holds the deep learning model, which is put into a volume that is accessible to the other two images.
 
-## Example Structure
+## Example structure
 Below is the structure of the example with a brief description of scripts.
 ```shell
 object-detector-cpp
@@ -101,7 +101,7 @@ object-detector_1   | Inference grpc call: 35 ms
 object-detector_1   | Postprocess: 0 ms
 ```
 ## Proxy settings
-Depending on the network, you might need proxy settings in the following file: *~/.docker/config.json
+Depending on the network, you might need proxy settings in the following file: `~/.docker/config.json`.
 
 For reference please see: https://docs.docker.com/network/proxy/.
 
@@ -110,7 +110,7 @@ This example uses larod-inference-server for video inference processing by using
 ```c++
 #define ZEROCOPY
 ```
-## Server Authentication
+## Server authentication
 This example uses larod-inference-server for video inference processing. The API uses an insecure gRPC communication channel when no certificate is provided and it uses SSL/TLS server authentication and encryption when a server certificate is provided as the first parameter to object detector:
 
 ```sh
@@ -121,6 +121,7 @@ The inference server must then be started by specifying the server certificate a
 ```sh
 larod-inference-server -c server.pem -k private.key
 ```
+
 ## Model over gRPC
 This example uses larod-inference-server for video inference processing by using gRPC API. The inference server supports multiple clients at the same time. Models are normally loaded when the inference server is starting up, but models can also be loaded by specifying the model file path over gRPC. Please note the model path specified must be accessible by the inference server.
 

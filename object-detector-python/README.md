@@ -24,7 +24,7 @@ model
 └── objects.txt - list of object labels
 ```
 
-## Example Structure
+## Example structure
 Following are the list of files and a brief description of each file in the example
 ```bash
 object-detector-python

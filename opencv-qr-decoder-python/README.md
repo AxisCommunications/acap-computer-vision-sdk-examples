@@ -77,10 +77,8 @@ docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT up
 docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT down -v
 ```
 
-
 ## License
 **[Apache License 2.0](../LICENSE)**
-
 
 ## References
 * https://docs.opencv.org/
