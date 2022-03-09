@@ -1,15 +1,12 @@
 ARG ARCH=armv7hf
 ARG SDK_VERSION=1.1
 ARG REPO=axisecp
-ARG RUNTIME_IMAGE=arm32v7/ubuntu:20.04
+ARG UBUNTU_IMAGE_VER=20.04
 
+FROM arm32v7/ubuntu:${UBUNTU_IMAGE_VER} as runtime-image-armv7hf
+FROM arm64v8/ubuntu:${UBUNTU_IMAGE_VER} as runtime-image-aarch64
 FROM $REPO/acap-computer-vision-sdk:$SDK_VERSION-$ARCH as cv-sdk-runtime
 FROM $REPO/acap-computer-vision-sdk:$SDK_VERSION-$ARCH-devel as cv-sdk-devel
-
-# Setup proxy configuration
-ARG HTTP_PROXY
-ENV http_proxy=$HTTP_PROXY
-ENV https_proxy=$HTTP_PROXY
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -18,7 +15,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y -f \
     libglib2.0-dev \
     libsystemd0 \
-    protobuf-compiler-grpc
+    protobuf-compiler-grpc && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /tmp/devel /tmp/runtime /build-root /target-root
 
@@ -51,7 +50,7 @@ COPY app/ build/
 WORKDIR /build
 RUN make
 
-FROM ${RUNTIME_IMAGE}
+FROM runtime-image-${ARCH}
 # Copy the libraries needed for our runtime
 COPY --from=cv-sdk-devel /target-root /
 

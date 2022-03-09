@@ -41,19 +41,15 @@ export AXIS_TARGET_IP=<actual device IP address>
 docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 system prune -af
 
 # Set environment variables for arm32 devices (ARTPEC-7)
-export REPO=axisecp
 export ARCH=armv7hf
-export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 export APP_NAME=parameter_api
 
 # Set environment variables for arm64 devices (ARTPEC-8)
-export REPO=axisecp
 export ARCH=aarch64
-export RUNTIME_IMAGE=arm64v8/ubuntu:20.04
 export APP_NAME=parameter_api
 
 # Build and upload parameter-api
-docker build . -t $APP_NAME --build-arg REPO --build-arg ARCH --build-arg RUNTIME_IMAGE
+docker build . -t $APP_NAME --build-arg ARCH
 docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 load
 
 # Use the following command to run the example on the device
@@ -70,7 +66,7 @@ parameter-api_1  | root.Brand.WebURL : http://www.axis.com
 parameter-api_1  | root.Image.I0.Enabled : yes
 parameter-api_1  | root.Brand.ProdFullName : AXIS Q1615 Mk III Network Camera
 parameter-api_1  | root.Brand.ProdNbr : Q1615 Mk III
-parameter-api_1  | root.invalid : 
+parameter-api_1  | root.invalid :
 ```
 
 ## Proxy settings
@@ -98,7 +94,7 @@ ssh root@$AXIS_TARGET_IP
 chown sdk /usr/local/packages/acapruntime/server.*
 ```
 
-See instruction at [ACAP runtime](https://hub.docker.com/r/axisecp/acap-runtime) how to use TLS at the server side. 
+See instruction at [ACAP runtime](https://hub.docker.com/r/axisecp/acap-runtime) how to use TLS at the server side.
 
 ## License
 **[Apache License 2.0](../LICENSE)**
