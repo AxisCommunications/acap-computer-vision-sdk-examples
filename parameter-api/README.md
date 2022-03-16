@@ -47,13 +47,13 @@ docker --tlsverify -H tcp://$AXIS_TARGET_IP:2376 system prune -af
 
 # Set environment variables for arm32 devices (ARTPEC-7)
 export ARCH=armv7hf
-export APP_NAME=parameter_api
+export APP_NAME=parameter-api
 
 # Set environment variables for arm64 devices (ARTPEC-8)
 export ARCH=aarch64
-export APP_NAME=parameter_api
+export APP_NAME=parameter-api
 
-# Build and upload parameter-api
+# Build parameter-api
 docker build . -t $APP_NAME --build-arg ARCH
 ```
 
