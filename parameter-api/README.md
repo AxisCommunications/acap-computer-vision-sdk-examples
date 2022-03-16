@@ -8,7 +8,7 @@ The example is written in C++ and communicates with the [ACAP runtime](https://h
 
 ## Example structure
 Below is the structure of the example with a brief description of scripts.
-```shell
+```sh
 parameter-api
 ├── app
 │   ├── apis
@@ -62,7 +62,7 @@ This example uses an insecure gRPC communication channel. To use SSL/TLS server
 authentication and encryption, a server certificate is provided as the first
 parameter to the application in the docker-compose.yml file:
 
-```sh
+```yaml
     command: /usr/bin/parameter /models/server.pem
 ```
 
@@ -102,7 +102,6 @@ parameter-api_1  | root.Brand.ProdFullName : AXIS Q1615 Mk III Network Camera
 parameter-api_1  | root.Brand.ProdNbr : Q1615 Mk III
 parameter-api_1  | root.invalid :
 ```
-
 
 ## License
 **[Apache License 2.0](../LICENSE)**
