@@ -3,6 +3,6 @@ version: '3.3'
 services:
   parameter-api:
     image: $APP_NAME
-    command: /usr/bin/parameter
+    command: /usr/bin/parameter /models/server.pem
     volumes:
       - /tmp:/tmp
