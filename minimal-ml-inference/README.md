@@ -6,7 +6,7 @@ This example demonstrates how to create a simple Python application that perform
 
 The example largely consists of three parts: the Python script [simple_inference.py](simple_inference.py) that is run on device, the [Dockerfile](Dockerfile) which build the application image and the [docker-compose.yml](docker-compose.yml) which specifies how the inference server and client is connected as well as specify the required mounts and environment variables needed.
 
-## Example Structure
+## Example structure
 Following are the list of files and a brief description of each file in the example
 ```bash
 minimal-ml-inference

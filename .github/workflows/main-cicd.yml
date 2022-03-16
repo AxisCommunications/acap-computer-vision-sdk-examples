@@ -43,20 +43,6 @@ jobs:
         docker build -t axisecp/hello-world-crosscompiled:armv7h7 --build-arg ARCH=armv7hf --build-arg RUNTIME_IMAGE=arm32v7/ubuntu:20.04 .
         docker build -t axisecp/hello-world-crosscompiled:aarch64 --build-arg ARCH=aarch64 --build-arg RUNTIME_IMAGE=arm64v8/ubuntu:20.04 .
 
-    # Run build script for opencv-image-capture-cpp app
-    - name: Build capture_app application
-      run: |
-        cd ./opencv-image-capture-cpp
-        docker build -t axisecp/acap-opencv-image-capture-cpp:armv7h7 --build-arg ARCH=armv7hf --build-arg RUNTIME_IMAGE=arm32v7/ubuntu:20.04 .
-        docker build -t axisecp/acap-opencv-image-capture-cpp:aarch64 --build-arg ARCH=aarch64 --build-arg RUNTIME_IMAGE=arm64v8/ubuntu:20.04 .
-
-    # Run build script for opencv-qr-decoder-python app
-    - name: Build qr-decoder application
-      run: |
-        cd ./opencv-qr-decoder-python
-        docker build -t axisecp/acap-opencv-qr-decoder-python:armv7h7 --build-arg ARCH=armv7hf --build-arg RUNTIME_IMAGE=arm32v7/ubuntu:20.04 .
-        docker build -t axisecp/acap-opencv-qr-decoder-python:aarch64 --build-arg ARCH=aarch64 --build-arg RUNTIME_IMAGE=arm64v8/ubuntu:20.04 .
-
     # Run build script for minimal-ml-inference app
     - name: Build minimal-ml-inference application
       run: |
@@ -78,6 +64,26 @@ jobs:
         docker build -t axisecp/object-detector-python:armv7h7 --build-arg ARCH=armv7hf --build-arg RUNTIME_IMAGE=arm32v7/ubuntu:20.04 --build-arg MODEL_NAME=acap-dl-models --build-arg MODEL_IMAGE=arm32v7/alpine .
         docker build -t axisecp/object-detector-python:aarch64 --build-arg ARCH=aarch64 --build-arg RUNTIME_IMAGE=arm64v8/ubuntu:20.04 --build-arg MODEL_NAME=acap-dl-models --build-arg MODEL_IMAGE=arm64v8/alpine .
 
+    # Run build script for opencv-image-capture-cpp app
+    - name: Build opencv-image-capture-cpp
+      run: |
+        cd ./opencv-image-capture-cpp
+        docker build -t axisecp/acap-opencv-image-capture-cpp:armv7h7 --build-arg ARCH=armv7hf --build-arg RUNTIME_IMAGE=arm32v7/ubuntu:20.04 .
+        docker build -t axisecp/acap-opencv-image-capture-cpp:aarch64 --build-arg ARCH=aarch64 --build-arg RUNTIME_IMAGE=arm64v8/ubuntu:20.04 .
+
+    # Run build script for opencv-qr-decoder-python app
+    - name: Build opencv-qr-decoder-python application
+      run: |
+        cd ./opencv-qr-decoder-python
+        docker build -t axisecp/acap-opencv-qr-decoder-python:armv7h7 --build-arg ARCH=armv7hf --build-arg RUNTIME_IMAGE=arm32v7/ubuntu:20.04 .
+        docker build -t axisecp/acap-opencv-qr-decoder-python:aarch64 --build-arg ARCH=aarch64 --build-arg RUNTIME_IMAGE=arm64v8/ubuntu:20.04 .
+
+    # Run build script for parameter-api
+    - name: Build parameter-api application
+      run: |
+        cd ./parameter-api
+        docker build -t axisecp/parameter-api:latest .
+
     # Run build web-server
     - name: Build web-server application
       run: |
@@ -85,4 +91,3 @@ jobs:
         docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
         docker build -t axisecp/web-server:armv7h7 --build-arg ARCH=armv7hf --build-arg RUNTIME_IMAGE=arm32v7/ubuntu:20.04 .
         docker build -t axisecp/web-server:aarch64 --build-arg ARCH=aarch64 --build-arg RUNTIME_IMAGE=arm64v8/ubuntu:20.04 .
-
