@@ -82,7 +82,8 @@ jobs:
     - name: Build parameter-api application
       run: |
         cd ./parameter-api
-        docker build -t axisecp/parameter-api:latest .
+        docker build -t axisecp/parameter-api:armv7h7 --build-arg ARCH=armv7hf .
+        docker build -t axisecp/parameter-api:aarch64 --build-arg ARCH=aarch64 .
 
     # Run build web-server
     - name: Build web-server application
