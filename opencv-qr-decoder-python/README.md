@@ -37,7 +37,7 @@ The first thing to do is to setup the environment. Generally, the variables desc
 ```sh
 # Set your camera IP address and clear docker memory
 export AXIS_TARGET_IP=<actual camera IP address>
-export DOCKER_PORT=2375
+export DOCKER_PORT=2376
 docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
 ### Export environment variables for arm32 cameras

@@ -46,7 +46,7 @@ To ensure compatibility with the examples, the following requirements shall be m
 ```sh
 # Set your camera IP address and clear docker memory
 export AXIS_TARGET_IP=<actual camera IP address>
-export DOCKER_PORT=2375
+export DOCKER_PORT=2376
 docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 
 # Set environment variables
@@ -61,7 +61,7 @@ export MODEL_IMAGE=arm32v7/alpine
 ```sh
 # Set your camera IP address and clear docker memory
 export AXIS_TARGET_IP=<actual camera IP address>
-export DOCKER_PORT=2375
+export DOCKER_PORT=2376
 docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 
 # Set environment variables
