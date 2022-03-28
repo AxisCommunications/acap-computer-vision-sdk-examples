@@ -30,8 +30,7 @@ To ensure compatibility with the examples, the following requirements shall be m
 * docker-compose version 1.29 or higher
 * Docker version 20.10.8 or higher
 * Firmware: 10.7
-* docker-acap installed on the camera
-* docker-acap set to TLS and external memory card
+* [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
 
 ## Supported architectures
 The examples support the following architectures.

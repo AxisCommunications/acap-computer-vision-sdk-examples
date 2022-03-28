@@ -25,8 +25,7 @@ To ensure compatibility with the examples, the following requirements shall be m
 * docker-compose version 1.29 or higher
 * Docker version 20.10.8 or higher
 * Firmware: 10.9
-* docker-acap installed on the camera
-* docker-acap set to use TLS and external memory card
+* [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
 
 ## How to run the code
 The first thing to do is to setup the environment. Generally, the variables described here can mostly be set to the default value, i.e., as seen below. However, the `AXIS_TARGET_IP` needs to be changed to your device's IP.
