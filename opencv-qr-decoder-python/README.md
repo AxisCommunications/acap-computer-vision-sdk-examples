@@ -31,30 +31,29 @@ To ensure compatibility with the examples, the following requirements shall be m
 * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
 
 ## How to run the code
-The first thing to do is to setup the environment. Generally, the variables described here can mostly be set to the default value, i.e., as seen below. However, the `AXIS_TARGET_IP` needs to be changed to your device's IP.
-
+### Export the environment variable for the architecture 
+Export the ARCH variable depending on the architecture of your camera
 ```sh
-# Set your camera IP address and clear docker memory
+# For arm32
+export ARCH=armv7hf
+# For arm64
+export ARCH=aarch64
+```
+
+### Set your camera IP address define APP name and clear Docker memory 
+```sh
+# Set camera IP
 export AXIS_TARGET_IP=<actual camera IP address>
 export DOCKER_PORT=2376
+
+# Define APP name
+export APP_NAME=acap-opencv-qr-decoder-python
+
+# Clean docker memory
 docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
-### Export environment variables for arm32 cameras
-```sh
-# Set environment variables
-# ARCH defines what architecture to use (e.g., armv7hf, aarch64)
-# RUNTIME_IMAGE defines what base image should be used for the application image 
-export ARCH=armv7hf
-export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
-export APP_NAME=acap-opencv-qr-decoder-python
-```
-### Export environment variables for arm64 cameras
-```sh
-export ARCH=aarch64
-export RUNTIME_IMAGE=arm64v8/ubuntu:20.04
-export APP_NAME=acap-opencv-qr-decoder-python
-```
 
+### Build and run the images
 With the environment setup, the `acap-opencv-qr-decoder-python` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
 
 ```sh
@@ -75,6 +74,7 @@ docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT up
 # Cleanup after execution
 docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT down -v
 ```
+
 
 ## License
 **[Apache License 2.0](../LICENSE)**
