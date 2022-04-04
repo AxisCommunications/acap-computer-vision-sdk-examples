@@ -1,8 +1,10 @@
 ARG ARCH=armv7hf
 ARG SDK_VERSION=1.1
 ARG REPO=axisecp
-ARG RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 
+
+FROM arm32v7/ubuntu:20.04 as runtime-image-armv7hf
+FROM arm64v8/ubuntu:20.04 as runtime-image-aarch64
 FROM $REPO/acap-computer-vision-sdk:$SDK_VERSION-$ARCH as cv-sdk-runtime
 FROM $REPO/acap-computer-vision-sdk:$SDK_VERSION-$ARCH-devel as cv-sdk-devel
 
@@ -51,7 +53,7 @@ WORKDIR /build
 RUN make
 
 
-FROM ${RUNTIME_IMAGE}
+FROM runtime-image-${ARCH}
 # Copy the libraries needed for our runtime
 COPY --from=cv-sdk-devel /target-root /
 

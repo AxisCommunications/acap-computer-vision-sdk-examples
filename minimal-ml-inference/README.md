@@ -35,64 +35,60 @@ To ensure compatibility with the examples, the following requirements shall be m
 * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
 
 ## How to run the code
-The first thing to do is to setup the environment. Generally, the variables described here can mostly be set to the default value, i.e., as seen below. However, the `AXIS_TARGET_IP` needs to be changed to your device's IP.
 
+### Export the environment variable for the architecture 
+Export the ARCH variable depending on the architecture of your camera
 ```sh
-# Set your camera IP address and clear docker memory
+# For arm32
+export ARCH=armv7hf
+# Valid options for chip on armv7hf are 'tpu' (hardware accelerator) or 'cpu'
+export CHIP=tpu
+```
+```sh
+# For arm64
+export ARCH=aarch64
+# Valid options for chip on aarch64 are 'artpec8' (hardware accelerator) or 'cpu'
+export CHIP=artpec8 
+```
+
+### Set your camera IP address and clear Docker memory
+```sh
 export AXIS_TARGET_IP=<actual camera IP address>
 export DOCKER_PORT=2376
 docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
 
-### Export environment variables for arm32 cameras
+### Build the minimal-ml-inference images
 ```sh
-# Set environment variables
-# ARCH defines what architecture to use (e.g., armv7hf, aarch64)
-# RUNTIME_IMAGE defines what base image should be used for the application image 
-# INFERENCE_SERVER is the image of the model server
-# MODEL_NAME is the image holding the inference model
-export ARCH=armv7hf
-export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
-export INFERENCE_SERVER=axisecp/acap-runtime:0.6-armv7hf
-export APP_NAME=minimal-ml-inference
+# Define APP name
+export APP_NAME=acap4-minimal-ml-inference
 export MODEL_NAME=acap-dl-models
-export MODEL_IMAGE=arm32v7/alpine
-```
 
-### Export environment variables for arm64 cameras
-```sh
-export ARCH=aarch64
-export RUNTIME_IMAGE=arm64v8/ubuntu:20.04
-export INFERENCE_SERVER=axisecp/acap-runtime:0.6-aarch64
-export APP_NAME=minimal-ml-inference
-export MODEL_NAME=acap-dl-models
-export MODEL_IMAGE=arm64v8/alpine
-```
+# Install qemu to allow build flask for a different architecture
+docker run -it --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
 
-With the environment setup, the `minimal-ml-inference` image and inference models can be built:
-
-```sh
-docker build . -t $APP_NAME --build-arg ARCH --build-arg RUNTIME_IMAGE
-docker build . -f Dockerfile.model -t $MODEL_NAME --build-arg MODEL_IMAGE
-```
-
-Next, the build images needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's Docker client:
-
-```sh
+# Build and upload inference client for camera
+docker build . -t $APP_NAME --build-arg ARCH 
 docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
+
+# Build and upload inference models
+docker build . -f Dockerfile.model -t $MODEL_NAME --build-arg ARCH
 docker save $MODEL_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
-```
 
-The following command pulls the inference server image from Docker Hub and starts the application. The environment variables are supplied as build arguments to the `docker-compose` command such that they are made available to Docker during the build process. As the example uses OpenCV, the OpenCV requirements will be included in `docker-compose.yml`, which is used to run the application:
+# Use the following command to run the example on the camera
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP up
 
-```sh
-docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./config/env.$ARCH up
-
-# Terminate with ctrl-C and cleanup
+# Terminate with Ctrl-C and cleanup
 docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT down -v
 ```
 
 The expected output from the application is the raw predictions from the model specified in the environment variable.
+
+### Hardware acceleration
+The ./config folder contains configuration files with the parameters to run the inference on different camera models, also giving the possibility to use the hardware accelerator. 
+To achieve the best performance we recommend using the TPU (Tensor Processing Unit) equipped with artpec7 cameras (e.g. [Axis-Q1615 Mk III](https://www.axis.com/products/axis-q1615-mk-iii))
+or the DLPU (Deep Learning Processing Unit) equipped in artpec8 cameras (e.g. [Axis-Q1656](https://www.axis.com/products/axis-q1656))
+
 
 ## License
 **[Apache License 2.0](../LICENSE)**
