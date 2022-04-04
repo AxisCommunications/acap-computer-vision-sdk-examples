@@ -40,39 +40,40 @@ EOF
 systemctl restart httpd
 ```
 
-## Build and run the Web Server
+## How to run the code
 Start by building the image containing the Web Server code with examples. This will compile the code to an executable and create an armv7hf container containing the executable, which can be uploaded to and run on the camera. After the Web Server is started it can be accessed from a web browser by specifying the web address: http://mycamera/monkey/ or http://mycamera:8080
+
+### Export the environment variable for the architecture 
+Export the ARCH variable depending on the architecture of your camera
 ```sh
-# Set your camera IP address and clear docker memory
+# For arm32
+export ARCH=armv7hf
+# For arm64
+export ARCH=aarch64
+```
+
+### Set your camera IP address define APP name and clear Docker memory 
+```sh
+# Set camera IP
 export AXIS_TARGET_IP=<actual camera IP address>
 export DOCKER_PORT=2376
+
+# Define APP name
+export APP_NAME=monkey
+# Clean docker memory
 docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
-### Export environment variables for arm32 cameras
+
+### Build and run the images
 ```sh
-# Set environment variables
-# ARCH defines what architecture to use (e.g., armv7hf, aarch64)
-# RUNTIME_IMAGE defines what base image should be used for the application image 
+# Install qemu emulator to build for different architectures
+docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
 
-
-export ARCH=armv7hf
-export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
-export APP_NAME=monkey
-```
-### Export environment variables for arm64 cameras
-```sh
-export ARCH=aarch64
-export RUNTIME_IMAGE=arm64v8/ubuntu:20.04
-export APP_NAME=monkey
-
-```
-
-
-# Build the application and load on camera
-```sh
-docker build . -t $APP_NAME --build-arg ARCH --build-arg RUNTIME_IMAGE
+# Build the container
+docker build . -t $APP_NAME --build-arg ARCH 
 docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
 ```
+
 # Start Web Server on the camera
 ```sh
 docker --tlsverify  -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT run --rm -p 8080:80 -it $APP_NAME

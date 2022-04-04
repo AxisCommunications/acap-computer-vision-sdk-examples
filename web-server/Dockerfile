@@ -1,7 +1,9 @@
 ARG ARCH=armv7hf
-ARG RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 
-FROM ${RUNTIME_IMAGE}
+FROM arm32v7/ubuntu:20.04 as runtime-image-armv7hf
+FROM arm64v8/ubuntu:20.04 as runtime-image-aarch64
+
+FROM runtime-image-${ARCH}
 
 # Setup environment variables
 ENV DEBIAN_FRONTEND=noninteractive
