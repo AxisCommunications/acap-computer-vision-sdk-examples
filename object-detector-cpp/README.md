@@ -41,50 +41,49 @@ To ensure compatibility with the examples, the following requirements shall be m
 * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
 
 ## How to run the code
-### Export environment variables for arm32 cameras
+### Export the environment variable for the architecture 
+Export the ARCH variable depending on the architecture of your camera
 ```sh
-# Set your camera IP address and clear docker memory
-export AXIS_TARGET_IP=<actual camera IP address>
-export DOCKER_PORT=2376
-docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
-
-# Set environment variables
+# For arm32
 export ARCH=armv7hf
-export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
-export APP_NAME=acap4-object-detector-cpp
-export MODEL_NAME=acap-dl-models
-export MODEL_IMAGE=arm32v7/alpine
+# Valid options for chip on armv7hf are 'tpu' (hardware accelerator) or 'cpu'
+export CHIP=tpu
+```
+```sh
+# For arm64
+export ARCH=aarch64
+# Valid options for chip on aarch64 are 'artpec8' (hardware accelerator) or 'cpu'
+export CHIP=artpec8 
 ```
 
-### Export environment variables for arm64 cameras
+### Set your camera IP address and clear Docker memory
 ```sh
-# Set your camera IP address and clear docker memory
 export AXIS_TARGET_IP=<actual camera IP address>
 export DOCKER_PORT=2376
 docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
-
-# Set environment variables
-export ARCH=aarch64
-export RUNTIME_IMAGE=arm64v8/ubuntu:20.04
-export APP_NAME=acap4-object-detector-cpp
-export MODEL_NAME=acap-dl-models
-export MODEL_IMAGE=arm64v8/alpine
 ```
 
-### Build the object-detector-cpp image
+### Build the object-detector-cpp images
 ```sh
-# Build and upload object detector
-docker build . -t $APP_NAME --build-arg ARCH --build-arg RUNTIME_IMAGE
+# Define APP name
+export APP_NAME=acap4-object-detector-cpp
+export MODEL_NAME=acap-dl-models
+
+# Install qemu to allow build flask for a different architecture
+docker run -it --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
+
+# Build and upload inference client for camera
+docker build . -t $APP_NAME --build-arg ARCH 
 docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
 
 # Build and upload inference models
-docker build . -f Dockerfile.model -t $MODEL_NAME --build-arg MODEL_IMAGE
+docker build . -f Dockerfile.model -t $MODEL_NAME --build-arg ARCH
 docker save $MODEL_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
 
 # Use the following command to run the example on the camera
-docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./config/env.$ARCH  up
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP up
 
-# Terminate with ctrl-C and cleanup
+# Terminate with Ctrl-C and cleanup
 docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT down -v
 ```
 
@@ -99,6 +98,7 @@ object-detector_1   | Capture: 90 ms
 object-detector_1   | Inference grpc call: 35 ms
 object-detector_1   | Postprocess: 0 ms
 ```
+
 ## Proxy settings
 Depending on the network, you might need proxy settings in the following file: `~/.docker/config.json`.
 
@@ -109,6 +109,7 @@ This example uses larod-inference-server for video inference processing by using
 ```c++
 #define ZEROCOPY
 ```
+
 ## Server authentication
 This example uses larod-inference-server for video inference processing. The API uses an insecure gRPC communication channel when no certificate is provided and it uses SSL/TLS server authentication and encryption when a server certificate is provided as the first parameter to object detector:
 
@@ -123,6 +124,12 @@ larod-inference-server -c server.pem -k private.key
 
 ## Model over gRPC
 This example uses larod-inference-server for video inference processing by using gRPC API. The inference server supports multiple clients at the same time. Models are normally loaded when the inference server is starting up, but models can also be loaded by specifying the model file path over gRPC. Please note the model path specified must be accessible by the inference server.
+
+### Hardware acceleration
+The ./config folder contains configuration files with the parameters to run the inference on different camera models, also giving the possibility to use the hardware accelerator. 
+To achieve the best performance we recommend using the TPU (Tensor Processing Unit) equipped with artpec7 cameras (e.g. [Axis-Q1615 Mk III](https://www.axis.com/products/axis-q1615-mk-iii))
+or the DLPU (Deep Learning Processing Unit) equipped in artpec8 cameras (e.g. [Axis-Q1656](https://www.axis.com/products/axis-q1656))
+
 
 ## License
 **[Apache License 2.0](../LICENSE)**
