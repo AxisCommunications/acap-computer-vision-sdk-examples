@@ -4,8 +4,9 @@
 ARG ARCH=armv7hf
 ARG REPO=axisecp
 ARG SDK_VERSION=1.1
-ARG RUNTIME_IMAGE=arm32v7/ubuntu:20.04
 
+FROM arm32v7/ubuntu:20.04 as runtime-image-armv7hf
+FROM arm64v8/ubuntu:20.04 as runtime-image-aarch64
 FROM ${REPO}/acap-computer-vision-sdk:${SDK_VERSION}-${ARCH}-runtime AS cv-sdk-runtime
 FROM ${REPO}/acap-computer-vision-sdk:${SDK_VERSION}-${ARCH}-devel AS cv-sdk-devel
 
@@ -57,7 +58,7 @@ RUN if [ "$ARCH" = armv7hf ]; then \
     fi
     
 
-FROM ${RUNTIME_IMAGE}
+FROM runtime-image-${ARCH}
 COPY --from=cv-sdk-devel /build/capture_app /usr/bin/
 COPY --from=cv-sdk-runtime /axis/opencv /
 COPY --from=cv-sdk-runtime /axis/openblas /

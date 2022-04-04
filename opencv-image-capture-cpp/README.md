@@ -45,41 +45,34 @@ opencv-image-capture-cpp
 * OpenCV module choice cannot be made in this version.
 * In order to change the binary name it has to be done in the Makefile
 
-### How to run the code
-Begin by setting up some environment variables.
-Below, we define the camera's IP, the desired app name and the path and version of the ACAP Computer Vision SDK.
+## How to run the code
+### Export the environment variable for the architecture 
+Export the ARCH variable depending on the architecture of your camera
 ```sh
-# Set your camera IP address and clear docker memory
+# For arm32
+export ARCH=armv7hf
+# For arm64
+export ARCH=aarch64
+```
+
+### Set your camera IP address define APP name and clear Docker memory 
+```sh
+# Set camera IP
 export AXIS_TARGET_IP=<actual camera IP address>
 export DOCKER_PORT=2376
+
+# Define APP name
+export APP_NAME=acap-opencv-image-capture-cpp
+# Clean docker memory
 docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
-### Export environment variables for arm32 cameras
-```sh
-# Set environment variables
-# ARCH defines what architecture to use (e.g., armv7hf, aarch64)
-# RUNTIME_IMAGE defines what base image should be used for the application image 
-export ARCH=armv7hf
-export RUNTIME_IMAGE=arm32v7/ubuntu:20.04
-export APP_NAME=acap-opencv-image-capture-cpp
-```
-### Export environment variables for arm64 cameras
-```sh
-export ARCH=aarch64
-export RUNTIME_IMAGE=arm64v8/ubuntu:20.04
-export APP_NAME=acap-opencv-image-capture-cpp
-```
 
-# Build and upload the application
+### Build and run the images
 ```sh
-docker build . -t $APP_NAME --build-arg ARCH --build-arg RUNTIME_IMAGE 
-
+docker build . -t $APP_NAME --build-arg ARCH 
 
 docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
-```
 
-#### Run the container
-```sh
 docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT -f docker-compose.yml up
 
 # Cleanup
