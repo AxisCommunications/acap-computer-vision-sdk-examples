@@ -6,7 +6,7 @@ FROM arm64v8/alpine as model-image-aarch64
 FROM arm32v7/ubuntu:20.04 as local-armv7hf
 FROM arm64v8/ubuntu:20.04 as local-aarch64
 
-FROM local-${ARCH}
+FROM local-${ARCH} as local
 
 RUN apt-get update && apt-get install -y -f \
     openssl
@@ -21,6 +21,6 @@ ADD https://github.com/google-coral/edgetpu/raw/master/test_data/ssd_mobilenet_v
 ADD https://github.com/google-coral/edgetpu/raw/master/test_data/ssd_mobilenet_v2_coco_quant_postprocess.tflite models/
 ADD https://github.com/google-coral/edgetpu/raw/master/test_data/coco_labels.txt models/
 ADD https://github.com/google-coral/edgetpu/raw/master/test_data/COPYRIGHT models/
-COPY --from=local-${ARCH} server.key server.pem models/
+COPY --from=local server.key server.pem models/
 
 CMD /bin/ls /models
