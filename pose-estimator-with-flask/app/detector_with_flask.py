@@ -41,7 +41,8 @@ def gen():
             time.sleep(1)
             continue
 
-        frame = cv2.imencode('.jpg', frame)[1].tobytes()
+        # Convert RGB to BGR format when encoding to keep the correct color
+        frame = cv2.imencode('.jpg', cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))[1].tobytes()
         yield b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n--frame\r\n'
 
 
@@ -136,8 +137,6 @@ class Detector:
     # Run object detection on video stream
     def get_frame(self):
         _, frame = self.cap.read()
-        # Convert the frame color channel from BGR to RGB
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         # Cut the central area of the frame of a 1920x1080 to make it square
         frame = frame[:, 420:-420, :]
         small_frame = cv2.resize(frame, (192, 192), interpolation=cv2.INTER_AREA)
