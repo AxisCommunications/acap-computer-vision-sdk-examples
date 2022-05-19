@@ -41,7 +41,8 @@ def gen():
             time.sleep(1)
             continue
 
-        frame = cv2.imencode('.jpg', frame)[1].tobytes()
+        # Convert RGB to BGR format when encoding to keep the correct color
+        frame = cv2.imencode('.jpg', cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))[1].tobytes()
         yield b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n--frame\r\n'
 
 
