@@ -26,7 +26,7 @@ step-by-step instructions on how to run applications on the camera.
 
 ## Requirements
 To ensure compatibility with the examples, the following requirements shall be met:
-* Camera: ARTPEC-7 DLPU devices (e.g., Q1615 MkIII)
+* Camera: ARTPEC-7 DLPU or ARTPEC8 devices (e.g., Q1615 MkIII, Q1656)
 * docker-compose version 1.29 or higher
 * Docker version 20.10.8 or higher
 * Firmware: 10.7
