@@ -67,9 +67,6 @@ The examples are based on the [ACAP Computer Vision SDK](https://github.com/Axis
 This SDK is an image which contains APIs and tooling to build computer vision apps for running on camera, with support for C/C++ and Python.
 Additionally, there is the [ACAP Native SDK](https://github.com/AxisCommunications/acap-native-sdk), which is more geared towards building ACAPs that uses AXIS-developed APIs directly, and primarily does so using C/C++.
 
-The examples also use the following images:
-* [larod-inference-server](https://hub.docker.com/r/axisecp/larod-inference-server) - Inference server implemented on top of Larod API
-* [acap-dl-models](https://hub.docker.com/repository/docker/axisecp/acap-dl-models) - A container containing deep learning models used by the different examples
 
 # How to work with Github repository
 You can help to make this repo a better one using the following commands.
