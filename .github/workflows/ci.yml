@@ -1,12 +1,14 @@
-name: Axis-CICD
+name: CI
 
 on:
   push:
     paths:
       - '**'
       - '!.github/workflows/example-checks.yml'
-      - '!README.md'
+      - '!.gitignore'
+      - '!CODEOWNERS'
       - '!LICENSE'
+      - '!README.md'
 
 jobs:
   build:
