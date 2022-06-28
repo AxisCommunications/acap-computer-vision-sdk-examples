@@ -8,7 +8,7 @@ all the essential parts needed.
 The ACAP Computer Vision SDK OpenCV comes with following modules:
 core, imgproc, imgcodecs, videoio,objdetect, python3, video, as well as with Axis VDO integration
 to enable capturing images directly from the camera. If you wish to use another set of modules,
-the Dockerfile used to build the CV SDK's OpenCV module can be found in the [acap-computer-vision-sdk repository](https://github.com/AxisCommunications/acap-computer-vision-sdk/tree/master).
+the Dockerfile used to build the CV SDK's OpenCV module can be found in the [acap-computer-vision-sdk repository](https://github.com/AxisCommunications/acap-computer-vision-sdk).
 
 Together with this file you should be able to find a directory called
 app, which contains the "capture.cpp" application which can
