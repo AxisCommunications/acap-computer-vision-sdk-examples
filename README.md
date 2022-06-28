@@ -3,10 +3,12 @@
 [![CI](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/ci.yml/badge.svg)](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/ci.yml)
 
 ## Mission
+
 Our mission is to provide an excellent development experience by enabling developers
 to build new AI/ML applications for a smarter and safer world.
 
 ## Axis video analytics example applications
+
 Video analytics ensures that video surveillance systems become smarter,
 more accurate, more cost-effective and easier to manage. The most scalable
 and flexible video analytics architecture is based on ‘intelligence at the
@@ -22,25 +24,31 @@ growing number of video analytics applications creates new end-user benefits
 and opens new business possibilities.
 
 ## Getting started
+
 This repository contains a set of application examples which aims to enrich the
 developers analytics experience. All examples are using Docker framework and has a
 README file in its directory which shows overview, example directory structure and
 step-by-step instructions on how to run applications on the camera.
 
 ### Requirements
+
 To ensure compatibility with the examples, the following requirements shall be met:
+
 * Camera: ARTPEC-7 DLPU or ARTPEC8 devices (e.g., Q1615 MkIII, Q1656)
 * docker-compose version 1.29 or higher
 * Docker version 20.10.8 or higher
 * Firmware: 10.7
- * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
+  * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
 
 ### Supported architectures
-The examples support the following architectures.
+
+The examples support the following architectures:
+
 * armv7hf
 * aarch64
 
 ### Example applications for video analytics
+
 Below is a list of examples available in the repository:
 
 * [hello-world](./hello-world/)
@@ -66,12 +74,13 @@ Below is a list of examples available in the repository:
   * A C++ example which runs a Monkey web server on the camera.
 
 ### Docker Hub images
+
 The examples are based on the [ACAP Computer Vision SDK](https://github.com/AxisCommunications/acap-computer-vision-sdk).
 This SDK is an image which contains APIs and tooling to build computer vision apps for running on camera, with support for C/C++ and Python.
 Additionally, there is the [ACAP Native SDK](https://github.com/AxisCommunications/acap-native-sdk), which is more geared towards building ACAPs that uses AXIS-developed APIs directly, and primarily does so using C/C++.
 
-
 ## How to work with Github repository
+
 You can help to make this repo a better one using the following commands.
 
 1. Fork it (git checkout ..)
@@ -80,6 +89,6 @@ You can help to make this repo a better one using the following commands.
 4. Push to the branch: git push origin <contr/my-new-feature>
 5. Submit a pull request
 
-
 ## License
+
 [Apache 2.0](LICENSE)
