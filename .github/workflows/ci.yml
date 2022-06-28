@@ -17,8 +17,7 @@ jobs:
     - uses: actions/checkout@v2
     # Add qemu cross compiler to compile pose-estimator-with-flask and web-server example
     - name: qemu cross compiler
-      run: |
-         docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
+      run: docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
 
     - name: Build hello-world application
       run: |
