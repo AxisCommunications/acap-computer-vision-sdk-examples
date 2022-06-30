@@ -15,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - uses: docker/setup-buildx-action@v2
+      with:
+        install: true
     # Add qemu cross compiler to compile pose-estimator-with-flask and web-server example
     - name: qemu cross compiler
       run: docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
