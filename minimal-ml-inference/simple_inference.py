@@ -4,8 +4,8 @@ import numpy as np
 
 from tf_proto_utils import InferenceClient
 
-# Create the inference client with model server ip and port from environment variables
-inf_client = InferenceClient(os.environ['INFERENCE_HOST'], int(os.environ['INFERENCE_PORT']))
+# Create the inference client with model and socket from environment variables
+inf_client = InferenceClient(os.environ['INFERENCE_HOST'])
 
 # Create a video stream that fits the model inputs
 cap = cv2.VideoCapture(0)

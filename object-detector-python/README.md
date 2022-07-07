@@ -73,7 +73,7 @@ export CHIP=artpec8
 ```sh
 export AXIS_TARGET_IP=<actual camera IP address>
 export DOCKER_PORT=2376
-docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
+docker -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
 
 ### Build the object-detector-python images
@@ -97,7 +97,7 @@ docker save $MODEL_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PO
 docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP up
 
 # Terminate with Ctrl-C and cleanup
-docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT down -v
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP down -v
 ```
 
 ### The expected output:

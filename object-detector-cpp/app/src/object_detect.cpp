@@ -169,8 +169,7 @@ int main(int argc, char *argv[]) {
 
       vector<string> classes = get_classes_from_file();
       VideoCapture cap = setup_capture(BUFFERS);
-      string connect_string = string(getenv("INFERENCE_HOST")) + string(":") +
-                              string(getenv("INFERENCE_PORT"));
+      string connect_string = string(getenv("INFERENCE_HOST"));
 
       shared_ptr<Channel> channel;
       if (argc < 2) {
