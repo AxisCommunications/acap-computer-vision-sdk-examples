@@ -1,5 +1,5 @@
 ARG ARCH=armv7hf
-ARG SDK_VERSION=1.2
+ARG SDK_VERSION=1.2.1
 ARG REPO=axisecp
 
 

@@ -131,7 +131,7 @@ class Detector:
     # Read environment variables
     def read_environment(self):
         self.threshold = float(os.environ.get('DETECTION_THRESHOLD', 0.3))
-        self.inference_client = InferenceClient(os.environ['INFERENCE_HOST'], int(os.environ['INFERENCE_PORT']))
+        self.inference_client =  InferenceClient(os.environ['INFERENCE_HOST'])
         self.model_path = os.environ['MODEL_PATH']
 
     # Run object detection on video stream

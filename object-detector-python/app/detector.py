@@ -84,7 +84,8 @@ class Detector:
     # Read environment variables
     def read_enviroment(self):
         self.threshold = float(os.environ.get('DETECTION_THRESHOLD', 0.5))
-        self.inference_client = InferenceClient(os.environ['INFERENCE_HOST'], int(os.environ['INFERENCE_PORT']))
+        self.inference_client =  InferenceClient(os.environ['INFERENCE_HOST'])
+
         self.model_path = os.environ['MODEL_PATH']
         image_path = os.environ.get('IMAGE_PATH')
         object_list_path = os.environ.get('OBJECT_LIST_PATH')
@@ -92,7 +93,7 @@ class Detector:
 
     # Run object detection
     def run(self):
-        print(f"object-detector-python connect to: {os.environ['INFERENCE_HOST']}:{int(os.environ['INFERENCE_PORT'])}")
+        print(f"object-detector-python connect to: {os.environ['INFERENCE_HOST']}")
         image_path, object_list_path = self.read_enviroment()
         self.read_object_list(object_list_path)
         if image_path is not None:

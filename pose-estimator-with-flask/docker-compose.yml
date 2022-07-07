@@ -13,8 +13,8 @@ services:
       - "5000"
     environment:
       - PYTHONUNBUFFERED=1
-      - INFERENCE_HOST=inference-server
-      - INFERENCE_PORT=8501
+      - INFERENCE_HOST=unix:///tmp/acap-runtime.sock
+      - INFERENCE_PORT=0
       - MODEL_PATH=${MODEL_PATH}
       - OBJECT_LIST_PATH=/models/coco_labels.txt
     volumes:
@@ -22,6 +22,7 @@ services:
       - acap_dl-models:/models:ro
       - /tmp:/output
       - /var/run/dbus:/var/run/dbus:rw
+      - inference-server:/tmp
 
   inference-server:
     image: ${INFERENCE_SERVER_IMAGE}
@@ -30,11 +31,15 @@ services:
       options:
         max-file: "5"
         max-size: "100k"
-    command: ${INFERENCE_SERVER_COMMAND}
+    command: ${INFERENCE_SERVER_ARGS}
     volumes:
       - /usr/acap-root/lib:/host/lib
       - acap_dl-models:/models:ro
       - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
+      - /run/parhand/parhandsocket:/run/parhand/parhandsocket
+      - /usr/lib:/usr/lib
+      - /usr/bin:/usr/bin
+      - inference-server:/tmp
 
   acap_dl-models:
     image: $MODEL_NAME
@@ -43,3 +48,4 @@ services:
 
 volumes:
   acap_dl-models: {}
+  inference-server: {}
