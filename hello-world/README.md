@@ -13,11 +13,13 @@ hello-world
 ├── app
 ├── |- simply_hello.py
 ├── Dockerfile
+├── docker-compose.yml
 └── README.md
 ```
 
 * **simply_hello.py** - A Python script that prints "Hello World"
 * **Dockerfile** - Build instructions for the application image that is run on the camera
+* **docker-compose.yml** - A docker-compose file that specifies how the application is run
 
 ## Requirements
 To ensure compatibility with the examples, the following requirements shall be met:
@@ -63,10 +65,13 @@ Next, the built image needs to be uploaded to the device. This can be done throu
 docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
 ```
 
-With the application image on the device, it can be started. As this example does not use e.g., OpenCV, no special mounts are needed, making the run command very simple:
+With the application image on the device, it can be started. As this example does not use e.g., OpenCV, no special mounts are needed, making the `docker-compose.yml` file very simple:
 
 ```sh
-docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT run -it $APP_NAME
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT up
+
+# Cleanup after execution
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT down -v
 ```
 
 The expected output from the application is simply:

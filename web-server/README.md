@@ -8,6 +8,7 @@ Below is the structure of the application with a brief description of its files.
 ```sh
 web-server
 ├── Dockerfile - Specifications on how to build the camera docker image
+├── docker-compose.yml
 └── README.md - Instructions on how to build and run the application
 ```
 
@@ -65,18 +66,31 @@ docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
 
 ### Build and run the images
+With the environment setup, the `monkey` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
+
 ```sh
 # Install qemu emulator to build for different architectures
 docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
 
 # Build the container
-docker build . -t $APP_NAME --build-arg ARCH 
+docker build . -t $APP_NAME --build-arg ARCH
+```
+
+Next, the built image needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
+
+```sh
 docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
 ```
 
 # Start Web Server on the camera
+
+With the application image on the device, it can be started using `docker-compose.yml`:
+
 ```sh
-docker --tlsverify  -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT run --rm -p 8080:2001 -it $APP_NAME
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT up
+
+# Cleanup after execution
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT down -v
 ```
 
 ### The expected output
