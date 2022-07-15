@@ -76,7 +76,7 @@ docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT
 
 # Start Web Server on the camera
 ```sh
-docker --tlsverify  -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT run --rm -p 8080:80 -it $APP_NAME
+docker --tlsverify  -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT run --rm -p 8080:2001 -it $APP_NAME
 ```
 
 ### The expected output
@@ -86,7 +86,7 @@ Monkey HTTP Server v1.5.6
 Built : Jun 18 2021 11:05:42 (arm-linux-gnueabihf-gcc -mthumb -mfpu=neon -mfloat-abi=hard -mcpu=cortex-a9 9.3.0)
 Home  : http://monkey-project.com
 [+] Process ID is 6
-[+] Server socket listening on Port 80
+[+] Server socket listening on Port 2001
 [+] 2 threads, 253 client connections per thread, total 506
 [+] Transport layer by liana in http mode
 [+] Linux Features: TCP_FASTOPEN SO_REUSEPORT
