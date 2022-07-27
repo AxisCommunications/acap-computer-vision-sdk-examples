@@ -1,5 +1,5 @@
 ARG ARCH=armv7hf
-ARG SDK_VERSION=1.2
+ARG SDK_VERSION=1.2.1
 ARG REPO=axisecp
 ARG UBUNTU_IMAGE_VER=20.04
 
@@ -9,9 +9,14 @@ FROM $REPO/acap-computer-vision-sdk:$SDK_VERSION-$ARCH as cv-sdk-runtime
 FROM $REPO/acap-computer-vision-sdk:$SDK_VERSION-$ARCH-devel as cv-sdk-devel
 
 ENV DEBIAN_FRONTEND=noninteractive
-
 # TARGET_TOOLCHAIN is defined as the platform arch string
 # i.e., arm-linux-gnueabihf for the ARTPEC-7 platform
+
+# Setup proxy configuration
+ARG HTTP_PROXY
+ENV http_proxy=$HTTP_PROXY
+ENV https_proxy=$HTTP_PROXY
+
 RUN apt-get update && apt-get install -y -f \
     libglib2.0-dev \
     libsystemd0 \
