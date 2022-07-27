@@ -1,0 +1,51 @@
+name: auto-sync
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+          
+      - name: Clone and sync
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        run: |
+          echo $API_TOKEN_GITHUB
+          branch_name="Auto-sync-$(date +'%Y-%m-%d_%H.%M.%S')"
+          public_repo_name=${{github.event.repository.name}}
+          destination_repo_name=${public_repo_name}"-staging"
+          destination_repo="https://github.com/AxisCommunications/$destination_repo_name"
+          git config --global user.name "ecosvc-dockerhub"
+          git config --global user.email "ecosvc-dockerhub@users.noreply.github.com"
+          
+          
+          sync_dir=/tmp/sync_tmp
+          mkdir -p $sync_dir
+          
+          echo 'echo $API_TOKEN_GITHUB' > $sync_dir/.git-askpass
+          export GIT_ASKPASS=$sync_dir/.git-askpass
+          chmod +x $sync_dir/.git-askpass
+          
+          cd /tmp/sync_tmp
+          git clone $destination_repo
+          cd ./$destination_repo_name
+          git checkout -b $branch_name 
+          rm $GITHUB_WORKSPACE/.github/workflows/auto-sync-to-staging.yml
+          cp -r $GITHUB_WORKSPACE/* .
+          cp -r $GITHUB_WORKSPACE/.github/workflows/* ./.github/workflows/
+          git add .
+          if git commit -m "Syncing with staging repo" | grep -q 'nothing to commit, working tree clean'; then
+            echo "Nothing to commit :)"
+          else
+             git push --set-upstream origin $branch_name    
+          fi
