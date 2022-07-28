@@ -1,0 +1,29 @@
+name: Build opencv-qr-decoder-python application
+on:
+  push:
+    paths:
+      - 'opencv-qr-decoder-python/**'
+      - '!opencv-qr-decoder-python/README.md'
+      - '.github/workflows/opencv-qr-decoder-python.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      EXREPO: acap-computer-vision-examples
+      EXNAME: opencv-qr-decoder-python
+    strategy:
+      matrix:
+        include:
+          - arch: armv7hf
+          - arch: aarch64
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build ${{ env.example }} application
+        env:
+          example: ${{ env.EXNAME }}
+          imagetag: ${{ env.EXREPO }}_${{ env.EXNAME }}:1.0
+        run: |
+          cd $EXNAME
+          docker build --no-cache --build-arg ARCH=${{ matrix.arch }} --tag $imagetag .
+          docker image rm -f $imagetag

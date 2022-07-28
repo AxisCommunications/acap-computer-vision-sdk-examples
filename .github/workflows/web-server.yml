@@ -1,0 +1,30 @@
+name: Build web-server application
+on:
+  push:
+    paths:
+      - 'web-server/**'
+      - '!web-server/README.md'
+      - '.github/workflows/web-server.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      EXREPO: acap-computer-vision-examples
+      EXNAME: web-server
+    strategy:
+      matrix:
+        include:
+          - arch: armv7hf
+          - arch: aarch64
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build ${{ env.example }} application
+        env:
+          example: ${{ env.EXNAME }}
+          imagetag: ${{ env.EXREPO }}_${{ env.EXNAME }}:1.0
+        run: |
+          cd $EXNAME
+          docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
+          docker build --no-cache --build-arg ARCH=${{ matrix.arch }} --tag $imagetag .
+          docker image rm -f $imagetag
