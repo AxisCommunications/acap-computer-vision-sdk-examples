@@ -1,0 +1,29 @@
+name: Build hello-world-crosscompiled application
+on:
+  push:
+    paths:
+      - 'hello-world-crosscompiled/**'
+      - '!hello-world-crosscompiled/README.md'
+      - '.github/workflows/hello-world-crosscompiled.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      EXREPO: acap-computer-vision-examples
+      EXNAME: hello-world-crosscompiled
+    strategy:
+      matrix:
+        include:
+          - arch: armv7hf
+          - arch: aarch64
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build ${{ env.example }} application
+        env:
+          example: ${{ env.EXNAME }}
+          imagetag: ${{ env.EXREPO }}_${{ env.EXNAME }}:1.0
+        run: |
+          cd $EXNAME
+          docker build --no-cache --build-arg ARCH=${{ matrix.arch }} --tag $imagetag .
+          docker image rm -f $imagetag

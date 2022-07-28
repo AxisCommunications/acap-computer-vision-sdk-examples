@@ -1,0 +1,37 @@
+name: Build pose-estimator-with-flask application
+on:
+  push:
+    paths:
+      - 'pose-estimator-with-flask/**'
+      - '!pose-estimator-with-flask/README.md'
+      - '.github/workflows/pose-estimator-with-flask.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      EXREPO: acap-computer-vision-examples
+      EXNAME: pose-estimator-with-flask
+    strategy:
+      matrix:
+        include:
+          - arch: armv7hf
+            chip: cpu
+          - arch: armv7hf
+            chip: edgetpu
+          - arch: aarch64
+            chip: artpec8
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build ${{ env.example }} application
+        env:
+          example: ${{ env.EXNAME }}-${{ matrix.chip }}
+          imagetag: ${{ env.EXREPO }}_${{ env.EXNAME }}-${{ matrix.chip }}:1.0
+          modeltag: ${{ env.EXREPO }}_${{ env.EXNAME }}-${{ matrix.chip }}-model:1.0
+        run: |
+          cd $EXNAME
+          docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
+          docker build --no-cache --build-arg CHIP=${{ matrix.chip }} --build-arg ARCH=${{ matrix.arch }} --tag $imagetag .
+          docker build . -f Dockerfile.model -t $modeltag --build-arg ARCH=${{ matrix.arch }}
+          docker image rm -f $imagetag
