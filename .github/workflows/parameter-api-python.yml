@@ -1,16 +1,16 @@
-name: Build opencv-qr-decoder-python application
+name: Build parameter-api-python application
 on:
   push:
     paths:
-      - 'opencv-qr-decoder-python/**'
-      - '!opencv-qr-decoder-python/README.md'
-      - '.github/workflows/opencv-qr-decoder-python.yml'
+      - 'parameter-api-python/**'
+      - '!parameter-api-python/README.md'
+      - '.github/workflows/parameter-api-python.yml'
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       EXREPO: acap-computer-vision-examples
-      EXNAME: opencv-qr-decoder-python
+      EXNAME: parameter-api-python
     strategy:
       matrix:
         include:
