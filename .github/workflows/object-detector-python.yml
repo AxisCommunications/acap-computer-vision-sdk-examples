@@ -1,10 +1,12 @@
 name: Build object-detector-python application
+
 on:
   push:
     paths:
       - 'object-detector-python/**'
       - '!object-detector-python/README.md'
       - '.github/workflows/object-detector-python.yml'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,7 +24,6 @@ jobs:
       EXNAME: object-detector-python
     steps:
       - uses: actions/checkout@v2
-
       - name: Build ${{ env.example }} application
         env:
           example: ${{ env.EXNAME }}-${{ matrix.chip }}

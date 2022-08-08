@@ -1,10 +1,12 @@
 name: Build web-server application
+
 on:
   push:
     paths:
       - 'web-server/**'
       - '!web-server/README.md'
       - '.github/workflows/web-server.yml'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,7 +20,6 @@ jobs:
           - arch: aarch64
     steps:
       - uses: actions/checkout@v2
-
       - name: Build ${{ env.example }} application
         env:
           example: ${{ env.EXNAME }}
