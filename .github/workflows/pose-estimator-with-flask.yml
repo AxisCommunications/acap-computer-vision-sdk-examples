@@ -1,10 +1,12 @@
 name: Build pose-estimator-with-flask application
+
 on:
   push:
     paths:
       - 'pose-estimator-with-flask/**'
       - '!pose-estimator-with-flask/README.md'
       - '.github/workflows/pose-estimator-with-flask.yml'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,7 +25,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
       - name: Build ${{ env.example }} application
         env:
           example: ${{ env.EXNAME }}-${{ matrix.chip }}

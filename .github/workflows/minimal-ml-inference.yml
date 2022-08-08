@@ -1,10 +1,12 @@
 name: Build minimal-ml-inference application
+
 on:
   push:
     paths:
       - 'minimal-ml-inference/**'
       - '!minimal-ml-inference/README.md'
       - '.github/workflows/minimal-ml-inference.yml'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,10 +22,8 @@ jobs:
             chip: edgetpu
           - arch: aarch64
             chip: artpec8
-
     steps:
       - uses: actions/checkout@v2
-
       - name: Build ${{ env.example }} application
         env:
           example: ${{ env.EXNAME }}-${{ matrix.chip }}

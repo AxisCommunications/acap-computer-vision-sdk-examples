@@ -1,10 +1,12 @@
 name: Build opencv-qr-decoder-python application
+
 on:
   push:
     paths:
       - 'opencv-qr-decoder-python/**'
       - '!opencv-qr-decoder-python/README.md'
       - '.github/workflows/opencv-qr-decoder-python.yml'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,7 +20,6 @@ jobs:
           - arch: aarch64
     steps:
       - uses: actions/checkout@v2
-
       - name: Build ${{ env.example }} application
         env:
           example: ${{ env.EXNAME }}
