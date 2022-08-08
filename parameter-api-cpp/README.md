@@ -4,7 +4,7 @@
 
 [![Build parameter-api-cpp application](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/parameter-api-cpp.yml/badge.svg)](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/parameter-api-cpp.yml)
 
-The example is written in Python and communicates with the [ACAP runtime](https://hub.docker.com/r/axisecp/acap-runtime) using gRPC on a Unix Domain Socket (UDS). ACAP runtime acts as a server that exposes the Parameter-API.
+The example is written in C++ and communicates with the [ACAP runtime](https://hub.docker.com/r/axisecp/acap-runtime) using gRPC on a Unix Domain Socket (UDS). ACAP runtime acts as a server that exposes the Parameter-API.
 
 ## Overview
 
