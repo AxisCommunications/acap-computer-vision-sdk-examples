@@ -3,6 +3,6 @@ version: '3.3'
 services:
   parameter-api:
     image: $APP_NAME
-    command: /usr/bin/parameter /models/server.pem
+    entrypoint: python3 parameter.py /certificates/server.pem
     volumes:
       - /tmp:/tmp

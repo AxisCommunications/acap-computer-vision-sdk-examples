@@ -1,16 +1,16 @@
-name: Build parameter-api application
+name: Build parameter-api-python application
 on:
   push:
     paths:
-      - 'parameter-api/**'
-      - '!parameter-api/README.md'
-      - '.github/workflows/parameter-api.yml'
+      - 'parameter-api-python/**'
+      - '!parameter-api-python/README.md'
+      - '.github/workflows/parameter-api-python.yml'
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       EXREPO: acap-computer-vision-examples
-      EXNAME: parameter-api
+      EXNAME: parameter-api-python
     strategy:
       matrix:
         include:

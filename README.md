@@ -66,8 +66,10 @@ Below is a list of examples available in the repository:
   * A C++ example which captures camera frames and properties such as time stamps, zoom, focus etc., through OpenCV.
 * [opencv-qr-decoder-python](./opencv-qr-decoder-python/)
   * A Python example which detects and decodes QR codes in the video stream using OpenCV.
-* [parameter-api](./parameter-api/)
+* [parameter-api-cpp](./parameter-api-cpp/)
   * A C++ example which reads camera parameters using the beta version of the Parameter-API.
+* [parameter-api-python](./parameter-api-python/)
+  * A Python example which reads camera parameters using the beta version of the Parameter-API.
 * [pose-estimator-with-flask](./pose-estimator-with-flask/)
   * A Python example which implements pose estimation on a video stream from the camera, and publish the output on a video stream using flask.
 * [web-server](./web-server/)

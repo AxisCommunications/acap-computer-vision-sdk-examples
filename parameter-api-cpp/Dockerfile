@@ -61,6 +61,6 @@ COPY --from=cv-sdk-devel /target-root /
 
 # Copy the compiled Parameter application
 COPY --from=cv-sdk-devel /build/parameter /usr/bin/
-COPY --from=cv-sdk-devel server.key server.pem models/
+COPY --from=cv-sdk-devel server.key server.pem certificates/
 
-CMD ["usr/bin/parameter"]
+ENTRYPOINT [ "usr/bin/parameter" ]
