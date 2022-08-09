@@ -24,7 +24,7 @@ To ensure compatibility with the examples, the following requirements shall be m
 * Apache Reverse Proxy can not translate content with absolute addresses (i.e. /image.png) in the HTML page. Use only relative content (i.e. image.png or ../image.png)). More information how to handle relative urls correctly with a reverse proxy [here](https://serverfault.com/questions/561892/how-to-handle-relative-urls-correctly-with-a-reverse-proxy).
 
 ## Configure Camera Apache Web Server to forward web requests
-The Web Server can be accessed from a Web Browser eighter directly using a port number (i.e. http://mycamera:8080) or through the Apache Server in the camera using an extension to the camera web URL (i.e http://mycamera/monkey). To configure the Apache Server as a Reverse Proxy Server, use the procedure shown below.
+The Web Server can be accessed from a Web Browser either directly using a port number (i.e. http://mycamera:8080) or through the Apache Server in the camera using an extension to the camera web URL (i.e http://mycamera/monkey). To configure the Apache Server as a Reverse Proxy Server, use the procedure shown below.
 ```sh
 # Do ssh login to the camera
 ssh root@<CAMERA_IP>
@@ -44,7 +44,7 @@ systemctl restart httpd
 ## How to run the code
 Start by building the image containing the Web Server code with examples. This will compile the code to an executable and create an armv7hf container containing the executable, which can be uploaded to and run on the camera. After the Web Server is started it can be accessed from a web browser by specifying the web address: http://mycamera/monkey/ or http://mycamera:8080
 
-### Export the environment variable for the architecture 
+### Export the environment variable for the architecture
 Export the ARCH variable depending on the architecture of your camera
 ```sh
 # For arm32
@@ -53,7 +53,7 @@ export ARCH=armv7hf
 export ARCH=aarch64
 ```
 
-### Set your camera IP address define APP name and clear Docker memory 
+### Set your camera IP address define APP name and clear Docker memory
 ```sh
 # Set camera IP
 export AXIS_TARGET_IP=<actual camera IP address>

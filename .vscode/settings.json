@@ -3,9 +3,14 @@
         "aarch64",
         "ACAP",
         "armv7hf",
-        "artpec7",
-        "artpec8",
+        "artpec",
         "DLPU",
-        "Larod"
+        "Larod",
+        "ssdlite",
+        "movenet",
+        "edgetpu",
+        "tflite",
+        "protobuf",
+        "mobilenet"
     ]
 }
