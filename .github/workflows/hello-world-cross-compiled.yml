@@ -1,18 +1,18 @@
-name: Build hello-world-crosscompiled application
+name: Build hello-world-cross-compiled application
 
 on:
   push:
     paths:
-      - 'hello-world-crosscompiled/**'
-      - '!hello-world-crosscompiled/README.md'
-      - '.github/workflows/hello-world-crosscompiled.yml'
+      - 'hello-world-cross-compiled/**'
+      - '!hello-world-cross-compiled/README.md'
+      - '.github/workflows/hello-world-cross-compiled.yml'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       EXREPO: acap-computer-vision-examples
-      EXNAME: hello-world-crosscompiled
+      EXNAME: hello-world-cross-compiled
     strategy:
       matrix:
         include:

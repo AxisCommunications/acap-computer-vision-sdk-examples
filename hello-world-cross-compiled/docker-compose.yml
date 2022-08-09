@@ -1,7 +1,7 @@
 version: '3.3'
 
 services:
-  hello-world-crosscompiled-app:
+  hello-world-cross-compiled-app:
     image: $APP_NAME
     ipc: "host"
     environment:

@@ -1,25 +1,25 @@
 *Copyright (C) 2021, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
 
 
-# A minimal Python application
-This example demonstrates how to create a simple Python application using the ACAP Computer Vision SDK and run it on an edge device.
-
-Going from zero to a Python application running on an AXIS device is quite easy. First, the application script is written, as in the hello-world script in [app/simply_hello.py](app/simply_hello.py). Next, the [Dockerfile](Dockerfile) which build the application image is constructed. This needs to pull in packages from the ACAP Computer Vision SDK, as is done using the `COPY` commands. Finally, the application needs to be built and uploaded, as is specified below.
+# A small, cross compiled C++ hello-world application
+This example demonstrates how to create and run a simple, cross compiled C++ OpenCV hello-world application using the ACAP Computer Vision SDK.
 
 ## Example structure
-Following are the list of files and a brief description of each file in the example
+Following are the list of files and a brief description of each file in the example:
 ```bash
-hello-world
+hello-world-cross-compiled
 ├── app
-├── |- simply_hello.py
-├── Dockerfile
+│   ├── Makefile
+│   └── src
+│       └── hello_world.cpp
 ├── docker-compose.yml
-└── README.md
+└── Dockerfile
 ```
 
-* **simply_hello.py** - A Python script that prints "Hello World"
+* **hello_world.cpp** - A Hello World application which writes to standard out.
+* **docker-compose.yml** - A docker-compose file that specifies how the application is run (mounts, environment variables, etc.,)
 * **Dockerfile** - Build instructions for the application image that is run on the camera
-* **docker-compose.yml** - A docker-compose file that specifies how the application is run
+* **Makefile** - Makefile containing the build and link instructions for building the ACAP application.
 
 ## Requirements
 To ensure compatibility with the examples, the following requirements shall be met:
@@ -38,7 +38,6 @@ export ARCH=armv7hf
 # For arm64
 export ARCH=aarch64
 ```
-
 ### Set your camera IP address define APP name and clear Docker memory
 ```sh
 # Set camera IP
@@ -46,14 +45,14 @@ export AXIS_TARGET_IP=<actual camera IP address>
 export DOCKER_PORT=2376
 
 # Define APP name
-export APP_NAME=hello-world
+export APP_NAME=hello-world-cross-compiled
 
 # Clean docker memory
 docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
 
 ### Build and run the images
-With the environment setup, the `hello-world` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
+With the environment setup, the `hello-world-cross-compiled` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
 
 ```sh
 docker build . -t $APP_NAME --build-arg ARCH
@@ -65,7 +64,7 @@ Next, the built image needs to be uploaded to the device. This can be done throu
 docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
 ```
 
-With the application image on the device, it can be started. As this example does not use e.g., OpenCV, no special mounts are needed, making the `docker-compose.yml` file very simple:
+With the application image on the device, it can be started. As the example uses OpenCV, the OpenCV requirements will be included in `docker-compose.yml`, which is used to run the application:
 
 ```sh
 docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT up
@@ -74,10 +73,11 @@ docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT up
 docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT down -v
 ```
 
-The expected output from the application is simply:
+The expected output from the application is (depending on the OpenCV pulled from the ACAP Computer Vision SDK):
 
 ```sh
-Hello World!
+...
+Hello World from OpenCV 4.5.1
 ```
 ## License
 **[Apache License 2.0](../LICENSE)**
