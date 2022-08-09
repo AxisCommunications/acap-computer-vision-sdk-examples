@@ -53,7 +53,7 @@ Below is a list of examples available in the repository:
 
 * [hello-world](./hello-world/)
   * A Python example which builds a simple hello-world application.
-* [hello-world-crosscompiled](./hello-world-crosscompiled/)
+* [hello-world-cross-compiled](./hello-world-cross-compiled/)
   * A C++ example which cross compiles a simple OpenCV hello-world application.
 * [minimal-ml-inference](./minimal-ml-inference/)
   * A Python example to build a minimal machine learning inference application.

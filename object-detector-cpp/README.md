@@ -41,7 +41,7 @@ To ensure compatibility with the examples, the following requirements shall be m
 * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
 
 ## How to run the code
-### Export the environment variable for the architecture 
+### Export the environment variable for the architecture
 Export the ARCH variable depending on the architecture of your camera
 ```sh
 # For arm32
@@ -53,7 +53,7 @@ export CHIP=tpu
 # For arm64
 export ARCH=aarch64
 # Valid options for chip on aarch64 are 'artpec8' (hardware accelerator) or 'cpu'
-export CHIP=artpec8 
+export CHIP=artpec8
 ```
 
 ### Set your camera IP address and clear Docker memory
@@ -73,7 +73,7 @@ export MODEL_NAME=acap-dl-models
 docker run -it --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
 
 # Build and upload inference client for camera
-docker build . -t $APP_NAME --build-arg ARCH 
+docker build . -t $APP_NAME --build-arg ARCH
 docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
 
 # Build and upload inference models
@@ -126,7 +126,7 @@ larod-inference-server -c server.pem -k private.key
 This example uses larod-inference-server for video inference processing by using gRPC API. The inference server supports multiple clients at the same time. Models are normally loaded when the inference server is starting up, but models can also be loaded by specifying the model file path over gRPC. Please note the model path specified must be accessible by the inference server.
 
 ### Hardware acceleration
-The ./config folder contains configuration files with the parameters to run the inference on different camera models, also giving the possibility to use the hardware accelerator. 
+The ./config folder contains configuration files with the parameters to run the inference on different camera models, also giving the possibility to use the hardware accelerator.
 To achieve the best performance we recommend using the TPU (Tensor Processing Unit) equipped with artpec7 cameras (e.g. [Axis-Q1615 Mk III](https://www.axis.com/products/axis-q1615-mk-iii))
 or the DLPU (Deep Learning Processing Unit) equipped in artpec8 cameras (e.g. [Axis-Q1656](https://www.axis.com/products/axis-q1656))
 

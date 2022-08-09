@@ -14,12 +14,12 @@ The first container contains the actual program built in this example. It uses [
 Lastly, there is a third container that holds the deep learning model, which is put into a volume that is accessible by the other two images.
 
 ### Applications
-Pose estimation is useful to accoplish several tasks. For example in action detection it can be applied in:
+Pose estimation is useful to accomplish several tasks. For example in action detection it can be applied in:
 * autonomous driving, to detect if a pedestrian is waiting or crossing a street
-* healthcare, to detect if a persion is standing or falling.
-Pose estimation models are also considered better than object detection at tracking humans. That is because they can keep tracking the human under partial occlusion, where a classic object detection model is more prone to fail. 
+* healthcare, to detect if a person is standing or falling.
+Pose estimation models are also considered better than object detection at tracking humans. That is because they can keep tracking the human under partial occlusion, where a classic object detection model is more prone to fail.
 
-### larod-inference server 
+### larod-inference server
 This image uses the larod service in AXIS OS and the model from the installed model image.
 You can find documentation about the larod inference server on the [Machine Learning API documentation page](https://axiscommunications.github.io/acap-documentation/docs/api/native-api.html#machine-learning-api)
 
@@ -69,7 +69,7 @@ Meet the following requirements to ensure compatibility with the examples:
   * docker-compose v1.29 or higher
 
 ## How to run the code
-### Export the environment variable for the architecture 
+### Export the environment variable for the architecture
 Export the ARCH variable depending on the architecture of your camera
 ```sh
 # For arm32
@@ -81,7 +81,7 @@ export CHIP=tpu
 # For arm64
 export ARCH=aarch64
 # Valid options for chip on aarch64 are 'artpec8' (hardware accelerator) or 'cpu'
-export CHIP=artpec8 
+export CHIP=artpec8
 ```
 
 ### Set your camera IP address and clear Docker memory
@@ -101,7 +101,7 @@ docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 docker run -it --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
 
 # Build and upload inference client for camera
-docker build . -t $APP_NAME --build-arg ARCH 
+docker build . -t $APP_NAME --build-arg ARCH
 docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
 
 # Build and upload inference models
@@ -116,7 +116,7 @@ docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./co
 ```
 
 ### The expected output:
-In your browser, go to http://$AXIS_TARGET_IP:5000 to start the interference. If a person is detected, the key points are drawn on the video stream. 
+In your browser, go to http://$AXIS_TARGET_IP:5000 to start the interference. If a person is detected, the key points are drawn on the video stream.
 
 
 ![Pose estimator](assets/frame_36.jpg)
@@ -149,7 +149,7 @@ pose-estimator_1    |  0.02048427 0.01638742 0.15568045 0.07374337 0.05735596]
 ```
 
 ### Hardware acceleration
-The ./config folder contains configuration files with the parameters to run the inference on different camera models. The parameters also gives you the possibility to use the hardware accelerator. 
+The ./config folder contains configuration files with the parameters to run the inference on different camera models. The parameters also gives you the possibility to use the hardware accelerator.
 To achieve the best performance we recommend using:
 * the TPU (Tensor Processing Unit) equipped with artpec7 cameras (for example [Axis-Q1615 Mk III](https://www.axis.com/products/axis-q1615-mk-iii))
 * or the DLPU (Deep Learning Processing Unit) equipped in artpec8 cameras (e.g. [Axis-Q1656](https://www.axis.com/products/axis-q1656))
