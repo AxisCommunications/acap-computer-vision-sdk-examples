@@ -1,6 +1,7 @@
 *Copyright (C) 2021, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
 
 # An OpenCV based example application on an edge device
+
 This readme file explains how to build an OpenCV application.
 It is achieved by using the ACAP Computer Vision SDK image, which contains
 all the essential parts needed.
@@ -16,7 +17,9 @@ easily be compiled and run with the help of the tools and step by step
 below.
 
 ## Requirements
+
 To ensure compatibility with the examples, the following requirements shall be met:
+
 * Camera: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
 * docker-compose version 1.29 or higher
 * Docker version 20.10.8 or higher
@@ -24,9 +27,10 @@ To ensure compatibility with the examples, the following requirements shall be m
 * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
 
 ## Getting started
+
 These instructions below will guide you on how to execute the code. Below is the structure and scripts used in the example:
 
-```bash
+```text
 opencv-image-capture-cpp
 ├── app
 │   ├── Makefile
@@ -36,18 +40,23 @@ opencv-image-capture-cpp
 ├── Dockerfile
 └── README.md
 ```
+
 * **capture.cpp**        - Example application to capture camera properties such as time stamps, zoom, focus etc.
 * **Dockerfile**         - Docker file with the toolchain included to run the example.
 * **docker-compose.yml** - Docker compose file contains the latest image of the example from dockerhub.
 * **README.md**          - Step by step instructions on how to run the example.
 
 ### Limitations
+
 * OpenCV module choice cannot be made in this version.
 * In order to change the binary name it has to be done in the Makefile
 
 ## How to run the code
-### Export the environment variable for the architecture 
+
+### Export the environment variable for the architecture
+
 Export the ARCH variable depending on the architecture of your camera
+
 ```sh
 # For arm32
 export ARCH=armv7hf
@@ -55,7 +64,8 @@ export ARCH=armv7hf
 export ARCH=aarch64
 ```
 
-### Set your camera IP address define APP name and clear Docker memory 
+### Set your camera IP address define APP name and clear Docker memory
+
 ```sh
 # Set camera IP
 export AXIS_TARGET_IP=<actual camera IP address>
@@ -68,8 +78,9 @@ docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
 
 ### Build and run the images
+
 ```sh
-docker build . -t $APP_NAME --build-arg ARCH 
+docker build . -t $APP_NAME --build-arg ARCH
 
 docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
 
@@ -79,8 +90,9 @@ docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT -f docker-compo
 docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT -f docker-compose.yml down -v
 ```
 
-#### The expected output:
-```bash
+#### The expected output
+
+```text
 Setting Rotation 270: Done
 Setting Rotation 180: Done
 Setting Rotation  90: Done
@@ -130,6 +142,7 @@ These extensions facilitate inter-process zero-copy by allowing buffers
 to be forwarded across unix domain sockets.
 
 Mandatory zero-copy extensions:
+
 * CAP_PROP_UNIMATRIX_FD
   Buffer file descriptor
 * CAP_PROP_UNIMATRIX_FD_OFFSET
@@ -140,6 +153,7 @@ Mandatory zero-copy extensions:
   Maximum buffers in-flight
 
 UniMatrix conforming backends must support at least *one* of these fourcc formats:
+
 * NV12
 * NV21
 * RGB3
@@ -147,15 +161,18 @@ UniMatrix conforming backends must support at least *one* of these fourcc format
 The most efficient color format should always be default.
 
 UniMatrix conforming backends must support monochrome fourcc:
+
 * Y800
 
 Optional properties:
+
 * CAP_PROP_UNIMATRIX_FNUMBER
   f-number
 
 #### OpenCV-VideoIO Axis implementation
 
 Axis supports all UniMatrix extensions:
+
 * CAP_PROP_UNIMATRIX_FD
 * CAP_PROP_UNIMATRIX_FD_OFFSET
 * CAP_PROP_UNIMATRIX_FD_CAPACITY
@@ -163,18 +180,22 @@ Axis supports all UniMatrix extensions:
 * CAP_PROP_UNIMATRIX_FNUMBER
 
 These UniMatrix stream formats are not supported:
+
 * NV21
 
 Below stream formats are fully hardware-accelerated:
+
 * Y800
 * NV12
   This is the default native format of the camera.
 
 Below stream formats are converted from the native format (i.e. it has a performance penalty):
+
 * RGB3
 
 These *stream* properties can be changed before capturing the first frame,
 not when the stream is running:
+
 * CAP_PROP_FPS
 * CAP_PROP_FOURCC
 * CAP_PROP_CHANNEL
@@ -185,10 +206,12 @@ not when the stream is running:
   Not every camera is required to support every rotation.
 
 These *stream* properties are read-only:
+
 * CAP_PROP_POS_MSEC
 * CAP_PROP_POS_FRAMES
 
 These *image* properties are read-only:
+
 * CAP_PROP_ZOOM
   Zoom factor (1.0-)
 * CAP_PROP_FOCUS
@@ -212,6 +235,7 @@ These *image* properties are read-only:
     Camblock
 
 These *image* properties are write-only:
+
 * CAP_PROP_UNIMATRIX_EXPOSURE_MODE
   * CAP_UNIMATRIX_EXPOSURE_MODE_AUTO
     Automatic exposure
@@ -221,18 +245,22 @@ These *image* properties are write-only:
     Limit max automatic exposure time (unit: µs)
 
 These *image* properties are read-write:
+
 * CAP_PROP_UNIMATRIX_TONEMAPPING
   ToneMapping [0-100]
 * CAP_PROP_UNIMATRIX_TEMPORAL_FILTER
   Temporal Noise-Filter [0-100]
 
 ## Proxy settings
+
 Depending on the network, you might need proxy settings in the following file: `~/.docker/config.json`.
 
 For reference please see: https://docs.docker.com/network/proxy/.
 
 ## License
+
 **[Apache License 2.0](../LICENSE)**
 
 ## References
+
 * https://docs.opencv.org/

@@ -1,14 +1,16 @@
 *Copyright (C) 2022, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
 
-
 # A minimal, machine learning inference application
+
 This example demonstrates how to create a simple Python application that performs inference on the camera image. This is done using the ACAP Computer Vision SDK.
 
 The example largely consists of three parts: the Python script [simple_inference.py](simple_inference.py) that is run on device, the [Dockerfile](Dockerfile) which build the application image and the [docker-compose.yml](docker-compose.yml) which specifies how the inference server and client is connected as well as specify the required mounts and environment variables needed.
 
 ## Example structure
+
 Following are the list of files and a brief description of each file in the example
-```bash
+
+```text
 minimal-ml-inference
 ├── config
 │   ├── env.aarch64
@@ -27,7 +29,9 @@ minimal-ml-inference
 * **docker-compose.yml** - A docker-compose file that specifies how the application is run (mounts, environment variables, etc.,)
 
 ## Requirements
+
 To ensure compatibility with the examples, the following requirements shall be met:
+
 * Camera: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
 * docker-compose version 1.29 or higher
 * Docker version 20.10.8 or higher
@@ -37,13 +41,16 @@ To ensure compatibility with the examples, the following requirements shall be m
 ## How to run the code
 
 ### Export the environment variable for the architecture
+
 Export the ARCH variable depending on the architecture of your camera
+
 ```sh
 # For arm32
 export ARCH=armv7hf
 # Valid options for chip on armv7hf are 'tpu' (hardware accelerator) or 'cpu'
 export CHIP=tpu
 ```
+
 ```sh
 # For arm64
 export ARCH=aarch64
@@ -52,6 +59,7 @@ export CHIP=artpec8
 ```
 
 ### Set your camera IP address and clear Docker memory
+
 ```sh
 export AXIS_TARGET_IP=<actual camera IP address>
 export DOCKER_PORT=2376
@@ -59,6 +67,7 @@ docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
 
 ### Build the minimal-ml-inference images
+
 ```sh
 # Define APP name
 export APP_NAME=acap4-minimal-ml-inference
@@ -85,10 +94,11 @@ docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./co
 The expected output from the application is the raw predictions from the model specified in the environment variable.
 
 ### Hardware acceleration
+
 The ./config folder contains configuration files with the parameters to run the inference on different camera models, also giving the possibility to use the hardware accelerator.
 To achieve the best performance we recommend using the TPU (Tensor Processing Unit) equipped with artpec7 cameras (e.g. [Axis-Q1615 Mk III](https://www.axis.com/products/axis-q1615-mk-iii))
 or the DLPU (Deep Learning Processing Unit) equipped in artpec8 cameras (e.g. [Axis-Q1656](https://www.axis.com/products/axis-q1656))
 
-
 ## License
+
 **[Apache License 2.0](../LICENSE)**

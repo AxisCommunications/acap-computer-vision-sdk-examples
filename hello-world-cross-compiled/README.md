@@ -1,12 +1,14 @@
 *Copyright (C) 2021, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
 
-
 # A small, cross compiled C++ hello-world application
+
 This example demonstrates how to create and run a simple, cross compiled C++ OpenCV hello-world application using the ACAP Computer Vision SDK.
 
 ## Example structure
+
 Following are the list of files and a brief description of each file in the example:
-```bash
+
+```text
 hello-world-cross-compiled
 ├── app
 │   ├── Makefile
@@ -22,7 +24,9 @@ hello-world-cross-compiled
 * **Makefile** - Makefile containing the build and link instructions for building the ACAP application.
 
 ## Requirements
+
 To ensure compatibility with the examples, the following requirements shall be met:
+
 * Camera: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
 * docker-compose version 1.29 or higher
 * Docker version 20.10.8 or higher
@@ -30,15 +34,20 @@ To ensure compatibility with the examples, the following requirements shall be m
 * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
 
 ## How to run the code
+
 ### Export the environment variable for the architecture
+
 Export the ARCH variable depending on the architecture of your camera
+
 ```sh
 # For arm32
 export ARCH=armv7hf
 # For arm64
 export ARCH=aarch64
 ```
+
 ### Set your camera IP address define APP name and clear Docker memory
+
 ```sh
 # Set camera IP
 export AXIS_TARGET_IP=<actual camera IP address>
@@ -52,6 +61,7 @@ docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
 
 ### Build and run the images
+
 With the environment setup, the `hello-world-cross-compiled` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
 
 ```sh
@@ -79,5 +89,7 @@ The expected output from the application is (depending on the OpenCV pulled from
 ...
 Hello World from OpenCV 4.5.1
 ```
+
 ## License
+
 **[Apache License 2.0](../LICENSE)**
