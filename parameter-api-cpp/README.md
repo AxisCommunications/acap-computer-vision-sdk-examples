@@ -141,7 +141,7 @@ docker-compose --tlsverify --tlscacert ca.pem --tlscert cert.pem --tlskey key.pe
 
 where `ca.pem`, `cert.pem` and `key.pem` are the certificates generated when configuring TLS on Docker ACAP.
 
-### The expected output:
+### The expected output
 
 ```text
 parameter-api_1  | root.Brand.Brand : AXIS

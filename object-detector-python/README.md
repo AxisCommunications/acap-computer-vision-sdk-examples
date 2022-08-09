@@ -1,11 +1,14 @@
 *Copyright (C) 2021, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
 
 # An inference example application on an edge device
+
 This example is written in Python and implements the following object detection scenarios:
- - Run a video streaming inference on camera
- - Run a still image inference on camera
+
+* Run a video streaming inference on camera
+* Run a still image inference on camera
 
 ## Overview
+
 This example composes three different container images into an application that performs object detection using a deep learning model.
 
 The first container contains the actual program being built here, which uses OpenCV to capture pictures from the camera and modifies them to fit the input required by the model. It then uses grpc/protobuf to call the second container, the "inference-server", that performs the actual inference. The inference server implements the TensorFlow Serving API.
@@ -17,7 +20,8 @@ Uses larod service in the camera firmware with model in docker image
 `axisecp/acap-dl-models:ssdlite-mobilenet-v2`
 
 The docker image containing the model has a layout as shown below. What model to use is specified by path in the docker-compose file.
-```bash
+
+```text
 model
 ├── ssdlite-mobilenet-v2 - model for CPU
 ├── ssdlite-mobilenet-v2-tpu - model for TPU
@@ -25,12 +29,14 @@ model
 ```
 
 ## Example structure
+
 Following are the list of files and a brief description of each file in the example
-```bash
+
+```text
 object-detector-python
 ├── app
-├── |- detector.py
-├── |- dog416.png
+│   ├── detector.py
+│   └── dog416.png
 ├── docker-compose.yml
 ├── static-image.yml
 ├── Dockerfile
@@ -46,7 +52,9 @@ object-detector-python
 * **Dockerfile.model** - Build Docker image with inference model
 
 ## Requirements
+
 To ensure compatibility with the examples, the following requirements shall be met:
+
 * Camera: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
 * docker-compose version 1.29 or higher
 * Docker version 20.10.8 or higher
@@ -54,22 +62,27 @@ To ensure compatibility with the examples, the following requirements shall be m
 * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
 
 ## How to run the code
-### Export the environment variable for the architecture 
+
+### Export the environment variable for the architecture
+
 Export the ARCH variable depending on the architecture of your camera
+
 ```sh
 # For arm32
 export ARCH=armv7hf
 # Valid options for chip on armv7hf are 'tpu' (hardware accelerator) or 'cpu'
 export CHIP=tpu
 ```
+
 ```sh
 # For arm64
 export ARCH=aarch64
 # Valid options for chip on aarch64 are 'artpec8' (hardware accelerator) or 'cpu'
-export CHIP=artpec8 
+export CHIP=artpec8
 ```
 
 ### Set your camera IP address and clear Docker memory
+
 ```sh
 export AXIS_TARGET_IP=<actual camera IP address>
 export DOCKER_PORT=2376
@@ -77,6 +90,7 @@ docker -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
 
 ### Build the object-detector-python images
+
 ```sh
 # Define APP name
 export APP_NAME=acap4-object-detector-python
@@ -86,7 +100,7 @@ export MODEL_NAME=acap-dl-models
 docker run -it --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
 
 # Build and upload inference client for camera
-docker build . -t $APP_NAME --build-arg ARCH 
+docker build . -t $APP_NAME --build-arg ARCH
 docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
 
 # Build and upload inference models
@@ -100,27 +114,30 @@ docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./co
 docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP down -v
 ```
 
-### The expected output:
+### The expected output
+
 ```sh
-`docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP up`
-```
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP up
 ....
 object-detector_1           | 1 Objects found
 object-detector_1           | person
 ```
 
-`docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT -f static-image.yml --env-file ./config/env.$ARCH.$CHIP up`
-```
+```sh
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT -f static-image.yml --env-file ./config/env.$ARCH.$CHIP up
 ....
 object-detector-python_1          | 3 Objects found
 object-detector-python_1          | bicycle
 object-detector-python_1          | dog
 object-detector-python_1          | car
 ```
+
 ### Hardware acceleration
-The ./config folder contains configuration files with the parameters to run the inference on different camera models, also giving the possibility to use the hardware accelerator. 
+
+The ./config folder contains configuration files with the parameters to run the inference on different camera models, also giving the possibility to use the hardware accelerator.
 To achieve the best performance we recommend using the TPU (Tensor Processing Unit) equipped with artpec7 cameras (e.g. [Axis-Q1615 Mk III](https://www.axis.com/products/axis-q1615-mk-iii))
 or the DLPU (Deep Learning Processing Unit) equipped in artpec8 cameras (e.g. [Axis-Q1656](https://www.axis.com/products/axis-q1656))
 
 ## License
+
 **[Apache License 2.0](../LICENSE)**
