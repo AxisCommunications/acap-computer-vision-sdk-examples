@@ -1,7 +1,5 @@
 # ACAP Computer Vision SDK examples
 
-[![CI](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/ci.yml/badge.svg)](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/ci.yml)
-
 ## Mission
 
 Our mission is to provide an excellent development experience by enabling developers
