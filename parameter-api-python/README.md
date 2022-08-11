@@ -1,6 +1,6 @@
 *Copyright (C) 2022, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
 
-# A Beta version of Parameter-API example application in Python on an edge device
+# Read device parameters using Python
 
 [![Build parameter-api-python application](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/parameter-api-python.yml/badge.svg)](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/parameter-api-python.yml)
 

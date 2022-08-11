@@ -1,6 +1,6 @@
 *Copyright (C) 2022, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
 
-# A Beta version of Parameter-API example application in C++ on an edge device
+# Read device parameters using C++
 
 [![Build parameter-api-cpp application](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/parameter-api-cpp.yml/badge.svg)](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/parameter-api-cpp.yml)
 
