@@ -1,5 +1,7 @@
 # ACAP Computer Vision SDK examples
 
+[![CI](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/ci.yml/badge.svg)](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/ci.yml)
+
 ## Mission
 
 Our mission is to provide an excellent development experience by enabling developers
@@ -65,9 +67,9 @@ Below is a list of examples available in the repository:
 * [opencv-qr-decoder-python](./opencv-qr-decoder-python/)
   * A Python example which detects and decodes QR codes in the video stream using OpenCV.
 * [parameter-api-cpp](./parameter-api-cpp/)
-  * A C++ example which reads device parameters using the Parameter-API.
+  * A C++ example which reads camera parameters using the beta version of the Parameter-API.
 * [parameter-api-python](./parameter-api-python/)
-  * A Python example which reads device parameters using the Parameter-API.
+  * A Python example which reads camera parameters using the beta version of the Parameter-API.
 * [pose-estimator-with-flask](./pose-estimator-with-flask/)
   * A Python example which implements pose estimation on a video stream from the camera, and publish the output on a video stream using flask.
 * [web-server](./web-server/)
@@ -83,7 +85,7 @@ Additionally, there is the [ACAP Native SDK](https://github.com/AxisCommunicatio
 
 You can help to make this repo a better one using the following commands.
 
-1. Fork it (git checkout ..)
+1. Fork it (git checkout ...)
 2. Create your feature branch: git checkout -b <contr/my-new-feature>
 3. Commit your changes: git commit -a
 4. Push to the branch: git push origin <contr/my-new-feature>
