@@ -72,13 +72,13 @@ class Detector:
                           2)
             if self.object_list is not None:
                 cv2.putText(image,
-                            self.object_list[int(np.asscalar(obj_class))],
+                            self.object_list[int(obj_class.item())],
                             (int(bounding_box[1] * width), int(bounding_box[0] * height - 10)),
                             cv2.FONT_HERSHEY_SIMPLEX,
                             1,
                             color,
                             2)
-                print(self.object_list[int(np.asscalar(obj_class))])
+                print(self.object_list[int(obj_class.item())])
         return image
 
     # Read environment variables
