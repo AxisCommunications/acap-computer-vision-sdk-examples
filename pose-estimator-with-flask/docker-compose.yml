@@ -18,7 +18,7 @@ services:
       - MODEL_PATH=${MODEL_PATH}
       - OBJECT_LIST_PATH=/models/coco_labels.txt
     volumes:
-      - /usr/lib/libvdostream.so.1:/usr/lib/libvdostream.so.1 
+      - /usr/lib/libvdostream.so.1:/usr/lib/libvdostream.so.1
       - acap_dl-models:/models:ro
       - /tmp:/output
       - /var/run/dbus:/var/run/dbus:rw
@@ -31,7 +31,7 @@ services:
       options:
         max-file: "5"
         max-size: "100k"
-    command: ${INFERENCE_SERVER_ARGS}
+    entrypoint: ["/opt/app/acap_runtime/acapruntime", "-o", "-m", "${MODEL_PATH}", "-j", "${INFERENCE_CHIP}"]
     volumes:
       - /usr/acap-root/lib:/host/lib
       - acap_dl-models:/models:ro
