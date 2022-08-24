@@ -67,7 +67,7 @@ docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 With the environment setup, the `acap-opencv-qr-decoder-python` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
 
 ```sh
-docker build . -t $APP_NAME --build-arg ARCH --build-arg RUNTIME_IMAGE
+docker build . -t $APP_NAME --build-arg ARCH
 ```
 
 Next, the built image needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
