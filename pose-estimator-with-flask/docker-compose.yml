@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   pose-estimator:
-    image: $APP_NAME
+    image: ${APP_NAME}
     logging:
       driver: "json-file"
       options:
@@ -42,7 +42,7 @@ services:
       - inference-server:/tmp
 
   acap_dl-models:
-    image: $MODEL_NAME
+    image: ${MODEL_NAME}
     volumes:
       - acap_dl-models:/models
 

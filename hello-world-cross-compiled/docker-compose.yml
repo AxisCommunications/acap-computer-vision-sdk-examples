@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   hello-world-cross-compiled-app:
-    image: $APP_NAME
+    image: ${APP_NAME}
     ipc: "host"
     environment:
       - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket

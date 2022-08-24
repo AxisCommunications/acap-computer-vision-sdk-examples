@@ -4,16 +4,18 @@
 ARG ARCH=armv7hf
 ARG REPO=axisecp
 ARG SDK_VERSION=1.2.1
+ARG UBUNTU_VERSION=20.04
 
-FROM arm32v7/ubuntu:20.04 as runtime-image-armv7hf
-FROM arm64v8/ubuntu:20.04 as runtime-image-aarch64
+FROM arm32v7/ubuntu:${UBUNTU_VERSION} as runtime-image-armv7hf
+FROM arm64v8/ubuntu:${UBUNTU_VERSION} as runtime-image-aarch64
+
 FROM ${REPO}/acap-computer-vision-sdk:${SDK_VERSION}-${ARCH}-runtime AS cv-sdk-runtime
 FROM ${REPO}/acap-computer-vision-sdk:${SDK_VERSION}-${ARCH}-devel AS cv-sdk-devel
 
 # Setup proxy configuration
 ARG HTTP_PROXY
-ENV http_proxy=$HTTP_PROXY
-ENV https_proxy=$HTTP_PROXY
+ENV http_proxy=${HTTP_PROXY}
+ENV https_proxy=${HTTP_PROXY}
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -25,14 +27,14 @@ RUN apt-get update && apt-get install -y -f \
         libglib2.0-dev \
         libsystemd0
 
-RUN if [ "$ARCH" = armv7hf ]; then \
+RUN if [ ${ARCH} = armv7hf ]; then \
         apt-get install -y -f \
         g++-arm-linux-gnueabihf &&\
         dpkg --add-architecture armhf &&\
         apt-get update && apt-get install -y  \
         libglib2.0-dev:armhf \
         libsystemd0:armhf; \
-    elif [ "$ARCH" = aarch64 ]; then \
+    elif [ ${ARCH} = aarch64 ]; then \
         apt-get install -y -f \
         g++-aarch64-linux-gnu &&\
         dpkg --add-architecture arm64 &&\
@@ -40,7 +42,7 @@ RUN if [ "$ARCH" = armv7hf ]; then \
         libglib2.0-dev:arm64 \
         libsystemd0:arm64; \
     else \
-        printf "Error: '%s' is not a valid value for the ARCH variable\n", "$ARCH"; \
+        printf "Error: '%s' is not a valid value for the ARCH variable\n", ${ARCH}; \
         exit 1; \
     fi
 
@@ -48,12 +50,12 @@ COPY app/Makefile /build/
 COPY app/src/ /build/src/
 WORKDIR /build
 
-RUN if [ "$ARCH" = armv7hf ]; then \
+RUN if [ ${ARCH} = armv7hf ]; then \
         make CXX=arm-linux-gnueabihf-g++ CC=arm-linux-gnueabihf-gcc  STRIP=arm-linux-gnueabihf-strip;\
-    elif [ "$ARCH" = aarch64 ]; then \
+    elif [ ${ARCH} = aarch64 ]; then \
         make  CXX=/usr/bin/aarch64-linux-gnu-g++ CC=/usr/bin/aarch64-linux-gnu-gcc STRIP=aarch64-linux-gnu-strip;\
     else \
-        printf "Error: '%s' is not a valid value for the ARCH variable\n", "$ARCH"; \
+        printf "Error: '%s' is not a valid value for the ARCH variable\n", ${ARCH}; \
         exit 1; \
     fi
     

@@ -1,12 +1,13 @@
 ARG ARCH=armv7hf
-ARG SDK_VERSION=1.2.1
 ARG REPO=axisecp
-ARG UBUNTU_IMAGE_VER=20.04
+ARG SDK_VERSION=1.2.1
+ARG UBUNTU_VERSION=20.04
 
-FROM arm32v7/ubuntu:${UBUNTU_IMAGE_VER} as runtime-image-armv7hf
-FROM arm64v8/ubuntu:${UBUNTU_IMAGE_VER} as runtime-image-aarch64
-FROM $REPO/acap-computer-vision-sdk:$SDK_VERSION-$ARCH as cv-sdk-runtime
-FROM $REPO/acap-computer-vision-sdk:$SDK_VERSION-$ARCH-devel as cv-sdk-devel
+FROM arm32v7/ubuntu:${UBUNTU_VERSION} as runtime-image-armv7hf
+FROM arm64v8/ubuntu:${UBUNTU_VERSION} as runtime-image-aarch64
+
+FROM ${REPO}/acap-computer-vision-sdk:${SDK_VERSION}-${ARCH} as cv-sdk-runtime
+FROM ${REPO}/acap-computer-vision-sdk:${SDK_VERSION}-${ARCH}-devel as cv-sdk-devel
 
 ENV DEBIAN_FRONTEND=noninteractive
 # TARGET_TOOLCHAIN is defined as the platform arch string
@@ -14,8 +15,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Setup proxy configuration
 ARG HTTP_PROXY
-ENV http_proxy=$HTTP_PROXY
-ENV https_proxy=$HTTP_PROXY
+ENV http_proxy=${HTTP_PROXY}
+ENV https_proxy=${HTTP_PROXY}
 
 RUN apt-get update && apt-get install -y -f \
     libglib2.0-dev \
@@ -43,7 +44,7 @@ RUN cp -r /build-root/lib/* /build-root/usr/lib/ && rm -rf /build-root/lib
 # Separate the target libs required during runtime
 RUN apt-get update && apt-get install --reinstall --download-only -o=dir::cache=/tmp/runtime -y -f \
         libgrpc++:$UBUNTU_ARCH \
-        libprotobuf17:$UBUNTU_ARCH \
+        '^libprotobuf([0-9]{1,2})$':${UBUNTU_ARCH} \
         libc-ares2:$UBUNTU_ARCH
 RUN for f in /tmp/runtime/archives/*.deb; do dpkg -x $f /target-root; done
 RUN cp -r /target-root/lib/* /target-root/usr/lib/ && rm -rf /target-root/lib

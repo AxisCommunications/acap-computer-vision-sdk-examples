@@ -2,6 +2,6 @@ version: '3.3'
 
 services:
   monkey-app:
-    image: $APP_NAME
+    image: ${APP_NAME}
     ports:
       - "8080:2001"

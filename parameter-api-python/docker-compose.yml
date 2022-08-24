@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   parameter-api:
-    image: $APP_NAME
+    image: ${APP_NAME}
     entrypoint: python3 parameter.py /certificates/server.pem
     volumes:
       - /tmp:/tmp
