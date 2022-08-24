@@ -41,7 +41,7 @@ RUN cp -r /build-root/lib/* /build-root/usr/lib/ && rm -rf /build-root/lib
 # Separate the target libs required during runtime
 RUN apt-get update && apt-get install --reinstall --download-only -o=dir::cache=/tmp/runtime -y -f \
         libgrpc++:$UBUNTU_ARCH \
-        libprotobuf17:$UBUNTU_ARCH \
+        '^libprotobuf([0-9]{1,2})$':${UBUNTU_ARCH} \
         libc-ares2:$UBUNTU_ARCH
 RUN for f in /tmp/runtime/archives/*.deb; do dpkg -x $f /target-root; done
 RUN cp -r /target-root/lib/* /target-root/usr/lib/ && rm -rf /target-root/lib
