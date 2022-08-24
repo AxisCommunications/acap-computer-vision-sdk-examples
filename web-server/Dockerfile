@@ -1,25 +1,14 @@
 ARG ARCH=armv7hf
+ARG UBUNTU_VERSION=20.04
 
-FROM arm32v7/ubuntu:20.04 as runtime-image-armv7hf
-FROM arm64v8/ubuntu:20.04 as runtime-image-aarch64
+FROM arm32v7/ubuntu:${UBUNTU_VERSION} as runtime-image-armv7hf
+FROM arm64v8/ubuntu:${UBUNTU_VERSION} as runtime-image-aarch64
 
 FROM runtime-image-${ARCH}
 
 # Setup environment variables
 ENV DEBIAN_FRONTEND=noninteractive
 ENV BUILD_ROOT=/build-root
-
-# Add source for target arch
-RUN echo \
-"deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse\n\
-deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu/ focal-updates main restricted universe multiverse\n\
-deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu/ focal-backports main restricted universe multiverse\n\
-deb [arch=amd64] http://security.ubuntu.com/ubuntu focal-security main restricted universe multiverse\n\
-deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports/ focal main restricted universe multiverse\n\
-deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports/ focal-updates main restricted universe multiverse\n\
-deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports/ focal-backports main restricted universe multiverse\n\
-deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports/ focal-security main restricted universe multiverse"\
- > /etc/apt/sources.list
 
  ## Install dependencies
 ARG ARCH
@@ -31,7 +20,7 @@ RUN apt-get update && apt-get install -y -f \
         libglib2.0-dev \
         libsystemd0
 
-RUN if [ "$ARCH" = armv7hf ]; then \
+RUN if [ ${ARCH} = armv7hf ]; then \
         apt-get install -y -f \
         g++-arm-linux-gnueabihf &&\
         dpkg --add-architecture armhf &&\
@@ -39,7 +28,7 @@ RUN if [ "$ARCH" = armv7hf ]; then \
         libglib2.0-dev:armhf \
         libc-dev:armhf \
         libsystemd0:armhf; \
-    elif [ "$ARCH" = aarch64 ]; then \
+    elif [ ${ARCH} = aarch64 ]; then \
         apt-get install -y -f \
         g++-aarch64-linux-gnu &&\
         dpkg --add-architecture arm64 &&\
@@ -48,7 +37,7 @@ RUN if [ "$ARCH" = armv7hf ]; then \
         libc-dev:arm64 \
         libsystemd0:arm64; \
     else \
-        printf "Error: '%s' is not a valid value for the ARCH variable\n", "$ARCH"; \
+        printf "Error: '%s' is not a valid value for the ARCH variable\n", ${ARCH}; \
         exit 1; \
     fi
 WORKDIR /opt

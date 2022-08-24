@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   capture-example-app:
-    image: $APP_NAME
+    image: ${APP_NAME}
     ipc: "host"
     privileged: true
     environment:

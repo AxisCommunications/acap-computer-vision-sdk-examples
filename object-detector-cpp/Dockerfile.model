@@ -1,10 +1,11 @@
 ARG ARCH=armv7hf
+ARG UBUNTU_VERSION=20.04
 
 FROM arm32v7/alpine as model-image-armv7hf
 FROM arm64v8/alpine as model-image-aarch64
 
-FROM arm32v7/ubuntu:20.04 as local-armv7hf
-FROM arm64v8/ubuntu:20.04 as local-aarch64
+FROM arm32v7/ubuntu:${UBUNTU_VERSION} as local-armv7hf
+FROM arm64v8/ubuntu:${UBUNTU_VERSION} as local-aarch64
 
 FROM local-${ARCH} as local
 
