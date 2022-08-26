@@ -11,13 +11,14 @@ FROM ${REPO}/acap-computer-vision-sdk:${SDK_VERSION}-${ARCH}-devel as cv-sdk-dev
 
 # Setup proxy configuration
 ARG HTTP_PROXY
-ENV http_proxy=$(HTTP_PROXY)
+ENV http_proxy=${HTTP_PROXY}
 ENV https_proxy=${HTTP_PROXY}
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 # TARGET_TOOLCHAIN is defined as the platform arch string
 # i.e., arm-linux-gnueabihf for the ARTPEC-7 platform
+
 RUN apt-get update && apt-get install -y -f \
     libglib2.0-dev \
     libsystemd0
@@ -38,7 +39,6 @@ RUN apt-get update && apt-get install --reinstall --download-only -o=dir::cache=
 RUN for f in /tmp/devel/archives/*.deb; do dpkg -x $f /build-root; done
 RUN cp -r /build-root/lib/* /build-root/usr/lib/ && rm -rf /build-root/lib
 
-
 # Separate the target libs required during runtime
 RUN apt-get update && apt-get install --reinstall --download-only -o=dir::cache=/tmp/runtime -y -f \
         libgrpc++:$UBUNTU_ARCH \
@@ -52,7 +52,6 @@ COPY app/Makefile /build/
 COPY app/src/ /build/src/
 WORKDIR /build
 RUN make
-
 
 FROM runtime-image-${ARCH}
 # Copy the libraries needed for our runtime
