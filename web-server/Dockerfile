@@ -1,5 +1,5 @@
 ARG ARCH=armv7hf
-ARG UBUNTU_VERSION=20.04
+ARG UBUNTU_VERSION=22.04
 
 FROM arm32v7/ubuntu:${UBUNTU_VERSION} as runtime-image-armv7hf
 FROM arm64v8/ubuntu:${UBUNTU_VERSION} as runtime-image-aarch64
