@@ -3,7 +3,7 @@
 # Currently, only armv7hf is supported
 ARG ARCH=armv7hf
 ARG REPO=axisecp
-ARG SDK_VERSION=1.2.1
+ARG SDK_VERSION=1.3
 
 FROM arm32v7/ubuntu:20.04 as runtime-image-armv7hf
 FROM arm64v8/ubuntu:20.04 as runtime-image-aarch64

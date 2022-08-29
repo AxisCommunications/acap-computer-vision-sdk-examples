@@ -1,5 +1,5 @@
 ARG ARCH=armv7hf
-ARG SDK_VERSION=1.2
+ARG SDK_VERSION=1.3
 ARG REPO=axisecp
 
 FROM arm32v7/ubuntu:20.04 as runtime-image-armv7hf
