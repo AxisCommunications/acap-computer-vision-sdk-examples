@@ -11,8 +11,10 @@ FROM arm64v8/ubuntu:${UBUNTU_VERSION} as local-aarch64
 
 FROM local-${ARCH} as local
 
-RUN apt-get update && apt-get install -y -f \
-    openssl
+RUN <<EOF
+apt-get update
+apt-get install -y -f openssl
+EOF
 
 # Generate TSL/SSL test certificate
 RUN openssl req -x509 -batch -subj '/CN=localhost' -days 10000 -newkey rsa:4096 -nodes -out server.pem -keyout server.key
