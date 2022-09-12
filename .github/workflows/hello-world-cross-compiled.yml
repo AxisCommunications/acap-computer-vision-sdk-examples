@@ -6,6 +6,7 @@ on:
       - 'hello-world-cross-compiled/**'
       - '!hello-world-cross-compiled/README.md'
       - '.github/workflows/hello-world-cross-compiled.yml'
+  pull_request:
 
 jobs:
   build:

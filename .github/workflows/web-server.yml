@@ -6,6 +6,7 @@ on:
       - 'web-server/**'
       - '!web-server/README.md'
       - '.github/workflows/web-server.yml'
+  pull_request:
 
 jobs:
   build:

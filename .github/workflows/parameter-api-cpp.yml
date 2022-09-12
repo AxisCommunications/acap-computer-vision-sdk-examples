@@ -6,6 +6,7 @@ on:
       - 'parameter-api-cpp/**'
       - '!parameter-api-cpp/README.md'
       - '.github/workflows/parameter-api-cpp.yml'
+  pull_request:
 
 jobs:
   build:

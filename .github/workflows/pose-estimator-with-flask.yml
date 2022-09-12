@@ -6,6 +6,7 @@ on:
       - 'pose-estimator-with-flask/**'
       - '!pose-estimator-with-flask/README.md'
       - '.github/workflows/pose-estimator-with-flask.yml'
+  pull_request:
 
 jobs:
   build:

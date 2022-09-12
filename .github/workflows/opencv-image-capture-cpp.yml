@@ -6,6 +6,7 @@ on:
       - 'opencv-image-capture-cpp/**'
       - '!opencv-image-capture-cpp/README.md'
       - '.github/workflows/opencv-image-capture-cpp.yml'
+  pull_request:
 
 jobs:
   build:
