@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 ARG ARCH=armv7hf
 ARG REPO=axisecp
 ARG SDK_VERSION=1.3

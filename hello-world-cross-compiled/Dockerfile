@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 # Specify the architecture at build time: mipsis32r2el/armv7hf/aarch64
 ARG ARCH=armv7hf
 ARG REPO=axisecp

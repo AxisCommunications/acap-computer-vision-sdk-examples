@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 ARG ARCH=armv7hf
 ARG UBUNTU_VERSION=22.04
 

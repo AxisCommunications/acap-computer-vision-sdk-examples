@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 # Specify the architecture at build time: mipsis32r2el/armv7hf/aarch64
 # Should be used for getting API image
 # Currently, only armv7hf is supported
@@ -58,7 +60,7 @@ RUN if [ ${ARCH} = armv7hf ]; then \
         printf "Error: '%s' is not a valid value for the ARCH variable\n", ${ARCH}; \
         exit 1; \
     fi
-    
+
 
 FROM runtime-image-${ARCH}
 COPY --from=cv-sdk-devel /build/capture_app /usr/bin/
