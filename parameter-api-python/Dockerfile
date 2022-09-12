@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 ARG ARCH=armv7hf
 ARG REPO=axisecp
 ARG SDK_VERSION=1.3
@@ -9,7 +11,9 @@ FROM arm64v8/ubuntu:${UBUNTU_VERSION} as runtime-image-aarch64
 # Specify which ACAP Computer Vision SDK version to use
 FROM ${REPO}/acap-computer-vision-sdk:${SDK_VERSION}-${ARCH} AS cv-sdk
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN <<EOF
+apt-get update
+apt-get install -y --no-install-recommends \
     ca-certificates \
     git \
     libprotobuf-dev \
@@ -20,6 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     protobuf-compiler \
     protobuf-compiler-grpc \
     python3-grpcio
+EOF
 
 # Generate TSL/SSL test certificate
 RUN openssl req -x509 -batch -subj '/CN=localhost' -days 365 -newkey rsa:4096 -nodes -out server.pem -keyout server.key

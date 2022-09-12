@@ -72,8 +72,8 @@ Meet the following requirements to ensure compatibility with the examples:
   * Firmware: 10.9 or higher
   * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
 * Computer
-  * Docker v20.10.8 or higher
-  * docker-compose v1.29 or higher
+  * Docker version 20.10.17 or higher
+  * Docker Compose version 1.29.2 or higher
 
 ## How to run the code
 

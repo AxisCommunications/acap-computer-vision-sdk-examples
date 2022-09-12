@@ -44,8 +44,8 @@ Meet the following requirements to ensure compatibility with the example:
   * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
   * [ACAP runtime](https://hub.docker.com/r/axisecp/acap-runtime) installed and started
 * Computer
-  * Docker v20.10.8 or higher
-  * docker-compose v1.29 or higher
+  * Docker version 20.10.17 or higher
+  * Docker Compose version 1.29.2 or higher
 
 ## Proxy settings
 

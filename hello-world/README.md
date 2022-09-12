@@ -28,10 +28,10 @@ hello-world
 To ensure compatibility with the examples, the following requirements shall be met:
 
 * Camera: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
-* docker-compose version 1.29 or higher
-* Docker version 20.10.8 or higher
 * Firmware: 10.9
 * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
+* Docker version 20.10.17 or higher
+* Docker Compose version 1.29.2 or higher
 
 ## How to run the code
 
