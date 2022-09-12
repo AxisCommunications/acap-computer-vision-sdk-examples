@@ -6,6 +6,7 @@ on:
       - 'object-detector-python/**'
       - '!object-detector-python/README.md'
       - '.github/workflows/object-detector-python.yml'
+  pull_request:
 
 jobs:
   build:

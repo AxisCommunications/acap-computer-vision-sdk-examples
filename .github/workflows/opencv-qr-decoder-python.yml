@@ -6,6 +6,7 @@ on:
       - 'opencv-qr-decoder-python/**'
       - '!opencv-qr-decoder-python/README.md'
       - '.github/workflows/opencv-qr-decoder-python.yml'
+  pull_request:
 
 jobs:
   build:

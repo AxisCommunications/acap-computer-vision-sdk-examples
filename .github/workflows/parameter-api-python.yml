@@ -6,6 +6,7 @@ on:
       - 'parameter-api-python/**'
       - '!parameter-api-python/README.md'
       - '.github/workflows/parameter-api-python.yml'
+  pull_request:
 
 jobs:
   build:

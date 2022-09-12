@@ -6,6 +6,7 @@ on:
       - 'minimal-ml-inference/**'
       - '!minimal-ml-inference/README.md'
       - '.github/workflows/minimal-ml-inference.yml'
+  pull_request:
 
 jobs:
   build:

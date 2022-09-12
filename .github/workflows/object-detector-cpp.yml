@@ -6,6 +6,7 @@ on:
       - 'object-detector-cpp/**'
       - '!object-detector-cpp/README.md'
       - '.github/workflows/object-detector-cpp.yml'
+  pull_request:
 
 jobs:
   build:
