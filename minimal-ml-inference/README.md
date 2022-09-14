@@ -30,13 +30,14 @@ minimal-ml-inference
 
 ## Requirements
 
-To ensure compatibility with the examples, the following requirements shall be met:
+Meet the following requirements to ensure compatibility with the example:
 
-* Camera: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
-* Firmware: 10.9
-* [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
-* Docker version 20.10.17 or higher
-* Docker Compose version 1.29.2 or higher
+* Axis device
+  * Chip: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
+  * Firmware: 10.9 or higher
+  * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
+* Computer
+  * Either [Docker Desktop](https://docs.docker.com/desktop/) version 4.11.1 or higher, or [Docker Engine](https://docs.docker.com/engine/) version 20.10.17 or higher with BuildKit enabled using Docker Compose version 1.29.2 or higher
 
 ## How to run the code
 
