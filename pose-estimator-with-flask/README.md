@@ -65,15 +65,14 @@ pose-estimator-with-flask
 
 ## Requirements
 
-Meet the following requirements to ensure compatibility with the examples:
+Meet the following requirements to ensure compatibility with the example:
 
-* Network device
-  * Chip: ARTPEC-7 and ARTPEC-8 (e.g., Q1615 Mk III or Q1656)
+* Axis device
+  * Chip: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
   * Firmware: 10.9 or higher
   * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
 * Computer
-  * Docker version 20.10.17 or higher
-  * Docker Compose version 1.29.2 or higher
+  * Either [Docker Desktop](https://docs.docker.com/desktop/) version 4.11.1 or higher, or [Docker Engine](https://docs.docker.com/engine/) version 20.10.17 or higher with BuildKit enabled using Docker Compose version 1.29.2 or higher
 
 ## How to run the code
 
