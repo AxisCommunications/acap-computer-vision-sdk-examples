@@ -97,13 +97,13 @@ export CHIP=artpec8
 ### Set your camera IP address and clear Docker memory
 
 ```sh
-DEVICE_IP=<actual camera IP address>
-DOCKER_PORT=2376
+export AXIS_TARGET_IP=<actual camera IP address>
+export DOCKER_PORT=2376
 
 # Define APP name
-APP_NAME=acap4-pose-estimator-python
-MODEL_NAME=acap-dl-models
-docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
+export APP_NAME=acap4-pose-estimator-python
+export MODEL_NAME=acap-dl-models
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
 
 ### Build the pose-estimator-with-flask images
@@ -114,22 +114,22 @@ docker run -it --rm --privileged multiarch/qemu-user-static --credential yes --p
 
 # Build and upload inference client for camera
 docker build . -t $APP_NAME --build-arg ARCH
-docker save $APP_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
+docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
 
 # Build and upload inference models
 docker build . -f Dockerfile.model -t $MODEL_NAME --build-arg ARCH
-docker save $MODEL_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
+docker save $MODEL_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
 
 # Use the following command to run the example on the camera
-docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP up
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP up
 
 # Terminate with Ctrl-C and cleanup
-docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP down -v
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP down -v
 ```
 
 ### The expected output
 
-In your browser, go to http://$DEVICE_IP:5000 to start the interference. If a person is detected, the key points are drawn on the video stream.
+In your browser, go to http://$AXIS_TARGET_IP:5000 to start the interference. If a person is detected, the key points are drawn on the video stream.
 
 ![Pose estimator](assets/frame_36.jpg)
 

@@ -51,14 +51,14 @@ export ARCH=aarch64
 
 ```sh
 # Set camera IP
-DEVICE_IP=<actual camera IP address>
-DOCKER_PORT=2376
+export AXIS_TARGET_IP=<actual camera IP address>
+export DOCKER_PORT=2376
 
 # Define APP name
-APP_NAME=hello-world
+export APP_NAME=hello-world
 
 # Clean docker memory
-docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
 
 ### Build and run the images
@@ -72,16 +72,16 @@ docker build . -t $APP_NAME --build-arg ARCH
 Next, the built image needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
 
 ```sh
-docker save $APP_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
+docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
 ```
 
 With the application image on the device, it can be started. As this example does not use e.g., OpenCV, no special mounts are needed, making the `docker-compose.yml` file very simple:
 
 ```sh
-docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT up
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT up
 
 # Cleanup after execution
-docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT down -v
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT down -v
 ```
 
 The expected output from the application is simply:

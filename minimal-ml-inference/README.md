@@ -62,34 +62,34 @@ export CHIP=artpec8
 ### Set your camera IP address and clear Docker memory
 
 ```sh
-DEVICE_IP=<actual camera IP address>
-DOCKER_PORT=2376
-docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
+export AXIS_TARGET_IP=<actual camera IP address>
+export DOCKER_PORT=2376
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
 
 ### Build the minimal-ml-inference images
 
 ```sh
 # Define APP name
-APP_NAME=acap4-minimal-ml-inference
-MODEL_NAME=acap-dl-models
+export APP_NAME=acap4-minimal-ml-inference
+export MODEL_NAME=acap-dl-models
 
 # Install qemu to allow build flask for a different architecture
 docker run -it --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
 
 # Build and upload inference client for camera
 docker build . -t $APP_NAME --build-arg ARCH
-docker save $APP_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
+docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
 
 # Build and upload inference models
 docker build . -f Dockerfile.model -t $MODEL_NAME --build-arg ARCH
-docker save $MODEL_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
+docker save $MODEL_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
 
 # Use the following command to run the example on the camera
-docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP up
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP up
 
 # Terminate with Ctrl-C and cleanup
-docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP down -v
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP down -v
 ```
 
 The expected output from the application is the raw predictions from the model specified in the environment variable.

@@ -69,13 +69,13 @@ export ARCH=aarch64
 
 ```sh
 # Set camera IP
-DEVICE_IP=<actual camera IP address>
-DOCKER_PORT=2376
+export AXIS_TARGET_IP=<actual camera IP address>
+export DOCKER_PORT=2376
 
 # Define APP name
-APP_NAME=monkey
+export APP_NAME=monkey
 # Clean docker memory
-docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
 
 ### Build and run the images
@@ -93,7 +93,7 @@ docker build . -t $APP_NAME --build-arg ARCH
 Next, the built image needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
 
 ```sh
-docker save $APP_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
+docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
 ```
 
 ### Start Web Server on the camera
@@ -101,10 +101,10 @@ docker save $APP_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
 With the application image on the device, it can be started using `docker-compose.yml`:
 
 ```sh
-docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT up
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT up
 
 # Cleanup after execution
-docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT down -v
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT down -v
 ```
 
 ### The expected output
@@ -128,13 +128,13 @@ Some C API examples are included in the Web Server container that has been built
 
 ```sh
 # Run the hello example
-docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT  run --rm -p 2001:2001 -it $APP_NAME hello
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  run --rm -p 2001:2001 -it $APP_NAME hello
 
 # Run the list directory example
-docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT  run --rm -p 2001:2001 -it $APP_NAME list
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  run --rm -p 2001:2001 -it $APP_NAME list
 
 # Run the quiz example
-docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT  run --rm -p 2001:2001 -it $APP_NAME quiz
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  run --rm -p 2001:2001 -it $APP_NAME quiz
 ```
 
 ## Proxy settings
