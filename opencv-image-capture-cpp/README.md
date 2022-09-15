@@ -69,13 +69,13 @@ export ARCH=aarch64
 
 ```sh
 # Set camera IP
-export AXIS_TARGET_IP=<actual camera IP address>
-export DOCKER_PORT=2376
+DEVICE_IP=<actual camera IP address>
+DOCKER_PORT=2376
 
 # Define APP name
-export APP_NAME=acap-opencv-image-capture-cpp
+APP_NAME=acap-opencv-image-capture-cpp
 # Clean docker memory
-docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
+docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
 ```
 
 ### Build and run the images
@@ -83,12 +83,12 @@ docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```sh
 docker build . -t $APP_NAME --build-arg ARCH
 
-docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
+docker save $APP_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
 
-docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT -f docker-compose.yml up
+docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT -f docker-compose.yml up
 
 # Cleanup
-docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT -f docker-compose.yml down -v
+docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT -f docker-compose.yml down -v
 ```
 
 #### The expected output
