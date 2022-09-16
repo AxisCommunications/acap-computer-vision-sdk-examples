@@ -12,8 +12,8 @@ FROM arm64v8/ubuntu:${UBUNTU_VERSION} as runtime-image-aarch64
 FROM ${REPO}/acap-computer-vision-sdk:${SDK_VERSION}-${ARCH} AS cv-sdk
 
 RUN <<EOF
-apt-get update
-apt-get install -y --no-install-recommends \
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends \
     ca-certificates \
     git \
     libprotobuf-dev \
@@ -24,7 +24,7 @@ apt-get install -y --no-install-recommends \
     protobuf-compiler \
     protobuf-compiler-grpc \
     python3-grpcio
-EOF
+RUN <<EOF
 
 # Generate TSL/SSL test certificate
 RUN openssl req -x509 -batch -subj '/CN=localhost' -days 365 -newkey rsa:4096 -nodes -out server.pem -keyout server.key

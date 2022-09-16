@@ -21,18 +21,18 @@ ENV http_proxy=${HTTP_PROXY}
 ENV https_proxy=${HTTP_PROXY}
 
 RUN <<EOF
-apt-get update
-apt-get install -y -f libglib2.0-dev libsystemd0 protobuf-compiler-grpc
-apt-get clean
-rm -rf /var/lib/apt/lists/*
-EOF
+RUN apt-get update
+RUN apt-get install -y -f libglib2.0-dev libsystemd0 protobuf-compiler-grpc
+RUN apt-get clean
+RUN rm -rf /var/lib/apt/lists/*
+RUN <<EOF
 
 RUN mkdir -p /tmp/devel /tmp/runtime /build-root /target-root
 
 # Download the target libs/headers required for compilation
 RUN <<EOF
-apt-get update
-apt-get install --reinstall --download-only -o=dir::cache=/tmp/devel -y -f \
+RUN apt-get update
+RUN apt-get install --reinstall --download-only -o=dir::cache=/tmp/devel -y -f \
     libglib2.0-dev:$UBUNTU_ARCH \
     libsystemd0:$UBUNTU_ARCH \
     libgrpc++-dev:$UBUNTU_ARCH \
@@ -42,18 +42,18 @@ apt-get install --reinstall --download-only -o=dir::cache=/tmp/devel -y -f \
     libssl-dev:$UBUNTU_ARCH \
     libcrypto++-dev:$UBUNTU_ARCH \
     libgcrypt20:$UBUNTU_ARCH
-EOF
+RUN <<EOF
 RUN for f in /tmp/devel/archives/*.deb; do dpkg -x $f /build-root; done
 RUN cp -r /build-root/lib/* /build-root/usr/lib/ && rm -rf /build-root/lib
 
 # Separate the target libs required during runtime
 RUN <<EOF
-apt-get update
-apt-get install --reinstall --download-only -o=dir::cache=/tmp/runtime -y -f \
+RUN apt-get update
+RUN apt-get install --reinstall --download-only -o=dir::cache=/tmp/runtime -y -f \
     libgrpc++:$UBUNTU_ARCH \
     '^libprotobuf([0-9]{1,2})$':${UBUNTU_ARCH} \
     libc-ares2:$UBUNTU_ARCH
-EOF
+RUN <<EOF
 RUN for f in /tmp/runtime/archives/*.deb; do dpkg -x $f /target-root; done
 RUN cp -r /target-root/lib/* /target-root/usr/lib/ && rm -rf /target-root/lib
 
