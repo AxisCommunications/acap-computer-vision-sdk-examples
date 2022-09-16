@@ -71,7 +71,7 @@ export ARCH=aarch64
 APP_NAME=parameter-api
 
 # Build
-docker build . -t $APP_NAME --build-arg ARCH
+docker build . --tag $APP_NAME --build-arg ARCH
 ```
 
 ### Set your camera IP address and clear Docker memory

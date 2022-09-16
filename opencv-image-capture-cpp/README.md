@@ -81,14 +81,14 @@ docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
 ### Build and run the images
 
 ```sh
-docker build . -t $APP_NAME --build-arg ARCH
+docker build . --tag $APP_NAME --build-arg ARCH
 
 docker save $APP_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
 
-docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT -f docker-compose.yml up
+docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT --file docker-compose.yml up
 
 # Cleanup
-docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT -f docker-compose.yml down -v
+docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT --file docker-compose.yml down -v
 ```
 
 #### The expected output

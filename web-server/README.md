@@ -87,7 +87,7 @@ With the environment setup, the `monkey` image can be built. The environment var
 docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
 
 # Build the container
-docker build . -t $APP_NAME --build-arg ARCH
+docker build . --tag $APP_NAME --build-arg ARCH
 ```
 
 Next, the built image needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
