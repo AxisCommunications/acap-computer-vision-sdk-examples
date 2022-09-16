@@ -113,11 +113,11 @@ docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
 docker run -it --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
 
 # Build and upload inference client for camera
-docker build . --tag $APP_NAME --build-arg ARCH
+docker build --tag $APP_NAME --build-arg ARCH .
 docker save $APP_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
 
 # Build and upload inference models
-docker build . --file Dockerfile.model --tag $MODEL_NAME --build-arg ARCH
+docker build --file Dockerfile.model --tag $MODEL_NAME --build-arg ARCH .
 docker save $MODEL_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
 
 # Use the following command to run the example on the camera

@@ -81,7 +81,7 @@ docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
 ### Build and run the images
 
 ```sh
-docker build . --tag $APP_NAME --build-arg ARCH
+docker build --tag $APP_NAME --build-arg ARCH .
 
 docker save $APP_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
 
