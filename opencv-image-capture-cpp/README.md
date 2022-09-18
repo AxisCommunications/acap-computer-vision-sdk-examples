@@ -104,7 +104,7 @@ With the application image on the device, it can be started using `docker-compos
 docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --file docker-compose.yml up
 
 # Terminate with Ctrl-C and cleanup
-docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --file docker-compose.yml down -v
+docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --file docker-compose.yml down --volumes
 ```
 
 #### The expected output

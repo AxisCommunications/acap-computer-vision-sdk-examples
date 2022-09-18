@@ -88,7 +88,7 @@ With the application image on the device, it can be started. As the example uses
 docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT up
 
 # Terminate with Ctrl-C and cleanup
-docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT down -v
+docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT down --volumes
 ```
 
 ## License

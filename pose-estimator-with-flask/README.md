@@ -124,7 +124,7 @@ docker save $MODEL_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_POR
 docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP up
 
 # Terminate with Ctrl-C and cleanup
-docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP down -v
+docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP down --volumes
 ```
 
 ### The expected output
