@@ -56,38 +56,54 @@ opencv-image-capture-cpp
 
 ### Export the environment variable for the architecture
 
-Export the ARCH variable depending on the architecture of your camera
+Export the `ARCH` variable depending on the architecture of your camera:
 
 ```sh
 # For arm32
 export ARCH=armv7hf
+
 # For arm64
 export ARCH=aarch64
 ```
 
-### Set your camera IP address define APP name and clear Docker memory
+### Build the Docker image
+
+With the architecture defined, the `acap-opencv-image-capture-cpp` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
 
 ```sh
-# Set camera IP
+# Define app name
+APP_NAME=acap-opencv-image-capture-cpp
+
+docker build --tag $APP_NAME --build-arg ARCH .
+```
+
+### Set your device IP address and clear Docker memory
+
+```sh
 DEVICE_IP=<actual camera IP address>
 DOCKER_PORT=2376
 
-# Define APP name
-APP_NAME=acap-opencv-image-capture-cpp
-# Clean docker memory
 docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
 ```
 
-### Build and run the images
+If you encounter any TLS related issues, please see the TLS setup chapter regarding the `DOCKER_CERT_PATH` environment variable in the [Docker ACAP repository](https://github.com/AxisCommunications/docker-acap).
+
+### Install the images
+
+Next, the built image needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
 
 ```sh
-docker build --tag $APP_NAME --build-arg ARCH .
-
 docker save $APP_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
+```
 
+### Run the container
+
+With the application image on the device, it can be started using `docker-compose.yml`:
+
+```sh
 docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT --file docker-compose.yml up
 
-# Cleanup
+# Terminate with Ctrl-C and cleanup
 docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT --file docker-compose.yml down -v
 ```
 

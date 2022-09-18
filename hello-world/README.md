@@ -38,7 +38,7 @@ Meet the following requirements to ensure compatibility with the example:
 
 ### Export the environment variable for the architecture
 
-Export the ARCH variable depending on the architecture of your camera
+Export the `ARCH` variable depending on the architecture of your camera:
 
 ```sh
 # For arm32
@@ -47,27 +47,29 @@ export ARCH=armv7hf
 export ARCH=aarch64
 ```
 
-### Set your camera IP address define APP name and clear Docker memory
+### Build the Docker image
+
+With the architecture defined, the `hello-world` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
 
 ```sh
-# Set camera IP
+# Define app name
+APP_NAME=hello-world
+
+docker build --tag $APP_NAME --build-arg ARCH .
+```
+
+### Set your device IP address and clear Docker memory
+
+```sh
 DEVICE_IP=<actual camera IP address>
 DOCKER_PORT=2376
 
-# Define APP name
-APP_NAME=hello-world
-
-# Clean docker memory
 docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
 ```
 
-### Build and run the images
+If you encounter any TLS related issues, please see the TLS setup chapter regarding the `DOCKER_CERT_PATH` environment variable in the [Docker ACAP repository](https://github.com/AxisCommunications/docker-acap).
 
-With the environment setup, the `hello-world` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
-
-```sh
-docker build --tag $APP_NAME --build-arg ARCH .
-```
+### Install the image
 
 Next, the built image needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
 
@@ -75,18 +77,20 @@ Next, the built image needs to be uploaded to the device. This can be done throu
 docker save $APP_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
 ```
 
-With the application image on the device, it can be started. As this example does not use e.g., OpenCV, no special mounts are needed, making the `docker-compose.yml` file very simple:
+### Run the container
+
+With the application image on the device, it can be started using `docker-compose.yml`:
 
 ```sh
 docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT up
 
-# Cleanup after execution
+# Terminate with Ctrl-C and cleanup
 docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT down -v
 ```
 
 The expected output from the application is simply:
 
-```sh
+```text
 Hello World!
 ```
 

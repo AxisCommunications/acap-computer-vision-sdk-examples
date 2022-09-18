@@ -74,7 +74,7 @@ APP_NAME=parameter-api
 docker build --tag $APP_NAME --build-arg ARCH .
 ```
 
-### Set your camera IP address and clear Docker memory
+### Set your device IP address and clear Docker memory
 
 ```sh
 DEVICE_IP=<actual camera IP address>
@@ -128,9 +128,9 @@ docker save $APP_NAME | docker --tlsverify --tlscacert ca.pem --tlscert cert.pem
 
 where `ca.pem`, `cert.pem` and `key.pem` are the certificates generated when configuring TLS on Docker ACAP.
 
-### Run the image
+### Run the container
 
-Use the following command to run the example on the device:
+With the application image on the device, it can be started using `docker-compose.yml`:
 
 ```sh
 docker-compose --tlsverify --tlscacert ca.pem --tlscert cert.pem --tlskey key.pem -H tcp://$DEVICE_IP:$DOCKER_PORT up

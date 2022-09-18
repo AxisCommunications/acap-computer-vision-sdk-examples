@@ -52,11 +52,12 @@ Meet the following requirements to ensure compatibility with the example:
 
 ### Export the environment variable for the architecture
 
-Export the ARCH variable depending on the architecture of your camera
+Export the `ARCH` variable depending on the architecture of your camera:
 
 ```sh
 # For arm32
 export ARCH=armv7hf
+
 # Valid options for chip on armv7hf are 'tpu' (hardware accelerator) or 'cpu'
 export CHIP=tpu
 ```
@@ -64,37 +65,56 @@ export CHIP=tpu
 ```sh
 # For arm64
 export ARCH=aarch64
+
 # Valid options for chip on aarch64 are 'artpec8' (hardware accelerator) or 'cpu'
 export CHIP=artpec8
 ```
 
-### Set your camera IP address and clear Docker memory
+### Build the Docker image
+
+With the architecture defined, the `acap4-object-detector-cpp` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
 
 ```sh
-DEVICE_IP=<actual camera IP address>
-DOCKER_PORT=2376
-docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
-```
-
-### Build the object-detector-cpp images
-
-```sh
-# Define APP name
+# Define app name
 APP_NAME=acap4-object-detector-cpp
 MODEL_NAME=acap-dl-models
 
 # Install qemu to allow build flask for a different architecture
 docker run -it --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
 
-# Build and upload inference client for camera
+# Build app
 docker build --tag $APP_NAME --build-arg ARCH .
+
+# Build inference model
+docker build --file Dockerfile.model --tag $MODEL_NAME --build-arg ARCH .
+```
+
+### Set your device IP address and clear Docker memory
+
+```sh
+DEVICE_IP=<actual camera IP address>
+DOCKER_PORT=2376
+
+docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
+```
+
+If you encounter any TLS related issues, please see the TLS setup chapter regarding the `DOCKER_CERT_PATH` environment variable in the [Docker ACAP repository](https://github.com/AxisCommunications/docker-acap).
+
+### Install the images
+
+Next, the built images needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
+
+```sh
 docker save $APP_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
 
-# Build and upload inference models
-docker build --file Dockerfile.model --tag $MODEL_NAME --build-arg ARCH .
 docker save $MODEL_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
+```
 
-# Use the following command to run the example on the camera
+### Run the container
+
+With the application image on the device, it can be started using `docker-compose.yml`:
+
+```sh
 docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP up
 
 # Terminate with Ctrl-C and cleanup

@@ -78,7 +78,7 @@ Meet the following requirements to ensure compatibility with the example:
 
 ### Export the environment variable for the architecture
 
-Export the ARCH variable depending on the architecture of your camera
+Export the `ARCH` variable depending on the architecture of your camera:
 
 ```sh
 # For arm32
@@ -94,13 +94,13 @@ export ARCH=aarch64
 export CHIP=artpec8
 ```
 
-### Set your camera IP address and clear Docker memory
+### Set your device IP address and clear Docker memory
 
 ```sh
 DEVICE_IP=<actual camera IP address>
 DOCKER_PORT=2376
 
-# Define APP name
+# Define app name
 APP_NAME=acap4-pose-estimator-python
 MODEL_NAME=acap-dl-models
 docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
