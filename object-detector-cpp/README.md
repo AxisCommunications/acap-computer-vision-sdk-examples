@@ -80,7 +80,7 @@ APP_NAME=acap4-object-detector-cpp
 MODEL_NAME=acap-dl-models
 
 # Install qemu to allow build flask for a different architecture
-docker run -it --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
+docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
 
 # Build app
 docker build --tag $APP_NAME --build-arg ARCH .
