@@ -103,7 +103,7 @@ DOCKER_PORT=2376
 # Define app name
 APP_NAME=acap4-pose-estimator-python
 MODEL_NAME=acap-dl-models
-docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT system prune --all --force
 ```
 
 ### Build the pose-estimator-with-flask images
@@ -114,17 +114,17 @@ docker run -it --rm --privileged multiarch/qemu-user-static --credential yes --p
 
 # Build and upload inference client for camera
 docker build --tag $APP_NAME --build-arg ARCH .
-docker save $APP_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
+docker save $APP_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT load
 
 # Build and upload inference models
 docker build --file Dockerfile.model --tag $MODEL_NAME --build-arg ARCH .
-docker save $MODEL_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
+docker save $MODEL_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT load
 
 # Use the following command to run the example on the camera
-docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP up
+docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP up
 
 # Terminate with Ctrl-C and cleanup
-docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP down -v
+docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP down -v
 ```
 
 ### The expected output

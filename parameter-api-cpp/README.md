@@ -84,7 +84,7 @@ docker build --tag $APP_NAME --build-arg ARCH .
 DEVICE_IP=<actual camera IP address>
 DOCKER_PORT=2376
 
-docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT system prune --all --force
 ```
 
 If you encounter any TLS related issues, please see the TLS setup chapter regarding the `DOCKER_CERT_PATH` environment variable in the [Docker ACAP repository](https://github.com/AxisCommunications/docker-acap).
@@ -127,7 +127,7 @@ where `<password>` is the password to the `root` user.
 Finally install the Docker image to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
 
 ```sh
-docker save $APP_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
+docker save $APP_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT load
 ```
 
 ### Run the container
@@ -135,7 +135,7 @@ docker save $APP_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
 With the application image on the device, it can be started using `docker-compose.yml`:
 
 ```sh
-docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT up
+docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT up
 ```
 
 ### The expected output

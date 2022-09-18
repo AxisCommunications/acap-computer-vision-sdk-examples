@@ -80,7 +80,7 @@ docker build --tag $APP_NAME --build-arg ARCH .
 DEVICE_IP=<actual camera IP address>
 DOCKER_PORT=2376
 
-docker --tlsverify --tlscacert ca.pem --tlscert cert.pem --tlskey key.pem -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
+docker --tlsverify --tlscacert ca.pem --tlscert cert.pem --tlskey key.pem --host tcp://$DEVICE_IP:$DOCKER_PORT system prune --all --force
 ```
 
 where `ca.pem`, `cert.pem` and `key.pem` are the certificates generated when configuring TLS on Docker ACAP.
@@ -123,7 +123,7 @@ where `<password>` is the password to the `root` user.
 Finally install the Docker image to the device:
 
 ```sh
-docker save $APP_NAME | docker --tlsverify --tlscacert ca.pem --tlscert cert.pem --tlskey key.pem -H tcp://$DEVICE_IP:$DOCKER_PORT load
+docker save $APP_NAME | docker --tlsverify --tlscacert ca.pem --tlscert cert.pem --tlskey key.pem --host tcp://$DEVICE_IP:$DOCKER_PORT load
 ```
 
 where `ca.pem`, `cert.pem` and `key.pem` are the certificates generated when configuring TLS on Docker ACAP.
@@ -133,7 +133,7 @@ where `ca.pem`, `cert.pem` and `key.pem` are the certificates generated when con
 With the application image on the device, it can be started using `docker-compose.yml`:
 
 ```sh
-docker-compose --tlsverify --tlscacert ca.pem --tlscert cert.pem --tlskey key.pem -H tcp://$DEVICE_IP:$DOCKER_PORT up
+docker-compose --tlsverify --tlscacert ca.pem --tlscert cert.pem --tlskey key.pem --host tcp://$DEVICE_IP:$DOCKER_PORT up
 ```
 
 where `ca.pem`, `cert.pem` and `key.pem` are the certificates generated when configuring TLS on Docker ACAP.
