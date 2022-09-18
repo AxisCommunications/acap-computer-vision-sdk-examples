@@ -132,13 +132,13 @@ Some C API examples are included in the Web Server container that has been built
 
 ```sh
 # Run the hello example
-docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT  run --rm -p 2001:2001 -it $APP_NAME hello
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT  run --rm --publish 2001:2001 -it $APP_NAME hello
 
 # Run the list directory example
-docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT  run --rm -p 2001:2001 -it $APP_NAME list
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT  run --rm --publish 2001:2001 -it $APP_NAME list
 
 # Run the quiz example
-docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT  run --rm -p 2001:2001 -it $APP_NAME quiz
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT  run --rm --publish 2001:2001 -it $APP_NAME quiz
 ```
 
 ## Proxy settings
