@@ -77,7 +77,7 @@ With the architecture defined, the `acap4-object-detector-cpp` image can be buil
 ```sh
 # Define app name
 export APP_NAME=acap4-object-detector-cpp
-MODEL_NAME=acap-dl-models
+export MODEL_NAME=acap-dl-models
 
 # Install qemu to allow build flask for a different architecture
 docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
@@ -110,7 +110,7 @@ docker save $APP_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT 
 docker save $MODEL_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT load
 ```
 
-### Run the container
+### Run the containers
 
 With the application image on the device, it can be started using `docker-compose.yml`:
 
@@ -142,7 +142,7 @@ For reference please see: https://docs.docker.com/network/proxy/.
 
 ## Zero copy
 
-This example uses larod-inference-server for video inference processing by using gRPC API. In case this client and the inference server is located on the same camera, it is possible to speed up inference by using shared memory to pass the video image to the inference server by activating following define statement in file src/serving_client.hpp:
+This example uses larod-inference-server for video inference processing by using gRPC API. In case this client and the inference server is located on the same camera, it is possible to speed up inference by using shared memory to pass the video image to the inference server by activating following define statement in file `app/src/serving_client.hpp`:
 
 ```c++
 #define ZEROCOPY
@@ -168,9 +168,7 @@ This example uses larod-inference-server for video inference processing by using
 
 ### Hardware acceleration
 
-The ./config folder contains configuration files with the parameters to run the inference on different camera models, also giving the possibility to use the hardware accelerator.
-To achieve the best performance we recommend using the TPU (Tensor Processing Unit) equipped with artpec7 cameras (e.g. [Axis-Q1615 Mk III](https://www.axis.com/products/axis-q1615-mk-iii))
-or the DLPU (Deep Learning Processing Unit) equipped in artpec8 cameras (e.g. [Axis-Q1656](https://www.axis.com/products/axis-q1656))
+The `./config` folder contains configuration files with the parameters to run the inference on different camera models, also giving the possibility to use the hardware accelerator. To achieve the best performance we recommend using the TPU (Tensor Processing Unit) equipped with ARTPEC-7 cameras (e.g. [Axis-Q1615 Mk III](https://www.axis.com/products/axis-q1615-mk-iii)) or the DLPU (Deep Learning Processing Unit) equipped in ARTPEC-8 cameras (e.g. [Axis-Q1656](https://www.axis.com/products/axis-q1656)).
 
 ## License
 

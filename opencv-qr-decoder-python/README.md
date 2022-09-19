@@ -80,7 +80,7 @@ Next, the built images needs to be uploaded to the device. This can be done thro
 docker save $APP_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT load
 ```
 
-### Run the containers
+### Run the container
 
 With the application image on the device, it can be started. As the example uses OpenCV, the OpenCV requirements will be included in `docker-compose.yml`, which is used to run the application:
 

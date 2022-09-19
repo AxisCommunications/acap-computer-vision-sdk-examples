@@ -88,7 +88,7 @@ docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT system prune --all --for
 
 If you encounter any TLS related issues, please see the TLS setup chapter regarding the `DOCKER_CERT_PATH` environment variable in the [Docker ACAP repository](https://github.com/AxisCommunications/docker-acap).
 
-### Install the images
+### Install the image
 
 Next, the built image needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
 
@@ -101,10 +101,10 @@ docker save $APP_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT 
 With the application image on the device, it can be started using `docker-compose.yml`:
 
 ```sh
-docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --file docker-compose.yml up
+docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT up
 
 # Terminate with Ctrl-C and cleanup
-docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --file docker-compose.yml down --volumes
+docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT down --volumes
 ```
 
 #### The expected output

@@ -124,7 +124,7 @@ curl --anyauth -u "root:$AXIS_TARGET_PASSWORD" "$DEVICE_IP/axis-cgi/applications
 
 where `<password>` is the password to the `root` user.
 
-Finally install the Docker image to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
+Finally install the application image to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
 
 ```sh
 docker save $APP_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT load
@@ -136,6 +136,9 @@ With the application image on the device, it can be started using `docker-compos
 
 ```sh
 docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT up
+
+# Cleanup
+docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT down --volumes
 ```
 
 ### The expected output
