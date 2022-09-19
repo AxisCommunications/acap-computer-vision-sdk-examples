@@ -43,6 +43,7 @@ Export the `ARCH` variable depending on the architecture of your camera:
 ```sh
 # For arm32
 export ARCH=armv7hf
+
 # For arm64
 export ARCH=aarch64
 ```

@@ -83,6 +83,7 @@ Export the `ARCH` variable depending on the architecture of your camera:
 ```sh
 # For arm32
 export ARCH=armv7hf
+
 # Valid options for chip on armv7hf are 'tpu' (hardware accelerator) or 'cpu'
 export CHIP=tpu
 ```
@@ -90,6 +91,7 @@ export CHIP=tpu
 ```sh
 # For arm64
 export ARCH=aarch64
+
 # Valid options for chip on aarch64 are 'artpec8' (hardware accelerator) or 'cpu'
 export CHIP=artpec8
 ```
