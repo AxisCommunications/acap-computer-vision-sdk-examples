@@ -72,7 +72,7 @@ With the architecture defined, the `parameter-api` image can be built. The envir
 
 ```sh
 # Define app name
-APP_NAME=parameter-api
+export APP_NAME=parameter-api
 
 # Build app
 docker build --tag $APP_NAME --build-arg ARCH .

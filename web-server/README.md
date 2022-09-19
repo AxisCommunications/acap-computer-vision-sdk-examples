@@ -75,7 +75,7 @@ With the architecture defined, the `monkey` image can be built. The environment 
 docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
 
 # Define app name
-APP_NAME=monkey
+export APP_NAME=monkey
 
 # Build the container
 docker build --tag $APP_NAME --build-arg ARCH .

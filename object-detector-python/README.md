@@ -90,7 +90,7 @@ With the architecture defined, the `acap4-object-detector-python` and `acap-dl-m
 
 ```sh
 # Define app name
-APP_NAME=acap4-object-detector-python
+export APP_NAME=acap4-object-detector-python
 MODEL_NAME=acap-dl-models
 
 # Install qemu to allow build flask for a different architecture

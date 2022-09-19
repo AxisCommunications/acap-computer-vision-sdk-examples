@@ -68,7 +68,7 @@ export ARCH=aarch64
 
 ```sh
 # Define app name
-APP_NAME=parameter-api
+export APP_NAME=parameter-api
 
 # Build
 docker build --tag $APP_NAME --build-arg ARCH .

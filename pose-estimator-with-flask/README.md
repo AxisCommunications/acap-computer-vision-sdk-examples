@@ -103,7 +103,7 @@ DEVICE_IP=<actual camera IP address>
 DOCKER_PORT=2376
 
 # Define app name
-APP_NAME=acap4-pose-estimator-python
+export APP_NAME=acap4-pose-estimator-python
 MODEL_NAME=acap-dl-models
 docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT system prune --all --force
 ```

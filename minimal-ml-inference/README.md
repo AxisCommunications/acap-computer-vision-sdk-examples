@@ -67,7 +67,7 @@ With the architecture defined, the `acap4-minimal-ml-inference` and `acap-dl-mod
 
 ```sh
 # Define app name
-APP_NAME=acap4-minimal-ml-inference
+export APP_NAME=acap4-minimal-ml-inference
 MODEL_NAME=acap-dl-models
 
 # Install qemu to allow build flask for a different architecture

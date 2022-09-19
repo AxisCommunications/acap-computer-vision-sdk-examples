@@ -76,7 +76,7 @@ With the architecture defined, the `acap4-object-detector-cpp` image can be buil
 
 ```sh
 # Define app name
-APP_NAME=acap4-object-detector-cpp
+export APP_NAME=acap4-object-detector-cpp
 MODEL_NAME=acap-dl-models
 
 # Install qemu to allow build flask for a different architecture

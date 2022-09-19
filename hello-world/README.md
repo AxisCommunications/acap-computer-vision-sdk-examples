@@ -54,7 +54,7 @@ With the architecture defined, the `hello-world` image can be built. The environ
 
 ```sh
 # Define app name
-APP_NAME=hello-world
+export APP_NAME=hello-world
 
 docker build --tag $APP_NAME --build-arg ARCH .
 ```

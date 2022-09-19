@@ -54,7 +54,7 @@ With the architecture defined, the `hello-world-cross-compiled` image can be bui
 
 ```sh
 # Define app name
-APP_NAME=hello-world-cross-compiled
+export APP_NAME=hello-world-cross-compiled
 
 # Build
 docker build --tag $APP_NAME --build-arg ARCH .

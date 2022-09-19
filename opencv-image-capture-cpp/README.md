@@ -72,7 +72,7 @@ With the architecture defined, the `acap-opencv-image-capture-cpp` image can be 
 
 ```sh
 # Define app name
-APP_NAME=acap-opencv-image-capture-cpp
+export APP_NAME=acap-opencv-image-capture-cpp
 
 docker build --tag $APP_NAME --build-arg ARCH .
 ```

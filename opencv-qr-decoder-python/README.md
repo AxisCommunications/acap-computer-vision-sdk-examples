@@ -56,7 +56,7 @@ With the architecture defined, the `acap-opencv-qr-decoder-python` image can be 
 
 ```sh
 # Define app name
-APP_NAME=acap-opencv-qr-decoder-python
+export APP_NAME=acap-opencv-qr-decoder-python
 
 docker build --tag $APP_NAME --build-arg ARCH .
 ```
