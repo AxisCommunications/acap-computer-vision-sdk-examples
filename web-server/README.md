@@ -71,11 +71,11 @@ export ARCH=aarch64
 With the architecture defined, the `monkey` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
 
 ```sh
-# Install qemu emulator to build for different architectures
-docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
-
 # Define app name
 export APP_NAME=monkey
+
+# Install qemu emulator to build for different architectures
+docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
 
 # Build the container
 docker build --tag $APP_NAME --build-arg ARCH .
