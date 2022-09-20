@@ -72,7 +72,7 @@ export CHIP=artpec8
 
 ### Build the Docker images
 
-With the architecture defined, the `acap4-object-detector-cpp` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
+With the architecture defined, the `acap4-object-detector-cpp` and `acap-dl-models` images can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
 
 ```sh
 # Define app name
