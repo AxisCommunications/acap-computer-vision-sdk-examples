@@ -112,7 +112,7 @@ docker save $MODEL_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_POR
 
 ### Run the containers
 
-With the application image on the device, it can be started using `docker-compose.yml`:
+With the images on the device, they can be started using `docker-compose.yml`:
 
 ```sh
 docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP up
