@@ -56,55 +56,59 @@ Start by building the image containing the Web Server code with examples. This w
 
 ### Export the environment variable for the architecture
 
-Export the ARCH variable depending on the architecture of your camera
+Export the `ARCH` variable depending on the architecture of your camera:
 
 ```sh
 # For arm32
 export ARCH=armv7hf
+
 # For arm64
 export ARCH=aarch64
 ```
 
-### Set your camera IP address define APP name and clear Docker memory
+### Build the Docker image
+
+With the architecture defined, the `monkey` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
 
 ```sh
-# Set camera IP
-DEVICE_IP=<actual camera IP address>
-DOCKER_PORT=2376
+# Define app name
+export APP_NAME=monkey
 
-# Define APP name
-APP_NAME=monkey
-# Clean docker memory
-docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
-```
-
-### Build and run the images
-
-With the environment setup, the `monkey` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
-
-```sh
 # Install qemu emulator to build for different architectures
 docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
 
 # Build the container
-docker build . -t $APP_NAME --build-arg ARCH
+docker build --tag $APP_NAME --build-arg ARCH .
 ```
+
+### Set your device IP address and clear Docker memory
+
+```sh
+DEVICE_IP=<actual camera IP address>
+DOCKER_PORT=2376
+
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT system prune --all --force
+```
+
+If you encounter any TLS related issues, please see the TLS setup chapter regarding the `DOCKER_CERT_PATH` environment variable in the [Docker ACAP repository](https://github.com/AxisCommunications/docker-acap).
+
+### Install the image
 
 Next, the built image needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
 
 ```sh
-docker save $APP_NAME | docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT load
+docker save $APP_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT load
 ```
 
-### Start Web Server on the camera
+### Run the container
 
 With the application image on the device, it can be started using `docker-compose.yml`:
 
 ```sh
-docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT up
+docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT up
 
-# Cleanup after execution
-docker-compose --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT down -v
+# Terminate with Ctrl-C and cleanup
+docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT down
 ```
 
 ### The expected output
@@ -128,13 +132,13 @@ Some C API examples are included in the Web Server container that has been built
 
 ```sh
 # Run the hello example
-docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT  run --rm -p 2001:2001 -it $APP_NAME hello
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT  run --rm --publish 2001:2001 -it $APP_NAME hello
 
 # Run the list directory example
-docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT  run --rm -p 2001:2001 -it $APP_NAME list
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT  run --rm --publish 2001:2001 -it $APP_NAME list
 
 # Run the quiz example
-docker --tlsverify -H tcp://$DEVICE_IP:$DOCKER_PORT  run --rm -p 2001:2001 -it $APP_NAME quiz
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT  run --rm --publish 2001:2001 -it $APP_NAME quiz
 ```
 
 ## Proxy settings

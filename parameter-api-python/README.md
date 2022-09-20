@@ -68,22 +68,22 @@ export ARCH=aarch64
 
 ```sh
 # Define app name
-APP_NAME=parameter-api
+export APP_NAME=parameter-api
 
 # Build
-docker build . -t $APP_NAME --build-arg ARCH
+docker build --tag $APP_NAME --build-arg ARCH .
 ```
 
-### Set your camera IP address and clear Docker memory
+### Set your device IP address and clear Docker memory
 
 ```sh
 DEVICE_IP=<actual camera IP address>
 DOCKER_PORT=2376
 
-docker --tlsverify --tlscacert ca.pem --tlscert cert.pem --tlskey key.pem -H tcp://$DEVICE_IP:$DOCKER_PORT system prune -af
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT system prune --all --force
 ```
 
-where `ca.pem`, `cert.pem` and `key.pem` are the certificates generated when configuring TLS on Docker ACAP.
+If you encounter any TLS related issues, please see the TLS setup chapter regarding the `DOCKER_CERT_PATH` environment variable in the [Docker ACAP repository](https://github.com/AxisCommunications/docker-acap).
 
 ### Install the image and required server certificates
 
@@ -123,17 +123,18 @@ where `<password>` is the password to the `root` user.
 Finally install the Docker image to the device:
 
 ```sh
-docker save $APP_NAME | docker --tlsverify --tlscacert ca.pem --tlscert cert.pem --tlskey key.pem -H tcp://$DEVICE_IP:$DOCKER_PORT load
+docker save $APP_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT load
 ```
 
-where `ca.pem`, `cert.pem` and `key.pem` are the certificates generated when configuring TLS on Docker ACAP.
+### Run the container
 
-### Run the image
-
-Use the following command to run the example on the device:
+With the application image on the device, it can be started using `docker-compose.yml`:
 
 ```sh
-docker-compose --tlsverify --tlscacert ca.pem --tlscert cert.pem --tlskey key.pem -H tcp://$DEVICE_IP:$DOCKER_PORT up
+docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT up
+
+# Cleanup
+docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT down --volumes
 ```
 
 where `ca.pem`, `cert.pem` and `key.pem` are the certificates generated when configuring TLS on Docker ACAP.
