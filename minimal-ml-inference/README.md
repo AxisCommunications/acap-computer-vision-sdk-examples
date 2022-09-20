@@ -116,8 +116,7 @@ The expected output from the application is the raw predictions from the model s
 
 ### Hardware acceleration
 
-The `./config` folder contains configuration files with the parameters to run the inference on different camera models, also giving the possibility to use the hardware accelerator. To achieve the best performance we recommend using the TPU (Tensor Processing Unit) equipped with ARTPEC-7 cameras (e.g. [Axis-Q1615 Mk III](https://www.axis.com/products/axis-q1615-mk-iii))
-or the DLPU (Deep Learning Processing Unit) equipped in ARTPEC-8 cameras (e.g. [Axis-Q1656](https://www.axis.com/products/axis-q1656)).
+The `./config` folder contains configuration files with the parameters to run the inference on different camera models, also giving the possibility to use the hardware accelerator. To achieve the best performance we recommend using the TPU (Tensor Processing Unit) equipped with ARTPEC-7 cameras (e.g. [Axis-Q1615 Mk III](https://www.axis.com/products/axis-q1615-mk-iii)) or the DLPU (Deep Learning Processing Unit) equipped in ARTPEC-8 cameras (e.g. [Axis-Q1656](https://www.axis.com/products/axis-q1656)).
 
 ## License
 
