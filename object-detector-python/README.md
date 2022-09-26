@@ -15,9 +15,8 @@ The first container contains the actual program being built here, which uses Ope
 
 Lastly, there is a third container that holds the deep learning model, which is put into a volume that is accessible to the other two images.
 
-**larod-inference server**\
-Uses larod service in the camera firmware with model in docker image
-`axisecp/acap-dl-models:ssdlite-mobilenet-v2`
+**acap runtime**\
+Uses larod service in the camera firmware with the model you provide in your docker image
 
 The docker image containing the model has a layout as shown below. What model to use is specified by path in the docker-compose file.
 
