@@ -71,19 +71,19 @@ export ARCH=aarch64
 export APP_NAME=parameter-api
 
 # Build
-docker build --tag $APP_NAME --build-arg ARCH .
+docker build . -t $APP_NAME --build-arg ARCH
 ```
 
-### Set your device IP address and clear Docker memory
+### Set your camera IP address and clear Docker memory
 
 ```sh
-DEVICE_IP=<actual camera IP address>
-DOCKER_PORT=2376
+export AXIS_TARGET_IP=<actual camera IP address>
+export DOCKER_PORT=2376
 
-docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT system prune --all --force
+docker --tlsverify --tlscacert ca.pem --tlscert cert.pem --tlskey key.pem -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
 
-If you encounter any TLS related issues, please see the TLS setup chapter regarding the `DOCKER_CERT_PATH` environment variable in the [Docker ACAP repository](https://github.com/AxisCommunications/docker-acap).
+where `ca.pem`, `cert.pem` and `key.pem` are the certificates generated when configuring TLS on Docker ACAP.
 
 ### Install the image and required server certificates
 
@@ -97,13 +97,13 @@ Certificate files for TLS are created in the build process of this example and m
 
 ```sh
 docker cp $(docker create $APP_NAME):/certificates .
-scp certificates/* root@$DEVICE_IP:/usr/local/packages/acapruntime
+scp certificates/* root@$AXIS_TARGET_IP:/usr/local/packages/acapruntime
 ```
 
 Use SSH to change the ownership of the files on the device:
 
 ```sh
-ssh root@$DEVICE_IP 'chown sdk /usr/local/packages/acapruntime/server.*'
+ssh root@$AXIS_TARGET_IP 'chown sdk /usr/local/packages/acapruntime/server.*'
 ```
 
 After copying the server certificates onto the device, we have to make sure to enable TLS and then restart the ACAP-runtime.
@@ -112,10 +112,10 @@ After copying the server certificates onto the device, we have to make sure to e
 AXIS_TARGET_PASSWORD='<password>'
 
 # Enable TLS
-curl --anyauth -u "root:$AXIS_TARGET_PASSWORD" "$DEVICE_IP/axis-cgi/param.cgi?action=update&acapruntime.UseTLS=yes"
+curl --anyauth -u "root:$AXIS_TARGET_PASSWORD" "$AXIS_TARGET_IP/axis-cgi/param.cgi?action=update&acapruntime.UseTLS=yes"
 
 # Restart ACAP
-curl --anyauth -u "root:$AXIS_TARGET_PASSWORD" "$DEVICE_IP/axis-cgi/applications/control.cgi?package=acapruntime&action=restart"
+curl --anyauth -u "root:$AXIS_TARGET_PASSWORD" "$AXIS_TARGET_IP/axis-cgi/applications/control.cgi?package=acapruntime&action=restart"
 ```
 
 where `<password>` is the password to the `root` user.
@@ -123,18 +123,17 @@ where `<password>` is the password to the `root` user.
 Finally install the Docker image to the device:
 
 ```sh
-docker save $APP_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT load
+docker save $APP_NAME | docker --tlsverify --tlscacert ca.pem --tlscert cert.pem --tlskey key.pem -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT load
 ```
 
-### Run the container
+where `ca.pem`, `cert.pem` and `key.pem` are the certificates generated when configuring TLS on Docker ACAP.
 
-With the application image on the device, it can be started using `docker-compose.yml`:
+### Run the image
+
+Use the following command to run the example on the device:
 
 ```sh
-docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT up
-
-# Cleanup
-docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT down --volumes
+docker-compose --tlsverify --tlscacert ca.pem --tlscert cert.pem --tlskey key.pem -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT up
 ```
 
 where `ca.pem`, `cert.pem` and `key.pem` are the certificates generated when configuring TLS on Docker ACAP.

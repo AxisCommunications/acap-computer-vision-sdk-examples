@@ -32,3 +32,4 @@ jobs:
           cd $EXNAME
           docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
           docker build --no-cache --build-arg ARCH=${{ matrix.arch }} --tag $imagetag .
+          docker image rm -f $imagetag

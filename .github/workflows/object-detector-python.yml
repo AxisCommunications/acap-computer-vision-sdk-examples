@@ -36,4 +36,5 @@ jobs:
         run: |
           cd $EXNAME
           docker build --no-cache --build-arg CHIP=${{ matrix.chip }} --build-arg ARCH=${{ matrix.arch }} --tag $imagetag .
-          docker build --file Dockerfile.model --tag $modeltag --build-arg ARCH=${{ matrix.arch }} .
+          docker build . -f Dockerfile.model -t $modeltag --build-arg ARCH=${{ matrix.arch }}
+          docker image rm -f $imagetag

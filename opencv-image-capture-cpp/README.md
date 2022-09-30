@@ -56,55 +56,39 @@ opencv-image-capture-cpp
 
 ### Export the environment variable for the architecture
 
-Export the `ARCH` variable depending on the architecture of your camera:
+Export the ARCH variable depending on the architecture of your camera
 
 ```sh
 # For arm32
 export ARCH=armv7hf
-
 # For arm64
 export ARCH=aarch64
 ```
 
-### Build the Docker image
-
-With the architecture defined, the `acap-opencv-image-capture-cpp` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
+### Set your camera IP address define APP name and clear Docker memory
 
 ```sh
-# Define app name
+# Set camera IP
+export AXIS_TARGET_IP=<actual camera IP address>
+export DOCKER_PORT=2376
+
+# Define APP name
 export APP_NAME=acap-opencv-image-capture-cpp
-
-docker build --tag $APP_NAME --build-arg ARCH .
+# Clean docker memory
+docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT system prune -af
 ```
 
-### Set your device IP address and clear Docker memory
+### Build and run the images
 
 ```sh
-DEVICE_IP=<actual camera IP address>
-DOCKER_PORT=2376
+docker build . -t $APP_NAME --build-arg ARCH
 
-docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT system prune --all --force
-```
+docker save $APP_NAME | docker --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT  load
 
-If you encounter any TLS related issues, please see the TLS setup chapter regarding the `DOCKER_CERT_PATH` environment variable in the [Docker ACAP repository](https://github.com/AxisCommunications/docker-acap).
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT -f docker-compose.yml up
 
-### Install the image
-
-Next, the built image needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
-
-```sh
-docker save $APP_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT load
-```
-
-### Run the container
-
-With the application image on the device, it can be started using `docker-compose.yml`:
-
-```sh
-docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT up
-
-# Terminate with Ctrl-C and cleanup
-docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT down --volumes
+# Cleanup
+docker-compose --tlsverify -H tcp://$AXIS_TARGET_IP:$DOCKER_PORT -f docker-compose.yml down -v
 ```
 
 #### The expected output

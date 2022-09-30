@@ -31,3 +31,4 @@ jobs:
         run: |
           cd $EXNAME
           docker build --no-cache --build-arg ARCH=${{ matrix.arch }} --tag $imagetag .
+          docker image rm -f $imagetag
