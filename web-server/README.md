@@ -1,8 +1,8 @@
 *Copyright (C) 2021, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
 
-# How to use Web Server in ACAP 4
+# How to use web server in ACAP version 4
 
-This document explains briefly how to build and use [Monkey Web Server](https://github.com/monkey/monkey) in ACAP version 4. Monkey is a fast and lightweight Web Server for Linux. It has been designed to be very scalable with low memory and CPU consumption, the perfect solution for Embedded Linux and high end production environments. Besides the common features as HTTP server, it expose a flexible C API which aims to behave as a fully HTTP development framework, so it can be extended as desired through the plugins interface. The Monkey Web Server [documentation](http://monkey-project.com/documentation/1.5) describes the configuration in detail.
+This document explains briefly how to build and use the [Monkey web server](https://github.com/monkey/monkey) in ACAP version 4. Monkey is a fast and lightweight web server for Linux. It has been designed to be very scalable with low memory and CPU consumption, the perfect solution for Embedded Linux and high-end production environments. Besides the common features as HTTP server, it expose a flexible C API which aims to behave as a fully HTTP development framework, so it can be extended as desired through the plugins interface. The Monkey web server [documentation](http://monkey-project.com/documentation/1.5) describes the configuration in detail.
 
 ## Structure of this application
 
@@ -28,17 +28,17 @@ Meet the following requirements to ensure compatibility with the example:
 
 ## Limitations
 
-* Apache Reverse Proxy can not translate content with absolute addresses (i.e. /image.png) in the HTML page. Use only relative content (i.e. image.png or ../image.png)). More information how to handle relative urls correctly with a reverse proxy [here](https://serverfault.com/questions/561892/how-to-handle-relative-urls-correctly-with-a-reverse-proxy).
+* Apache Reverse Proxy can not translate content with absolute addresses (e.g. `/image.png`) in the HTML page. Use only relative content (e.g. `image.png` or `../image.png`). More information how to handle relative URLs correctly with a reverse proxy [here](https://serverfault.com/questions/561892/how-to-handle-relative-urls-correctly-with-a-reverse-proxy).
 
-## Configure Camera Apache Web Server to forward web requests
+## Configure Apache to forward HTTP requests
 
-The Web Server can be accessed from a Web Browser either directly using a port number (i.e. http://mycamera:8080) or through the Apache Server in the camera using an extension to the camera web URL (i.e http://mycamera/monkey). To configure the Apache Server as a Reverse Proxy Server, use the procedure shown below.
+The Axis camera's web server can be accessed from a web browser either directly using a port number (e.g. <http://mycamera:8080>) or through the Apache server in the camera using a route (e.g. <http://mycamera/monkey/>). To configure the Apache server as a reverse proxy server, use the procedure shown below.
 
 ```sh
 # Do ssh login to the camera
 ssh root@<CAMERA_IP>
 
-# Add Reverse Proxy configuration to the Apache Server, example:
+# Add reverse proxy configuration to the Apache server, example:
 cat >> /etc/apache2/httpd.conf <<EOF
 ProxyPass /monkey/demo http://localhost:2001
 ProxyPassReverse /monkey/demo http://localhost:2001
@@ -46,13 +46,13 @@ ProxyPass /monkey http://localhost:8080
 ProxyPassReverse /monkey http://localhost:8080
 EOF
 
-# Restart the Apache Server
+# Restart the Apache server
 systemctl restart httpd
 ```
 
 ## How to run the code
 
-Start by building the image containing the Web Server code with examples. This will compile the code to an executable and create an armv7hf container containing the executable, which can be uploaded to and run on the camera. After the Web Server is started it can be accessed from a web browser by specifying the web address: http://mycamera/monkey/ or http://mycamera:8080
+Start by building the Docker image containing the web server code with examples. This will compile the code to an executable and create a container containing the executable, which can be uploaded to and run on the camera. After the web server is started it can be accessed from a web browser by navigating to <http://mycamera/monkey/> or <http://mycamera:8080>.
 
 ### Export the environment variable for the architecture
 
@@ -126,9 +126,11 @@ Home  : http://monkey-project.com
 [+] Linux Features: TCP_FASTOPEN SO_REUSEPORT
 ```
 
+With the Monkey web server running, navigate to <http://mycamera:8080/> to see the served web page. If you managed to configure the Apache reverse proxy, the same page is also served at <http://mycamera/monkey/>.
+
 ## C API Examples
 
-Some C API examples are included in the Web Server container that has been built. The commands below show how to run the examples on the camera. To see the result, use a web browser and web address: http://mycamera/monkey/demo/ or http://mycamera:2001
+Some C API examples are included in the web server container that has been built. The commands below show how to run the examples on the camera. To see the result, use a web browser and navigate to <http://mycamera/monkey/demo/> or <http://mycamera:2001>.
 
 ```sh
 # Run the hello example
