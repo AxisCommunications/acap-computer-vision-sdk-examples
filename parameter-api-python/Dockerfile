@@ -19,12 +19,15 @@ apt-get install -y --no-install-recommends \
     libprotobuf-dev \
     python3 \
     python3-pip \
-    python3-grpc-tools \
-    python3-protobuf \
     protobuf-compiler \
-    protobuf-compiler-grpc \
-    python3-grpcio
+    protobuf-compiler-grpc
 EOF
+
+# grpcio-tools contains protoc, which allows to build the pb2.py files in the install-tf.sh script.
+# Installing directly grpcio-tools result in an older version of protobuf. 
+# So we install first the dependencies with the desired version and then grpcio-tool without dependencies.
+RUN python3 -m pip install protobuf==4.21.1 six==1.16.0 grpcio==1.46.3 && \
+    python3 -m pip install --no-dependencies grpcio-tools==1.47.0
 
 # Generate TSL/SSL test certificate
 RUN openssl req -x509 -batch -subj '/CN=localhost' -days 365 -newkey rsa:4096 -nodes -out server.pem -keyout server.key
@@ -46,4 +49,3 @@ COPY --from=cv-sdk /build/*.py opt/build/
 COPY /app/src/parameter.py opt/build/
 WORKDIR /opt/build
 ENTRYPOINT [ "python3", "parameter.py" ]
-

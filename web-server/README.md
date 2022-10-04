@@ -32,7 +32,7 @@ Meet the following requirements to ensure compatibility with the example:
 
 ## Configure Camera Apache Web Server to forward web requests
 
-The Web Server can be accessed from a Web Browser either directly using a port number (i.e. http://mycamera:8080) or through the Apache Server in the camera using an extension to the camera web URL (i.e http://mycamera/monkey). To configure the Apache Server as a Reverse Proxy Server, use the procedure shown below.
+The Web Server can be accessed from a Web Browser either directly using a port number (i.e. http://mycamera:2001) or through the Apache Server in the camera using an extension to the camera web URL (i.e http://mycamera/monkey). To configure the Apache Server as a Reverse Proxy Server, use the procedure shown below.
 
 ```sh
 # Do ssh login to the camera
@@ -40,10 +40,8 @@ ssh root@<CAMERA_IP>
 
 # Add Reverse Proxy configuration to the Apache Server, example:
 cat >> /etc/apache2/httpd.conf <<EOF
-ProxyPass /monkey/demo http://localhost:2001
-ProxyPassReverse /monkey/demo http://localhost:2001
-ProxyPass /monkey http://localhost:8080
-ProxyPassReverse /monkey http://localhost:8080
+ProxyPass /monkey http://localhost:2001
+ProxyPassReverse /monkey http://localhost:2001
 EOF
 
 # Restart the Apache Server
@@ -52,7 +50,7 @@ systemctl restart httpd
 
 ## How to run the code
 
-Start by building the image containing the Web Server code with examples. This will compile the code to an executable and create an armv7hf container containing the executable, which can be uploaded to and run on the camera. After the Web Server is started it can be accessed from a web browser by specifying the web address: http://mycamera/monkey/ or http://mycamera:8080
+Start by building the image containing the Web Server code with examples. This will compile the code to an executable and create an image containing the executable, which can be uploaded to and run on the camera. After the Web Server is started it can be accessed from a web browser by specifying the web address: http://mycamera/monkey/index.html or http://mycamera:2001.
 
 ### Export the environment variable for the architecture
 
@@ -97,7 +95,9 @@ If you encounter any TLS related issues, please see the TLS setup chapter regard
 Next, the built image needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
 
 ```sh
+
 docker save $APP_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT load
+
 ```
 
 ### Run the container
@@ -128,18 +128,7 @@ Home  : http://monkey-project.com
 
 ## C API Examples
 
-Some C API examples are included in the Web Server container that has been built. The commands below show how to run the examples on the camera. To see the result, use a web browser and web address: http://mycamera/monkey/demo/ or http://mycamera:2001
-
-```sh
-# Run the hello example
-docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT  run --rm --publish 2001:2001 -it $APP_NAME hello
-
-# Run the list directory example
-docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT  run --rm --publish 2001:2001 -it $APP_NAME list
-
-# Run the quiz example
-docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT  run --rm --publish 2001:2001 -it $APP_NAME quiz
-```
+Some C API examples are included in the Web Server container that has been built: `hello`, `list` and `quiz`. The current Docker image, starts the Monkey server `monkey` when using `CMD monkey` in the Dockerfile. To try another C API example, either re-build the Docker image with another `CMD` (i.e. `CMD hello`) or override it by using the `entrypoint` keyword in the `docker-compose.yml` file (i.e. `entrypoint: hello`). To see the result, use a web browser and web address: http://mycamera/monkey/ or http://mycamera:2001.
 
 ## Proxy settings
 
