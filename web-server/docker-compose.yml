@@ -4,4 +4,4 @@ services:
   monkey-app:
     image: ${APP_NAME}
     ports:
-      - "8080:2001"
+      - "2001:2001"
