@@ -2,7 +2,6 @@ version: '3.3'
 services:
   simple-inference-client-app:
     image: ${APP_NAME}
-    build: .
     environment:
       - PYTHONUNBUFFERED=1
       - INFERENCE_HOST=unix:///tmp/acap-runtime.sock
@@ -34,7 +33,6 @@ services:
 
   acap_dl-models:
     image: ${MODEL_NAME}
-    build: .
     volumes:
       - acap_dl-models:/models
 
