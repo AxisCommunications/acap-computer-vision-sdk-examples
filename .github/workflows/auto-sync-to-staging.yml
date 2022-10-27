@@ -20,7 +20,6 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         run: |
-          echo $API_TOKEN_GITHUB
           branch_name="Auto-sync-$(date +'%Y-%m-%d_%H.%M.%S')"
           public_repo_name=${{github.event.repository.name}}
           destination_repo_name=${public_repo_name}"-staging"
