@@ -29,7 +29,7 @@ services:
       options:
         max-file: "5"
         max-size: "100k"
-    entrypoint: ["/opt/app/acap_runtime/acapruntime", "-o", "-m", "${MODEL_PATH}", "-j", "${INFERENCE_CHIP}"]
+    entrypoint: ["/opt/app/acap_runtime/acapruntime", "-m", "${MODEL_PATH}", "-j", "${INFERENCE_CHIP}"]
     volumes:
       - /usr/acap-root/lib:/host/lib
       - acap_dl-models:/models:ro
