@@ -136,7 +136,9 @@ class Detector:
 
     # Run object detection on video stream
     def get_frame(self):
-        _, frame = self.cap.read()
+        read_success, frame = self.cap.read()
+        if not read_success:
+            return False, 0
         # Cut the central area of the frame of a 1920x1080 to make it square
         frame = frame[:, 420:-420, :]
         small_frame = cv2.resize(frame, (192, 192), interpolation=cv2.INTER_AREA)
