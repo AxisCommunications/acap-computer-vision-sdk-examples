@@ -45,4 +45,3 @@ services:
 volumes:
   acap_dl-models: {}
   inference-server: {}
-
