@@ -3,7 +3,7 @@
 # Specify the architecture at build time: mipsis32r2el/armv7hf/aarch64
 ARG ARCH=armv7hf
 ARG REPO=axisecp
-ARG SDK_VERSION=1.5
+ARG SDK_VERSION=1.6
 ARG UBUNTU_VERSION=22.04
 
 FROM arm32v7/ubuntu:${UBUNTU_VERSION} as runtime-image-armv7hf
