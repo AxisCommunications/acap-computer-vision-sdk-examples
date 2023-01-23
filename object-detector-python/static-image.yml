@@ -30,7 +30,6 @@ services:
         max-size: "100k"
     entrypoint: ["/opt/app/acap_runtime/acapruntime", "-m", "${MODEL_PATH}", "-j", "${INFERENCE_CHIP}"]
     volumes:
-      - /usr/acap-root/lib:/host/lib
       - acap_dl-models:/models:ro
       - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
       - /run/parhand/parhandsocket:/run/parhand/parhandsocket
