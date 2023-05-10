@@ -9,7 +9,7 @@ This example demonstrates how to create and run a simple, cross compiled C++ Ope
 Following are the list of files and a brief description of each file in the example:
 
 ```text
-hello-world-cross-compiled
+hello-world-cpp
 ├── app
 │   ├── Makefile
 │   └── src
@@ -50,11 +50,11 @@ export ARCH=aarch64
 
 ### Build the Docker image
 
-With the architecture defined, the `hello-world-cross-compiled` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
+With the architecture defined, the `hello-world-cpp` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
 
 ```sh
 # Define app name
-export APP_NAME=hello-world-cross-compiled
+export APP_NAME=hello-world-cpp
 
 # Build
 docker build --tag $APP_NAME --build-arg ARCH .

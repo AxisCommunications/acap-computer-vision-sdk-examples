@@ -11,7 +11,7 @@ Going from zero to a Python application running on an AXIS device is quite easy.
 Following are the list of files and a brief description of each file in the example
 
 ```text
-hello-world
+hello-world-python
 ├── app
 │   └── simply_hello.py
 ├── Dockerfile
@@ -50,11 +50,11 @@ export ARCH=aarch64
 
 ### Build the Docker image
 
-With the architecture defined, the `hello-world` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
+With the architecture defined, the `hello-world-python` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
 
 ```sh
 # Define app name
-export APP_NAME=hello-world
+export APP_NAME=hello-world-python
 
 docker build --tag $APP_NAME --build-arg ARCH .
 ```

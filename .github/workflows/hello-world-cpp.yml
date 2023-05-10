@@ -1,11 +1,11 @@
-name: Build hello-world-cross-compiled application
+name: Build hello-world-cpp application
 
 on:
   push:
     paths:
-      - 'hello-world-cross-compiled/**'
-      - '!hello-world-cross-compiled/README.md'
-      - '.github/workflows/hello-world-cross-compiled.yml'
+      - 'hello-world-cpp/**'
+      - '!hello-world-cpp/README.md'
+      - '.github/workflows/hello-world-cpp.yml'
   pull_request:
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       EXREPO: acap-computer-vision-examples
-      EXNAME: hello-world-cross-compiled
+      EXNAME: hello-world-cpp
     strategy:
       matrix:
         include:

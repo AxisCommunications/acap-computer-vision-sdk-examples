@@ -43,10 +43,10 @@ The examples support the following architectures:
 
 Below is a list of examples available in the repository:
 
-* [hello-world](./hello-world/)
-  * A Python example which builds a simple hello-world application.
-* [hello-world-cross-compiled](./hello-world-cross-compiled/)
+* [hello-world-cpp](./hello-world-cpp/)
   * A C++ example which cross compiles a simple OpenCV hello-world application.
+* [hello-world-python](./hello-world-python/)
+  * A Python example which builds a simple hello-world application.
 * [minimal-ml-inference](./minimal-ml-inference/)
   * A Python example to build a minimal machine learning inference application.
 * [object-detector-cpp](./object-detector-cpp/)

@@ -1,11 +1,11 @@
-name: Build hello-world application
+name: Build hello-world-python application
 
 on:
   push:
     paths:
-      - 'hello-world/**'
-      - '!hello-world/README.md'
-      - '.github/workflows/hello-world.yml'
+      - 'hello-world-python/**'
+      - '!hello-world-python/README.md'
+      - '.github/workflows/hello-world-python.yml'
   pull_request:
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       EXREPO: acap-computer-vision-examples
-      EXNAME: hello-world
+      EXNAME: hello-world-python
     strategy:
       matrix:
         include:
