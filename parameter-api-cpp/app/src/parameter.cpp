@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,13 +40,13 @@ class Parameter {
     // and its corresponding value as a pair
     vector<pair<string, string>> GetValues(
       const vector<string>& keys) {
-        
+
       vector<pair<string,string>> values;
       ClientContext context;
       Request request;
       Response response;
 
-      auto stream = stub_->GetValues(&context);     
+      auto stream = stub_->GetValues(&context);
       for (const auto& key : keys) {
         // Key we are sending to the server.
         request.set_key(key);
@@ -63,10 +63,10 @@ class Parameter {
 
       // Act upon its status.
       if (!status.ok()) {
-        throw std::runtime_error("Can not access gRPC channel: " + status.error_message());        
+        throw std::runtime_error("Can not access gRPC channel: " + status.error_message());
       }
       return values;
-    }  
+    }
  private:
   std::unique_ptr<KeyValueStore::Stub> stub_;
 };
@@ -89,7 +89,7 @@ string read_text(const char* path)
 
 // main function
 int main(int argc, char* argv[])
-{ 
+{
   // camera keys
   vector<string> keys = {
     "root.Brand.Brand",
@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
 
   try {
     // Create channel
-    shared_ptr<Channel> channel;     
+    shared_ptr<Channel> channel;
     if (argc > 1) {
       // gRPC secure connection
       string root_cert = read_text(argv[1]);
