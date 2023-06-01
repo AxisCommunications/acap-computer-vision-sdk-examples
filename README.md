@@ -1,3 +1,5 @@
+*Copyright (C) 2022, Axis Communications AB, Lund, Sweden. All Rights Reserved.*
+
 # ACAP Computer Vision SDK examples
 
 [![CI](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/ci.yml/badge.svg)](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/ci.yml)
