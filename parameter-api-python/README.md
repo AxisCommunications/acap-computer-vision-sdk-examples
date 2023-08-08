@@ -42,7 +42,8 @@ Meet the following requirements to ensure compatibility with the example:
   * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
   * [ACAP runtime](https://hub.docker.com/r/axisecp/acap-runtime) installed and started
 * Computer
-  * Either [Docker Desktop](https://docs.docker.com/desktop/) version 4.11.1 or higher, or [Docker Engine](https://docs.docker.com/engine/) version 20.10.17 or higher with BuildKit enabled using Docker Compose version 1.29.2 or higher
+  * Either [Docker Desktop](https://docs.docker.com/desktop/) version 4.11.1 or higher,
+  * or [Docker Engine](https://docs.docker.com/engine/) version 20.10.17 or higher with BuildKit enabled using Docker Compose version 1.29.2 or higher
 
 ## Proxy settings
 
@@ -131,10 +132,10 @@ docker save $APP_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT 
 With the application image on the device, it can be started using `docker-compose.yml`:
 
 ```sh
-docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT up
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT compose up
 
 # Cleanup
-docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT down --volumes
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT compose down --volumes
 ```
 
 where `ca.pem`, `cert.pem` and `key.pem` are the certificates generated when configuring TLS on Docker ACAP.
