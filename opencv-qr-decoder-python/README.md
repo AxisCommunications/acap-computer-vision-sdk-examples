@@ -34,7 +34,8 @@ Meet the following requirements to ensure compatibility with the example:
   * Firmware: 10.9 or higher
   * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
 * Computer
-  * Either [Docker Desktop](https://docs.docker.com/desktop/) version 4.11.1 or higher, or [Docker Engine](https://docs.docker.com/engine/) version 20.10.17 or higher with BuildKit enabled using Docker Compose version 1.29.2 or higher
+  * Either [Docker Desktop](https://docs.docker.com/desktop/) version 4.11.1 or higher,
+  * or [Docker Engine](https://docs.docker.com/engine/) version 20.10.17 or higher with BuildKit enabled using Docker Compose version 1.29.2 or higher
 
 ## How to run the code
 
@@ -85,10 +86,10 @@ docker save $APP_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT 
 With the application image on the device, it can be started. As the example uses OpenCV, the OpenCV requirements will be included in `docker-compose.yml`, which is used to run the application:
 
 ```sh
-docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT up
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT compose up
 
 # Terminate with Ctrl-C and cleanup
-docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT down --volumes
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT compose down --volumes
 ```
 
 ## License

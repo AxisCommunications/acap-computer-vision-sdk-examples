@@ -59,7 +59,8 @@ Meet the following requirements to ensure compatibility with the example:
   * Firmware: 10.9 or higher
   * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
 * Computer
-  * Either [Docker Desktop](https://docs.docker.com/desktop/) version 4.11.1 or higher, or [Docker Engine](https://docs.docker.com/engine/) version 20.10.17 or higher with BuildKit enabled using Docker Compose version 1.29.2 or higher
+  * Either [Docker Desktop](https://docs.docker.com/desktop/) version 4.11.1 or higher,
+  * or [Docker Engine](https://docs.docker.com/engine/) version 20.10.17 or higher with BuildKit enabled using Docker Compose version 1.29.2 or higher
 
 ## How to run the code
 
@@ -128,23 +129,23 @@ docker save $MODEL_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_POR
 With the application image on the device, it can be started using `docker-compose.yml`:
 
 ```sh
-docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP up
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP compose up
 
 # Terminate with Ctrl-C and cleanup
-docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP down --volumes
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP compose down --volumes
 ```
 
 ### The expected output
 
 ```sh
-docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP up
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP compose up
 ....
 object-detector_1           | 1 Objects found
 object-detector_1           | person
 ```
 
 ```sh
-docker-compose --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --file static-image.yml --env-file ./config/env.$ARCH.$CHIP up
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --file static-image.yml --env-file ./config/env.$ARCH.$CHIP compose up
 ....
 object-detector-python_1          | 3 Objects found
 object-detector-python_1          | bicycle
