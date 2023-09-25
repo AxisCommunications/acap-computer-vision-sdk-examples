@@ -107,10 +107,10 @@ docker save $MODEL_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_POR
 With the application image on the device, it can be started using `docker-compose.yml`:
 
 ```sh
-docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP compose up
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT compose --env-file ./config/env.$ARCH.$CHIP up
 
 # Terminate with Ctrl-C and cleanup
-docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT --env-file ./config/env.$ARCH.$CHIP compose down --volumes
+docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT compose --env-file ./config/env.$ARCH.$CHIP down --volumes
 ```
 
 The expected output from the application is the raw predictions from the model specified in the environment variable.
