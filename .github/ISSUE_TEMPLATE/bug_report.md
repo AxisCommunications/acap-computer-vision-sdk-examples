@@ -16,7 +16,6 @@ assignees: ''
 - [ ] I have verified that the SDK version I am using is compatible with the firmware version installed on my device.
 - [ ] I have included the SDK version and firmware version in my issue description for reference.
 
-
 ### Describe the bug
 
 Explain the behavior you would expect and the actual behavior.
