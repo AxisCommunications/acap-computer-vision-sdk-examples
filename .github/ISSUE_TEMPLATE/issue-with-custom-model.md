@@ -20,7 +20,10 @@ assignees: ''
 
 #### Minimum Debug Steps
 Before opening the issue, try to load the model on the device using this command:
-`larod-client -g model_path  -c <CHIP_ID> `
+
+```sh
+larod-client -g model_path -c <CHIP_ID>
+```
 
 Where <CHIP_ID> is:
 'cpu-tflite' - To test on CPU
