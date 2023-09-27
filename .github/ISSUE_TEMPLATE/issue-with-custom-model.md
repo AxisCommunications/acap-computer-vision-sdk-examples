@@ -18,7 +18,7 @@ assignees: ''
 - [ ] I have followed the minimum debug steps on my own.
 - [ ] I have included the output of the debug steps in the issue.
 
-**Minimum Debug Steps**
+#### Minimum Debug Steps
 Before opening the issue, try to load the model on the device using this command:
 `larod-client -g model_path  -c <CHIP_ID> `
 
