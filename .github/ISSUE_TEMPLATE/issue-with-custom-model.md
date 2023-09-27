@@ -27,9 +27,9 @@ larod-client -g model_path -c <CHIP_ID>
 
 Where `<CHIP_ID>` is:
 
-'cpu-tflite' - To test on CPU
-'axis-a8-dlpu-tflite' - To test on Artpec-8 DLPU
-'google-edge-tpu-tflite' - To test on Artpec-7 TPU
+- `cpu-tflite` - To test on CPU
+- `axis-a8-dlpu-tflite` - To test on Artpec-8 DLPU
+- `google-edge-tpu-tflite` - To test on Artpec-7 TPU
 'ambarella-cvflow'- To test on CV25 DLPU
     
 If it fails run
