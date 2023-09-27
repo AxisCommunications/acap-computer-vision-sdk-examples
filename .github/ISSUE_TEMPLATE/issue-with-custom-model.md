@@ -32,8 +32,12 @@ Where `<CHIP_ID>` is:
 - `google-edge-tpu-tflite` - To test on Artpec-7 TPU
 'ambarella-cvflow'- To test on CV25 DLPU
     
-If it fails run
-`journalctl -u larod`
+If it fails run:
+
+```
+journalctl -u larod
+```
+
 Please provide us this log together with your issue.
 
 ### Describe the bug
