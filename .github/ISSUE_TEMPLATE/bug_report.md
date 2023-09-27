@@ -10,7 +10,7 @@ assignees: ''
 > **Please do not disclose security vulnerabilities as issues. See our [security policy](../../SECURITY.md) for responsible disclosures.**
 
 ### Before opening an issue
-**Issue Checklist**
+#### Issue Checklist
 
 - [ ] I have checked the [compatibility table](https://axiscommunications.github.io/acap-documentation/docs/api/computer-vision-sdk-apis.html#compatibility) in the documentation.
 - [ ] I have verified that the SDK version I am using is compatible with the firmware version installed on my device.
