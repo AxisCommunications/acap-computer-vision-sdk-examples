@@ -23,7 +23,7 @@ Meet the following requirements to ensure compatibility with the example:
 * Axis device
   * Chip: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
   * Firmware: 10.9 or higher
-  * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
+  * [Docker ACAP](https://github.com/AxisCommunications/docker-acap#installing) installed and started, using TLS and SD card as storage
 * Computer
   * Either [Docker Desktop](https://docs.docker.com/desktop/) version 4.11.1 or higher,
   * or [Docker Engine](https://docs.docker.com/engine/) version 20.10.17 or higher with BuildKit enabled using Docker Compose version 1.29.2 or higher
@@ -45,7 +45,7 @@ opencv-image-capture-cpp
 
 * **capture.cpp**        - Example application to capture camera properties such as time stamps, zoom, focus etc.
 * **Dockerfile**         - Docker file with the toolchain included to run the example.
-* **docker-compose.yml** - Docker compose file contains the latest image of the example from dockerhub.
+* **docker-compose.yml** - Docker compose file contains the latest image of the example from DockerHub.
 * **README.md**          - Step by step instructions on how to run the example.
 
 ### Limitations
@@ -69,7 +69,7 @@ export ARCH=aarch64
 
 ### Build the Docker image
 
-With the architecture defined, the `acap-opencv-image-capture-cpp` image can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
+With the architecture defined, the `acap-opencv-image-capture-cpp` image can be built. The environment variables are supplied as build arguments such that they are made available to Docker during the build process:
 
 ```sh
 # Define app name
@@ -87,11 +87,11 @@ DOCKER_PORT=2376
 docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT system prune --all --force
 ```
 
-If you encounter any TLS related issues, please see the TLS setup chapter regarding the `DOCKER_CERT_PATH` environment variable in the [Docker ACAP repository](https://github.com/AxisCommunications/docker-acap).
+If you encounter any TLS related issues, please see the TLS setup chapter regarding the `DOCKER_CERT_PATH` environment variable in the [Docker ACAP repository](https://github.com/AxisCommunications/docker-acap#securing-the-docker-acap-using-tls).
 
 ### Install the image
 
-Next, the built image needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
+Next, the built image needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's Docker client:
 
 ```sh
 docker save $APP_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT load
