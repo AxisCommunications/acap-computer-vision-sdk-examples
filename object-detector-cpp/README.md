@@ -2,19 +2,26 @@
 
 # An object detection application in C++ on an edge device
 
-The example code is written in C++ for object detection on the camera using docker. The example uses the following technologies.
+This example code is written in C++ and implements an object detection scenario on the camera using Docker. The example uses the following technologies:
 
 * OpenCV
-* Larod inference-server
+* inference-server (larod)
 * ssdlite-mobilenet-v2
 
 ## Overview
 
 This example composes three different container images into an application that performs object detection using a deep learning model.
 
-The first container contains the actual program being built here, which uses OpenCV to capture pictures from the camera and modifies them to fit the input required by the model. It then uses grpc/protobuf to call the second container, the "inference-server", that performs the actual inference. The inference server implements the TensorFlow Serving API.
+The first container contains the actual program built in this example. It uses [OpenCV](https://opencv.org/) to capture pictures from the camera and modifies them to fit the input required by the model. It then uses [gRPC](https://grpc.io/)/[protobuf](https://developers.google.com/protocol-buffers) to call the second container, the *inference-server*, that performs the actual inference by implementing the [TensorFlow Serving API](https://github.com/tensorflow/serving). You can find more documentation on the [Machine Learning API documentation page](https://axiscommunications.github.io/acap-documentation/docs/api/computer-vision-sdk-apis.html#machine-learning-api). This example uses a containerized version of the [ACAP Runtime](https://github.com/AxisCommunications/acap-runtime#containerized-version) as the *inference-server*.
 
-Lastly, there is a third container that holds the deep learning model, which is put into a volume that is accessible to the other two images.
+Lastly, there is a third container that holds the deep learning model, which is put into a volume that is accessible by the other two images. The layout of the Docker image containing the model is shown below. The *MODEL_PATH* variable in the configuration file you're using specifies what model to use. By default, the armv7hf configuration file uses the edgetpu model, while the aarch64 configuration file uses the vanilla model.
+
+```text
+model
+├── ssdlite-mobilenet-v2 - model for CPU
+├── ssdlite-mobilenet-v2-tpu - model for TPU
+└── objects.txt - list of object labels
+```
 
 ## Example structure
 
@@ -44,7 +51,7 @@ Meet the following requirements to ensure compatibility with the example:
 * Axis device
   * Chip: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
   * Firmware: 10.9 or higher
-  * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
+  * [Docker ACAP](https://github.com/AxisCommunications/docker-acap#installing) installed and started, using TLS and SD card as storage
 * Computer
   * Either [Docker Desktop](https://docs.docker.com/desktop/) version 4.11.1 or higher,
   * or [Docker Engine](https://docs.docker.com/engine/) version 20.10.17 or higher with BuildKit enabled using Docker Compose version 1.29.2 or higher
@@ -73,7 +80,7 @@ export CHIP=artpec8
 
 ### Build the Docker images
 
-With the architecture defined, the `acap4-object-detector-cpp` and `acap-dl-models` images can be built. The environment variables are supplied as build arguments such that they are made available to docker during the build process:
+With the architecture defined, the `acap4-object-detector-cpp` and `acap-dl-models` images can be built. The environment variables are supplied as build arguments such that they are made available to Docker during the build process:
 
 ```sh
 # Define app name
@@ -99,17 +106,23 @@ DOCKER_PORT=2376
 docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT system prune --all --force
 ```
 
-If you encounter any TLS related issues, please see the TLS setup chapter regarding the `DOCKER_CERT_PATH` environment variable in the [Docker ACAP repository](https://github.com/AxisCommunications/docker-acap).
+If you encounter any TLS related issues, please see the TLS setup chapter regarding the `DOCKER_CERT_PATH` environment variable in the [Docker ACAP repository](https://github.com/AxisCommunications/docker-acap#securing-the-docker-acap-using-tls).
 
 ### Install the images
 
-Next, the built images needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's docker client:
+Next, the built images needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's Docker client:
 
 ```sh
 docker save $APP_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT load
 
 docker save $MODEL_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT load
 ```
+
+> [!NOTE]
+> If the *inference-server* ([containerized ACAP Runtime](https://github.com/AxisCommunications/acap-runtime#containerized-version)) is not already present on the device, it will be pulled from Docker Hub
+> when running `docker compose up`.
+> If the pull action fails due to network connectivity, pull the image to your host system and load it to
+> the device instead.
 
 ### Run the containers
 
@@ -143,7 +156,7 @@ For reference please see: https://docs.docker.com/network/proxy/.
 
 ## Zero copy
 
-This example uses larod-inference-server for video inference processing by using gRPC API. In case this client and the inference server is located on the same camera, it is possible to speed up inference by using shared memory to pass the video image to the inference server by activating following define statement in file `app/src/serving_client.hpp`:
+This example uses the inference server for video inference processing by using gRPC API. In case this client and the inference server is located on the same camera, it is possible to speed up inference by using shared memory to pass the video image to the inference server by activating following define statement in file `app/src/serving_client.hpp`:
 
 ```c++
 #define ZEROCOPY
@@ -151,21 +164,16 @@ This example uses larod-inference-server for video inference processing by using
 
 ## Server authentication
 
-This example uses larod-inference-server for video inference processing. The API uses an insecure gRPC communication channel when no certificate is provided and it uses SSL/TLS server authentication and encryption when a server certificate is provided as the first parameter to object detector:
+This example uses the inference server for video inference processing. The API uses SSL/TLS server authentication and encryption as the default behavior, but can use an insecure gRPC communication channel if no server certificate is provided. For the secure communication, we need:
 
-```sh
-objdetector server.pem
-```
+1. To provide a server certificate `server.pem` as the first parameter to object detector.
+2. To start the inference server by specifying the server certificate `server.pem` and the private key `server.key`.
 
-The inference server must then be started by specifying the server certificate and the private key in the file docker-compose.yml:
-
-```sh
-larod-inference-server -c server.pem -k private.key
-```
+Both of these are present in the `docker-compose.yml` file.
 
 ## Model over gRPC
 
-This example uses larod-inference-server for video inference processing by using gRPC API. The inference server supports multiple clients at the same time. Models are normally loaded when the inference server is starting up, but models can also be loaded by specifying the model file path over gRPC. Please note the model path specified must be accessible by the inference server.
+This example uses the inference server for video inference processing by using gRPC API. The inference server supports multiple clients at the same time. Models are normally loaded when the inference server is starting up, but models can also be loaded by specifying the model file path over gRPC. Please note the model path specified must be accessible by the inference server.
 
 ### Hardware acceleration
 

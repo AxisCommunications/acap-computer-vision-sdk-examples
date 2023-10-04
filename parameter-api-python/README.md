@@ -4,11 +4,11 @@
 
 [![Build parameter-api-python application](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/parameter-api-python.yml/badge.svg)](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/parameter-api-python.yml)
 
-The example is written in Python and communicates with the [ACAP runtime](https://hub.docker.com/r/axisecp/acap-runtime) using gRPC on a Unix Domain Socket (UDS). ACAP runtime acts as a server that exposes the Parameter-API.
+The example is written in Python and communicates with the [ACAP Runtime](https://github.com/AxisCommunications/acap-runtime#native-acap-application) using gRPC on a Unix Domain Socket (UDS). ACAP Runtime acts as a server that exposes the Parameter-API.
 
 ## Overview
 
-A network device from Axis has a lot of parameters and in this example we will use the Parameter-API, a service in [ACAP runtime](https://hub.docker.com/r/axisecp/acap-runtime) to read the values of a set of parameters and print them to the application log. The Parameter-API can read parameters, but cannot read parameter groups nor set parameter values.It is necessary to use the exact parameter name to get the expected results. The parameter list can be found using the URL `http://<ip address>/axis-cgi/param.cgi?action=list` where `<ip address>` is the IP address of your device.
+A network device from Axis has a lot of parameters and in this example we will use the Parameter-API, a service in [ACAP Runtime](https://github.com/AxisCommunications/acap-runtime) to read the values of a set of parameters and print them to the application log. The Parameter-API can read parameters, but cannot read parameter groups nor set parameter values.It is necessary to use the exact parameter name to get the expected results. The parameter list can be found using the URL `http://<ip address>/axis-cgi/param.cgi?action=list` where `<ip address>` is the IP address of your device.
 
 ## Example structure
 
@@ -39,8 +39,8 @@ Meet the following requirements to ensure compatibility with the example:
 * Axis device
   * Chip: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
   * Firmware: 10.9 or higher
-  * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) installed and started, using TLS and SD card as storage
-  * [ACAP runtime](https://hub.docker.com/r/axisecp/acap-runtime) installed and started
+  * [Docker ACAP](https://github.com/AxisCommunications/docker-acap#installing) installed and started, using TLS and SD card as storage
+  * [ACAP Runtime](https://github.com/AxisCommunications/acap-runtime#native-acap-application) installed and started
 * Computer
   * Either [Docker Desktop](https://docs.docker.com/desktop/) version 4.11.1 or higher,
   * or [Docker Engine](https://docs.docker.com/engine/) version 20.10.17 or higher with BuildKit enabled using Docker Compose version 1.29.2 or higher
@@ -84,7 +84,7 @@ DOCKER_PORT=2376
 docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT system prune --all --force
 ```
 
-If you encounter any TLS related issues, please see the TLS setup chapter regarding the `DOCKER_CERT_PATH` environment variable in the [Docker ACAP repository](https://github.com/AxisCommunications/docker-acap).
+If you encounter any TLS related issues, please see the TLS setup chapter regarding the `DOCKER_CERT_PATH` environment variable in the [Docker ACAP repository](https://github.com/AxisCommunications/docker-acap#securing-the-docker-acap-using-tls).
 
 ### Install the image and required server certificates
 
@@ -94,7 +94,7 @@ To use SSL/TLS server authentication and encryption, a server certificate is pro
     entrypoint: python3 parameter.py /certificates/server.pem
 ```
 
-Certificate files for TLS are created in the build process of this example and must be copied to ACAP runtime folder on the device:
+Certificate files for TLS are created in the build process of this example and must be copied to ACAP Runtime folder on the device:
 
 ```sh
 docker cp $(docker create $APP_NAME):/certificates .
@@ -107,7 +107,7 @@ Use SSH to change the ownership of the files on the device:
 ssh root@$DEVICE_IP 'chown sdk /usr/local/packages/acapruntime/server.*'
 ```
 
-After copying the server certificates onto the device, we have to make sure to enable TLS and then restart the ACAP-runtime.
+After copying the server certificates onto the device, we have to make sure to enable TLS and then restart the ACAP Runtime.
 
 ```sh
 AXIS_TARGET_PASSWORD='<password>'
