@@ -38,8 +38,8 @@ Meet the following requirements to ensure compatibility with the example:
 
 * Axis device
   * Chip: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
-  * Firmware: 11.10 or higher
-  * [Docker ACAP](https://github.com/AxisCommunications/docker-acap#installing) version 3.0 installed and started, using TLS with TCP and IPC socket and SD card as storage
+  * Firmware: 10.9 or higher
+  * [Docker ACAP](https://github.com/AxisCommunications/docker-acap#installing) installed and started, using TLS and SD card as storage
   * [ACAP Runtime](https://github.com/AxisCommunications/acap-runtime#native-acap-application) installed and started
 * Computer
   * Either [Docker Desktop](https://docs.docker.com/desktop/) version 4.11.1 or higher,
