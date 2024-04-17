@@ -45,23 +45,15 @@ The examples support the following architectures:
 
 Below is a list of examples available in the repository:
 
-* [hello-world-cpp](./hello-world-cpp/)
-  * A C++ example which cross compiles a simple OpenCV hello-world application.
 * [hello-world-python](./hello-world-python/)
   * A Python example which builds a simple hello-world application.
 * [minimal-ml-inference](./minimal-ml-inference/)
   * A Python example to build a minimal machine learning inference application.
-* [object-detector-cpp](./object-detector-cpp/)
-  * A C++ example which runs object detection on the camera.
 * [object-detector-python](./object-detector-python/)
   * A Python example which implements object detection on a
     video stream from the camera.
-* [opencv-image-capture-cpp](./opencv-image-capture-cpp/)
-  * A C++ example which captures camera frames and properties such as time stamps, zoom, focus etc., through OpenCV.
 * [opencv-qr-decoder-python](./opencv-qr-decoder-python/)
   * A Python example which detects and decodes QR codes in the video stream using OpenCV.
-* [parameter-api-cpp](./parameter-api-cpp/)
-  * A C++ example which reads camera parameters using the beta version of the Parameter-API.
 * [parameter-api-python](./parameter-api-python/)
   * A Python example which reads camera parameters using the beta version of the Parameter-API.
 * [pose-estimator-with-flask](./pose-estimator-with-flask/)
@@ -72,7 +64,7 @@ Below is a list of examples available in the repository:
 ### Docker Hub images
 
 The examples are based on the [ACAP Computer Vision SDK](https://github.com/AxisCommunications/acap-computer-vision-sdk).
-This SDK is an image which contains APIs and tooling to build computer vision apps for running on camera, with support for C/C++ and Python.
+This SDK is an image which contains APIs and tooling to build computer vision apps for running on camera, with support for Python.
 Additionally, there is the [ACAP Native SDK](https://github.com/AxisCommunications/acap-native-sdk), which is more geared towards building ACAPs that uses AXIS-developed APIs directly, and primarily does so using C/C++.
 
 ## How to work with Github repository
