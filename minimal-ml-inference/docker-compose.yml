@@ -8,10 +8,8 @@ services:
       - INFERENCE_PORT=0
       - MODEL_PATH=${MODEL_PATH}
     volumes:
-      - /usr/lib/libvdostream.so.1:/usr/lib/libvdostream.so.1
       - acap_dl-models:/models:ro
       - /tmp:/output
-      - /var/run/dbus:/var/run/dbus:rw
       - inference-server:/tmp
 
   inference-server:

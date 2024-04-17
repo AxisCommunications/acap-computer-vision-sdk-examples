@@ -2,7 +2,7 @@
 
 ARG ARCH=armv7hf
 ARG REPO=axisecp
-ARG SDK_VERSION=1.12
+ARG SDK_VERSION=1.13
 ARG UBUNTU_VERSION=22.04
 
 FROM arm32v7/ubuntu:${UBUNTU_VERSION} as runtime-image-armv7hf

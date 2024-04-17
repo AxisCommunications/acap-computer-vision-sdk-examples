@@ -1,24 +1,22 @@
 import os
-import cv2
 import numpy as np
-
 from tf_proto_utils import InferenceClient
+from vdo_proto_utils import VideoCaptureClient
 
-# Create the inference client with model and socket from environment variables
-inf_client = InferenceClient(os.environ['INFERENCE_HOST'])
 
-# Create a video stream that fits the model inputs
-cap = cv2.VideoCapture(0)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 300)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 300)
-cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"RGB3"))
+grpc_socket = os.environ['INFERENCE_HOST']
+stream_width, stream_height, stream_framerate = (224, 224, 10)
+capture_client = VideoCaptureClient(socket=grpc_socket,
+                                  stream_width=stream_width,
+                                  stream_height=stream_height,
+                                  stream_framerate=stream_framerate)
+inf_client = InferenceClient(grpc_socket)
 
 # The capture -> inference loop
 while True:
     # Read an image from the video stream
-    _, image = cap.read()
+    image = capture_client.get_frame()
 
-    # Give the image a batch dimension such that it has the shape (1, H, W, C)
     image = np.expand_dims(image, axis=0)
 
     # Perform inference with a model specified as an environment variable

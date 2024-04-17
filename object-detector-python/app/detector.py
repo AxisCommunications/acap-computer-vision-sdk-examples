@@ -20,7 +20,7 @@ import time
 import numpy as np
 import cv2
 from tf_proto_utils import InferenceClient
-
+from vdo_proto_utils import VideoCaptureClient
 
 # Detector object
 # Send images for object detection
@@ -83,8 +83,9 @@ class Detector:
 
     # Read environment variables
     def read_enviroment(self):
+        self.grpc_socket = os.environ['INFERENCE_HOST']
         self.threshold = float(os.environ.get('DETECTION_THRESHOLD', 0.5))
-        self.inference_client =  InferenceClient(os.environ['INFERENCE_HOST'])
+        self.inference_client =  InferenceClient(self.grpc_socket)
 
         self.model_path = os.environ['MODEL_PATH']
         image_path = os.environ.get('IMAGE_PATH')
@@ -93,8 +94,8 @@ class Detector:
 
     # Run object detection
     def run(self):
-        print(f"object-detector-python connect to: {os.environ['INFERENCE_HOST']}")
         image_path, object_list_path = self.read_enviroment()
+        print(f"object-detector-python connect to: {self.grpc_socket}")
         self.read_object_list(object_list_path)
         if image_path is not None:
             while True:
@@ -104,13 +105,14 @@ class Detector:
 
     # Run object detection on video stream
     def run_camera_source(self):
-        cap = cv2.VideoCapture(1)
-        cap.set(cv2.CAP_PROP_FPS, 5)
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 480)
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 320)
-        cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"RGB3"))
+        stream_width, stream_height, stream_framerate = (480, 320, 10)
+        capture_client = VideoCaptureClient(socket=self.grpc_socket,
+                                            stream_width=stream_width,
+                                            stream_height=stream_height,
+                                            stream_framerate=stream_framerate)
+
         while True:
-            _, frame = cap.read()
+            frame = capture_client.get_frame()
             succeed, bounding_boxes, obj_classes, _ = self.detect(frame)
             if not succeed:
                 time.sleep(1)

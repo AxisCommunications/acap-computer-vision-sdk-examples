@@ -2,7 +2,7 @@
 
 ARG ARCH=armv7hf
 ARG REPO=axisecp
-ARG SDK_VERSION=1.12
+ARG SDK_VERSION=1.13
 ARG UBUNTU_VERSION=22.04
 
 FROM arm32v7/ubuntu:${UBUNTU_VERSION} as runtime-image-armv7hf
@@ -17,6 +17,7 @@ FROM runtime-image-${ARCH}
 # Get packages from the CV SDK
 COPY --from=cv-sdk /axis/python /
 COPY --from=cv-sdk /axis/python-tfserving /
+COPY --from=cv-sdk /axis/python-vdoproto /
 COPY --from=cv-sdk /axis/python-numpy /
 COPY --from=cv-sdk /axis/opencv /
 COPY --from=cv-sdk /axis/openblas /
@@ -24,4 +25,4 @@ COPY --from=cv-sdk /axis/openblas /
 # Copy the application script to the container
 WORKDIR /app
 COPY simple_inference.py .
-ENTRYPOINT ["python3", "simple_inference.py"]
+CMD ["python3", "simple_inference.py"]

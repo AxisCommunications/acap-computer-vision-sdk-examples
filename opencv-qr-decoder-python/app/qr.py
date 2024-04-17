@@ -15,28 +15,23 @@
 """
 
 import cv2
-import numpy as np
+import os
+from vdo_proto_utils import VideoCaptureClient
 
 # Setup VDO stream
-cap = cv2.VideoCapture(0)
-
-# Set resolution
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
-
-# Set image format
-cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('R', 'G', 'B', '3'))
-
-# Set a small buffer size
-cap.set(cv2.CAP_PROP_UNIMATRIX_MAX_BUFFERS, 1)
+grpc_socket = os.environ['INFERENCE_HOST']
+stream_width, stream_height, stream_framerate = (640, 360, 10)
+capture_client = VideoCaptureClient(socket=grpc_socket,
+                                  stream_width=stream_width,
+                                  stream_height=stream_height,
+                                  stream_framerate=stream_framerate)
 
 # Instatiate our detector
 qr_detector = cv2.QRCodeDetector()
 
-got_frame, _ = cap.read()
-while got_frame:
+while True:
   # Read new frame
-  got_frame, frame = cap.read()
+  frame = capture_client.get_frame()
 
   # Preprocessing
   # RGB to BGR to accommodate the QR detectors input signature

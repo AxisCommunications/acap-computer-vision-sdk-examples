@@ -22,6 +22,8 @@ import numpy as np
 import cv2
 from flask import Flask, render_template, Response
 from tf_proto_utils import InferenceClient
+from vdo_proto_utils import VideoCaptureClient
+
 
 app = Flask(__name__)
 
@@ -61,8 +63,13 @@ class Detector:
         self.threshold = None
         self.background = None
         self.firs_frame = True
-        self.cap = cv2.VideoCapture(1)
-        self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"RGB3"))
+        self.grpc_socket = os.environ['INFERENCE_HOST']
+        self.stream_width, self.stream_height, self.stream_framerate = (1920, 1080, 10)
+        self.capture_client = VideoCaptureClient(socket=self.grpc_socket,
+                                                 stream_width=self.stream_width,
+                                                 stream_height=self.stream_height,
+                                                 stream_framerate=self.stream_framerate)
+
         self.read_environment()
 
     def draw_connections(self, frame, keypoints, confidences):
@@ -131,14 +138,12 @@ class Detector:
     # Read environment variables
     def read_environment(self):
         self.threshold = float(os.environ.get('DETECTION_THRESHOLD', 0.3))
-        self.inference_client =  InferenceClient(os.environ['INFERENCE_HOST'])
+        self.inference_client =  InferenceClient(self.grpc_socket)
         self.model_path = os.environ['MODEL_PATH']
 
     # Run object detection on video stream
     def get_frame(self):
-        read_success, frame = self.cap.read()
-        if not read_success:
-            return False, 0
+        frame = self.capture_client.get_frame()
         # Cut the central area of the frame of a 1920x1080 to make it square
         frame = frame[:, 420:-420, :]
         small_frame = cv2.resize(frame, (192, 192), interpolation=cv2.INTER_AREA)
