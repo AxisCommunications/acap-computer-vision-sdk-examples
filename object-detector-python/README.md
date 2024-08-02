@@ -111,6 +111,14 @@ If you encounter any TLS related issues, please see the TLS setup chapter regard
 
 ### Install the images
 
+Browse to the application page of the Axis device:
+
+```sh
+http://<AXIS_DEVICE_IP>/index.html#apps
+```
+
+Click on the tab `Apps` in the device GUI and enable `Allow unsigned apps` toggle.
+
 Next, the built images needs to be uploaded to the device. This can be done through a registry or directly. In this case, the direct transfer is used by piping the compressed application directly to the device's Docker client:
 
 ```sh

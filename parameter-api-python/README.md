@@ -123,6 +123,10 @@ where `<password>` is the password to the `root` user.
 
 Finally install the Docker image to the device:
 
+Navigate to the application page of the Axis device `http://<AXIS_DEVICE_IP>/index.html#apps`
+and enable `Allow unsigned apps` toggle. This will allow the installation of unsigned 
+applications. Use the following command to proceed with the application installation.
+
 ```sh
 docker save $APP_NAME | docker --tlsverify --host tcp://$DEVICE_IP:$DOCKER_PORT load
 ```
