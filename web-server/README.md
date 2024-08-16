@@ -20,9 +20,9 @@ web-server
 Meet the following requirements to ensure compatibility with the example:
 
 * Axis device
-  * Chip: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
-  * Firmware: 10.9 or higher
-  * [Docker ACAP](https://github.com/AxisCommunications/docker-acap#installing) installed and started, using TLS and SD card as storage
+  * Chip: ARTPEC-8 DLPU devices (e.g., Q1656)
+  * Firmware: 11.10 or higher
+  * [Docker ACAP](https://github.com/AxisCommunications/docker-acap#installing) version 3.0 installed and started, using TLS with TCP and IPC socket and SD card as storage
 * Computer
   * Either [Docker Desktop](https://docs.docker.com/desktop/) version 4.11.1 or higher,
   * or [Docker Engine](https://docs.docker.com/engine/) version 20.10.17 or higher with BuildKit enabled using Docker Compose version 1.29.2 or higher
@@ -53,21 +53,9 @@ systemctl restart httpd
 
 Start by building the Docker image containing the web server code with examples. This will compile the code to an executable and create a container containing the executable, which can be uploaded to and run on the camera. After the web server is started it can be accessed from a web browser by navigating to <http://mycamera/monkey/index.html> or <http://mycamera:2001>.
 
-### Export the environment variable for the architecture
-
-Export the `ARCH` variable depending on the architecture of your camera:
-
-```sh
-# For arm32
-export ARCH=armv7hf
-
-# For arm64
-export ARCH=aarch64
-```
-
 ### Build the Docker image
 
-With the architecture defined, the `monkey` image can be built. The environment variables are supplied as build arguments such that they are made available to Docker during the build process:
+Define the application image name in an environment variable `APP_NAME` and build the image:
 
 ```sh
 # Define app name
@@ -77,7 +65,7 @@ export APP_NAME=monkey
 docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
 
 # Build the container
-docker build --tag $APP_NAME --build-arg ARCH .
+docker build --tag $APP_NAME .
 ```
 
 ### Set your device IP address and clear Docker memory

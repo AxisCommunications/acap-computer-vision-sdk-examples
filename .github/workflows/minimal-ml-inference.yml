@@ -17,12 +17,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - arch: armv7hf
-            chip: cpu
-          - arch: armv7hf
-            chip: edgetpu
-          - arch: aarch64
-            chip: artpec8
+          - chip: cpu
+          - chip: artpec8
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-buildx-action@v2
@@ -36,5 +32,5 @@ jobs:
         run: |
           cd $EXNAME
           docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
-          docker build --no-cache --build-arg CHIP=${{ matrix.chip }} --build-arg ARCH=${{ matrix.arch }} --tag $imagetag .
-          docker build --file Dockerfile.model --tag $modeltag --build-arg ARCH=${{ matrix.arch }} .
+          docker build --no-cache --build-arg CHIP=${{ matrix.chip }} --tag $imagetag .
+          docker build --file Dockerfile.model --tag $modeltag  .

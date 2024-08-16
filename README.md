@@ -38,7 +38,6 @@ step-by-step instructions on how to run applications on the camera.
 
 The examples support the following architectures:
 
-* armv7hf
 * aarch64
 
 ### Example applications for video analytics

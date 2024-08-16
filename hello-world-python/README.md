@@ -28,36 +28,23 @@ hello-world-python
 Meet the following requirements to ensure compatibility with the example:
 
 * Axis device
-  * Chip: ARTPEC-{7-8} DLPU devices (e.g., Q1615 MkIII)
-  * Firmware: 10.9 or higher
-  * [Docker ACAP](https://github.com/AxisCommunications/docker-acap#installing) installed and started, using TLS and SD card as storage
+  * Chip: ARTPEC-8 DLPU devices (e.g., Q1656)
+  * Firmware: 11.10 or higher
+  * [Docker ACAP](https://github.com/AxisCommunications/docker-acap#installing) version 3.0 installed and started, using TLS with TCP and IPC socket and SD card as storage
 * Computer
   * Either [Docker Desktop](https://docs.docker.com/desktop/) version 4.11.1 or higher,
   * or [Docker Engine](https://docs.docker.com/engine/) version 20.10.17 or higher with BuildKit enabled using Docker Compose version 1.29.2 or higher
 
 ## How to run the code
 
-### Export the environment variable for the architecture
-
-Export the `ARCH` variable depending on the architecture of your camera:
-
-```sh
-# For arm32
-export ARCH=armv7hf
-
-# For arm64
-export ARCH=aarch64
-```
-
 ### Build the Docker image
 
-With the architecture defined, the `hello-world-python` image can be built. The environment variables are supplied as build arguments such that they are made available to Docker during the build process:
+Define and export the application image name in `APP_NAME` for use in the Docker Compose file.
 
 ```sh
-# Define app name
 export APP_NAME=hello-world-python
 
-docker build --tag $APP_NAME --build-arg ARCH .
+docker build --tag $APP_NAME .
 ```
 
 ### Set your device IP address and clear Docker memory
