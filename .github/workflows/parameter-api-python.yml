@@ -14,11 +14,6 @@ jobs:
     env:
       EXREPO: acap-computer-vision-examples
       EXNAME: parameter-api-python
-    strategy:
-      matrix:
-        include:
-          - arch: armv7hf
-          - arch: aarch64
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-buildx-action@v2
@@ -30,4 +25,4 @@ jobs:
           imagetag: ${{ env.EXREPO }}_${{ env.EXNAME }}:1.0
         run: |
           cd $EXNAME
-          docker build --no-cache --build-arg ARCH=${{ matrix.arch }} --tag $imagetag .
+          docker build --no-cache --tag $imagetag .

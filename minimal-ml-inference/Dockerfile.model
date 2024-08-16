@@ -1,31 +1,13 @@
 # syntax=docker/dockerfile:1
 
-ARG ARCH=armv7hf
 ARG UBUNTU_VERSION=22.04
 
-FROM arm32v7/alpine as model-image-armv7hf
-FROM arm64v8/alpine as model-image-aarch64
+FROM arm64v8/alpine as model-image
 
-FROM arm32v7/ubuntu:${UBUNTU_VERSION} as local-armv7hf
-FROM arm64v8/ubuntu:${UBUNTU_VERSION} as local-aarch64
-
-FROM local-${ARCH} as local
-
-RUN <<EOF
-apt-get update
-apt-get install -y -f openssl
-EOF
-
-# Generate TSL/SSL test certificate
-RUN openssl req -x509 -batch -subj '/CN=localhost' -days 10000 -newkey rsa:4096 -nodes -out server.pem -keyout server.key
-
-FROM model-image-${ARCH}
 
 # Get SSD Mobilenet V2
-ADD https://github.com/google-coral/edgetpu/raw/master/test_data/ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite models/
 ADD https://github.com/google-coral/edgetpu/raw/master/test_data/ssd_mobilenet_v2_coco_quant_postprocess.tflite models/
 ADD https://github.com/google-coral/edgetpu/raw/master/test_data/coco_labels.txt models/
 ADD https://github.com/google-coral/edgetpu/raw/master/test_data/COPYRIGHT models/
-COPY --from=local server.key server.pem models/
 
 CMD /bin/ls /models

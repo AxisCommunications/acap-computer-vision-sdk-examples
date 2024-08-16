@@ -14,12 +14,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - arch: armv7hf
-            chip: cpu
-          - arch: armv7hf
-            chip: edgetpu
-          - arch: aarch64
-            chip: artpec8
+          - chip: cpu
+          - chip: artpec8
     env:
       EXREPO: acap-computer-vision-examples
       EXNAME: object-detector-python
@@ -35,5 +31,5 @@ jobs:
           modeltag: ${{ env.EXREPO }}_${{ env.EXNAME }}-${{ matrix.chip }}-model:1.0
         run: |
           cd $EXNAME
-          docker build --no-cache --build-arg CHIP=${{ matrix.chip }} --build-arg ARCH=${{ matrix.arch }} --tag $imagetag .
-          docker build --file Dockerfile.model --tag $modeltag --build-arg ARCH=${{ matrix.arch }} .
+          docker build --no-cache --build-arg CHIP=${{ matrix.chip }} --tag $imagetag .
+          docker build --file Dockerfile.model --tag $modeltag  .
