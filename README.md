@@ -32,7 +32,7 @@ developers analytics experience. All examples are using Docker framework and has
 README file in its directory which shows overview, example directory structure and
 step-by-step instructions on how to run applications on the camera.
 
-### Requirements
+## Requirements
 
 ### Supported architectures
 
@@ -40,7 +40,14 @@ The examples support the following architectures:
 
 * aarch64
 
-### Example applications for video analytics
+### Required components
+
+The example applications make use of two special components:
+
+* [Docker ACAP](https://github.com/AxisCommunications/docker-acap) needs to be installed and running on the Axis device. It's required to deploy and run the example application.
+* [ACAP runtime](https://github.com/AxisCommunications/acap-runtime) is used in a few examples to get access to [APIs](https://axiscommunications.github.io/acap-documentation/docs/api/computer-vision-sdk-apis.html). ACAP Runtime is a container image and the example applications will pull it from Docker Hub when starting.
+
+## Example applications
 
 Below is a list of examples available in the repository:
 
@@ -59,12 +66,6 @@ Below is a list of examples available in the repository:
   * A Python example which implements pose estimation on a video stream from the camera, and publish the output on a video stream using flask.
 * [web-server](./web-server/)
   * A C++ example which runs a Monkey web server on the camera.
-
-### Docker Hub images
-
-The examples are based on the [ACAP Computer Vision SDK](https://github.com/AxisCommunications/acap-computer-vision-sdk).
-This SDK is an image which contains APIs and tooling to build computer vision apps for running on camera, with support for Python.
-Additionally, there is the [ACAP Native SDK](https://github.com/AxisCommunications/acap-native-sdk), which is more geared towards building ACAPs that uses AXIS-developed APIs directly, and primarily does so using C/C++.
 
 ## How to work with Github repository
 

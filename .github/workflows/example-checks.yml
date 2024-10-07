@@ -15,11 +15,17 @@ jobs:
         run: |
           # Find directories that do not start with dot
           acap_list="$(find . -maxdepth 1 -type d -printf '%f\n' |grep -v '^[.]' | sort)"
-          # Find lines starting with '* ['
-          # The grep removes anything but '[*]', then remove entries with space
-          # or capital letter and finally removes the brackets.
-          endline="$(sed -n '/## Docker Hub images/=' README.md)"
-          readme_examples="$(sed -n "1,${endline}!d ; /* \[/p" README.md | grep -oe '\[.*\]' | grep -v '[A-Z ]' | grep -oe '[0-9a-z-]*')"
+
+          # Find example application links in README.md
+          # The regular expression '^\* \[[0-9a-z-]*\]' matches lines starting with '* ['
+          # followed by alphanumeric characters and hyphens, and a closing ']'
+          example_links="$(grep -o '^\* \[[0-9a-z-]*\]' README.md)"
+
+          # Remove '* [' prefix and trailing ']' from example links
+          # The sed command uses two substitutions:
+          # 1. 's/^\* \[//' removes the '* [' prefix from the start of the line
+          # 2. 's/\]$//' removes the trailing ']' from the end of the line
+          readme_examples="$(echo "$example_links" | sed 's/^\* \[//;s/\]$//')"
 
           # Control that all examples have an entry in README
           common=$(printf "${acap_list}\n${readme_examples}" | sort | uniq -d)

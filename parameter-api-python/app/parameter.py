@@ -34,7 +34,12 @@ def main():
         # gRPC secure connection
         root_cert = open(sys.argv[1], 'rb').read()
         ssl_creds = grpc.ssl_channel_credentials(root_cert)
-        channel = grpc.secure_channel(target, ssl_creds)
+
+        # Set the default authority to 'localhost' for secure connections
+        # This tells gRPC to use 'localhost' as the authority for the connection,
+        # which should match the server's certificate.
+        options = (('grpc.default_authority', 'localhost'),)
+        channel = grpc.secure_channel(target, ssl_creds, options=options)
     else:
         # gRPC insecure connection
         channel = grpc.insecure_channel(target)
@@ -46,8 +51,7 @@ def main():
         "root.Brand.WebURL",
         "root.Image.I0.Enabled",
         "root.Brand.ProdFullName",
-        "root.Brand.ProdNbr",
-        "root.invalid"]
+        "root.Brand.ProdNbr"]
 
     for param_name in param_names:
         try:

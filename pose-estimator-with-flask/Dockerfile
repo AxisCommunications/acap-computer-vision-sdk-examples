@@ -1,22 +1,36 @@
 # syntax=docker/dockerfile:1
 
+ARG RUNTIME_VERSION=2.0.0
 ARG REPO=axisecp
-ARG SDK_VERSION=1.15
+ARG IMAGE=acap-runtime
 ARG UBUNTU_VERSION=22.04
 
+FROM ${REPO}/${IMAGE}:${RUNTIME_VERSION}-protofiles AS proto-image
+FROM arm64v8/ubuntu:${UBUNTU_VERSION} AS runtime-image
 
-FROM ${REPO}/acap-computer-vision-sdk:${SDK_VERSION}-aarch64 AS cv-sdk
-FROM arm64v8/ubuntu:${UBUNTU_VERSION}
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt-get update && apt-get install -y --no-install-recommends \
+    python3 \
+    python3-pip \
+    ffmpeg \
+    libsm6 \
+    libxext6 \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY --from=cv-sdk /axis/python /
-COPY --from=cv-sdk /axis/python-numpy /
-COPY --from=cv-sdk /axis/python-tfserving /
-COPY --from=cv-sdk /axis/python-vdoproto /
-COPY --from=cv-sdk /axis/opencv /
-COPY --from=cv-sdk /axis/openblas /
+# Copy list of grpc dependencies
+COPY --from=proto-image /build/requirements.txt .
 
-RUN pip install Flask
+RUN pip install --no-cache-dir -r requirements.txt \
+    numpy \
+    opencv-python \
+    Flask
 
-WORKDIR /app
-COPY app/ /app/
+WORKDIR /opt/app
+
+# Install prebuilt TensorFlow and VDO proto files
+COPY --from=proto-image /build/tf/proto_utils .
+COPY --from=proto-image /build/vdo/proto_utils .
+
+COPY app/ .
+
 CMD ["python3", "detector_with_flask.py"]

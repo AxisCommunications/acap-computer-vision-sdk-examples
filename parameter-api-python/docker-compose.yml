@@ -1,8 +1,34 @@
-version: '3.3'
-
+version: "3.3"
 services:
   parameter-api:
     image: ${APP_NAME}
-    entrypoint: python3 parameter.py /certificates/server.pem
     volumes:
-      - /tmp:/tmp
+      - acap-runtime:/tmp
+      - parameter-api:/opt/certificates
+
+  acap-runtime:
+    image: axisecp/acap-runtime:2.0.0-aarch64-containerized
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "100k"
+    entrypoint:
+      [
+        "/opt/app/acap_runtime/acapruntime",
+        "-k",
+        "/opt/app/certificates/server.key",
+        "-c",
+        "/opt/app/certificates/server.pem",
+      ]
+    volumes:
+      - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
+      - /run/confcache/confcachesocket:/run/confcache/confcachesocket
+      - /usr/lib:/usr/lib
+      - /usr/bin:/usr/bin
+      - acap-runtime:/tmp
+      - parameter-api:/opt/app/certificates
+
+volumes:
+  parameter-api: {}
+  acap-runtime: {}

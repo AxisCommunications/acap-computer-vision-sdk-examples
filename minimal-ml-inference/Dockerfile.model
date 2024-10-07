@@ -4,7 +4,6 @@ ARG UBUNTU_VERSION=22.04
 
 FROM arm64v8/alpine as model-image
 
-
 # Get SSD Mobilenet V2
 ADD https://github.com/google-coral/edgetpu/raw/master/test_data/ssd_mobilenet_v2_coco_quant_postprocess.tflite models/
 ADD https://github.com/google-coral/edgetpu/raw/master/test_data/coco_labels.txt models/
