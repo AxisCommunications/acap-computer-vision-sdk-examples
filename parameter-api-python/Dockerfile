@@ -1,47 +1,34 @@
 # syntax=docker/dockerfile:1
 
+ARG RUNTIME_VERSION=2.0.0
 ARG REPO=axisecp
-ARG SDK_VERSION=1.15
+ARG IMAGE=acap-runtime
 ARG UBUNTU_VERSION=22.04
 
+FROM ${REPO}/${IMAGE}:${RUNTIME_VERSION}-protofiles AS proto-image
+FROM arm64v8/ubuntu:${UBUNTU_VERSION} AS runtime-image
 
-# Specify which ACAP Computer Vision SDK version to use
-FROM ${REPO}/acap-computer-vision-sdk:${SDK_VERSION}-aarch64 AS cv-sdk
-
-RUN <<EOF
-apt-get update
-apt-get install -y --no-install-recommends \
-    ca-certificates \
-    git \
-    libprotobuf-dev \
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
-    protobuf-compiler \
-    protobuf-compiler-grpc
-EOF
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
-# grpcio-tools contains protoc, which allows to build the pb2.py files in the install-tf.sh script.
-# Installing directly grpcio-tools result in an older version of protobuf.
-# So we install first the dependencies with the desired version and then grpcio-tool without dependencies.
-RUN python3 -m pip install protobuf==4.21.1 six==1.16.0 grpcio==1.46.3 && \
-    python3 -m pip install --no-dependencies grpcio-tools==1.47.0
-
-# Generate TSL/SSL test certificate
+WORKDIR /opt/certificates
 RUN openssl req -x509 -batch -subj '/CN=localhost' -days 365 -newkey rsa:4096 -nodes -out server.pem -keyout server.key
 
-COPY app/apis build/
-WORKDIR /build
-ARG PROTO_FILE=keyvaluestore.proto
-RUN python3 -m grpc_tools.protoc -I . --python_out=. --grpc_python_out=. $PROTO_FILE
+# Copy list of grpc dependencies
+COPY --from=proto-image /build/requirements.txt .
 
-# Define the runtime image
-FROM arm64v8/ubuntu:${UBUNTU_VERSION}
-# Copy packages and files from CV-SDK
-COPY --from=cv-sdk /axis/python /
-COPY --from=cv-sdk /axis/python-tfserving /
-COPY --from=cv-sdk server.key server.pem certificates/
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY --from=cv-sdk /build/*.py opt/build/
-COPY /app/src/parameter.py opt/build/
-WORKDIR /opt/build
-ENTRYPOINT [ "python3", "parameter.py" ]
+WORKDIR /opt/app
+
+# Install prebuilt parameter proto files
+COPY --from=proto-image /build/param/proto_utils .
+
+# Copy the application script to the container
+COPY app/* .
+
+ENTRYPOINT  [ "python3", "parameter.py", "/opt/certificates/server.pem" ]

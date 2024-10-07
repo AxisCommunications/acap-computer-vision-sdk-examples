@@ -31,5 +31,6 @@ jobs:
           modeltag: ${{ env.EXREPO }}_${{ env.EXNAME }}-${{ matrix.chip }}-model:1.0
         run: |
           cd $EXNAME
+          docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
           docker build --no-cache --build-arg CHIP=${{ matrix.chip }} --tag $imagetag .
           docker build --file Dockerfile.model --tag $modeltag  .

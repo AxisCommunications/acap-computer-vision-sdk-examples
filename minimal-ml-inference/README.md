@@ -2,7 +2,7 @@
 
 # A minimal, machine learning inference application
 
-This example demonstrates how to create a simple Python application that performs inference on the camera image. This is done using the ACAP Computer Vision SDK.
+This example demonstrates how to create a simple Python application that performs inference on the camera image.
 
 ## Overview
 
@@ -14,7 +14,7 @@ Lastly, there is a third container that holds the deep learning model, which is 
 
 ```text
 model
-├── ssdlite-mobilenet-v2 - tflite model
+├── ssdlite-mobilenet-v2 - TFLite model
 └── objects.txt - list of object labels
 ```
 

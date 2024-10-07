@@ -4,7 +4,6 @@ ARG UBUNTU_VERSION=22.04
 
 FROM arm64v8/ubuntu:${UBUNTU_VERSION} as runtime-image
 
-
 # Setup environment variables
 ENV DEBIAN_FRONTEND=noninteractive
 ENV BUILD_ROOT=/build-root

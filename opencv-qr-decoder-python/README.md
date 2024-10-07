@@ -8,7 +8,6 @@ It composes two different container images into an application that performs an 
 The first container contains the actual program built in this example. It then uses [gRPC](https://grpc.io/)/[protobuf](https://developers.google.com/protocol-buffers) to call the second container, that is used to capture images from the camera.
 
 NumPy is used to preprocess the images and OpenCV to detect and decode any QR codes within the image.
-Additionally, Python, NumPy and OpenBLAS are also copied from the Computer Vision SDK.
 
 ## Application layout
 

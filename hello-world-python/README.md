@@ -2,9 +2,9 @@
 
 # A minimal Python application
 
-This example demonstrates how to create a simple Python application using the ACAP Computer Vision SDK and run it on an edge device.
+This example demonstrates how to create a simple containerized Python application and run it on an edge device.
 
-Going from zero to a Python application running on an AXIS device is quite easy. First, the application script is written, as in the hello-world script in [app/simply_hello.py](app/simply_hello.py). Next, the [Dockerfile](Dockerfile) which builds the application image is constructed. This needs to pull in packages from the ACAP Computer Vision SDK, as is done using the `COPY` commands. Finally, the application needs to be built and uploaded, as is specified below.
+Going from zero to a Python application running on an Axis device is quite easy. First, the application script is written, as in the hello-world script in [app/simply_hello.py](app/simply_hello.py). Next, the [Dockerfile](Dockerfile) which builds the application image is constructed. The application needs to be built and uploaded, as is specified below.
 
 ## Example structure
 
