@@ -2,7 +2,7 @@
 
 # How to use web server in ACAP version 4
 
-This document explains briefly how to build and use the [Monkey web server](https://github.com/monkey/monkey) in ACAP version 4. Monkey is a fast and lightweight web server for Linux. It has been designed to be very scalable with low memory and CPU consumption, the perfect solution for Embedded Linux and high-end production environments. Besides the common features as HTTP server, it expose a flexible C API which aims to behave as a fully HTTP development framework, so it can be extended as desired through the plugins interface. The Monkey web server [documentation](http://monkey-project.com/documentation/1.5) describes the configuration in detail.
+This document explains briefly how to build and use the [Monkey web server](https://github.com/monkey/monkey) in ACAP version 4. Monkey is a fast and lightweight web server for Linux. It has been designed to be very scalable with low memory and CPU consumption, the perfect solution for Embedded Linux and high-end production environments. Besides the common features as HTTP server, it expose a flexible C API which aims to behave as a fully HTTP development framework, so it can be extended as desired through the plugins interface.
 
 ## Structure of this application
 
@@ -27,31 +27,14 @@ Meet the following requirements to ensure compatibility with the example:
   * Either [Docker Desktop](https://docs.docker.com/desktop/) version 4.11.1 or higher,
   * or [Docker Engine](https://docs.docker.com/engine/) version 20.10.17 or higher with BuildKit enabled using Docker Compose version 1.29.2 or higher
 
-## Limitations
+## Limitation
 
-* Apache Reverse Proxy can not translate content with absolute addresses (e.g. `/image.png`) in the HTML page. Use only relative content (e.g. `image.png` or `../image.png`). More information how to handle relative URLs correctly with a reverse proxy [here](https://serverfault.com/questions/561892/how-to-handle-relative-urls-correctly-with-a-reverse-proxy).
-
-## Configure Apache to forward HTTP requests
-
-The Axis camera's web server can be accessed from a web browser either directly using a port number (e.g. <http://mycamera:2001>) or through the Apache server in the camera using a route (e.g. <http://mycamera/monkey/>). To configure the Apache server as a reverse proxy server, use the procedure shown below.
-
-```sh
-# Do ssh login to the camera
-ssh root@<CAMERA_IP>
-
-# Add reverse proxy configuration to the Apache server, example:
-cat >> /etc/apache2/httpd.conf <<EOF
-ProxyPass /monkey http://localhost:2001
-ProxyPassReverse /monkey http://localhost:2001
-EOF
-
-# Restart the Apache server
-systemctl restart httpd
-```
+* From AXIS OS 12.0 it's no longer possible to set a reverse proxy configuration in Axis devices due to the removal of root access. This means that this example can only use the default configuration.
+   * Note that it's possible to set a reverse proxy configuration in native ACAP applications, see the [web-server](https://github.com/AxisCommunications/acap-native-sdk-examples/tree/main/web-server) in acap-native-sdk-examples repo. Another native ACAP application using a web server is [web-server-using-fastcgi](https://github.com/AxisCommunications/acap-native-sdk-examples/tree/main/web-server-using-fastcgi).
 
 ## How to run the code
 
-Start by building the Docker image containing the web server code with examples. This will compile the code to an executable and create a container containing the executable, which can be uploaded to and run on the camera. After the web server is started it can be accessed from a web browser by navigating to <http://mycamera/monkey/index.html> or <http://mycamera:2001>.
+Start by building the Docker image containing the web server code with examples. This will compile the code to an executable and create a container containing the executable, which can be uploaded to and run on the camera. After the web server is started it can be accessed from a web browser by navigating to http://<AXIS_DEVICE_IP>:2001.
 
 ### Build the Docker image
 
@@ -123,11 +106,11 @@ Home  : http://monkey-project.com
 [+] Linux Features: TCP_FASTOPEN SO_REUSEPORT
 ```
 
-With the Monkey web server running, navigate to <http://mycamera:8080/> to see the served web page. If you managed to configure the Apache reverse proxy, the same page is also served at <http://mycamera/monkey/>.
+With the Monkey web server running, navigate to http://<AXIS_DEVICE_IP>:2001 to see the served web page.
 
 ## C API Examples
 
-Some C API examples are included in the web server container that has been built: `hello`, `list` and `quiz`. The current Docker image, starts the Monkey server `monkey` when using `CMD monkey` in the Dockerfile. To try another C API example, either re-build the Docker image with another `CMD` (i.e. `CMD hello`) or override it by using the `entrypoint` keyword in the `docker-compose.yml` file (i.e. `entrypoint: hello`). To see the result, use a web browser and navigate to <http://mycamera/monkey/> or <http://mycamera:2001>.
+Some C API examples are included in the web server container that has been built: `hello`, `list` and `quiz`. The current Docker image, starts the Monkey server `monkey` when using `CMD monkey` in the Dockerfile. To try another C API example, either re-build the Docker image with another `CMD` (i.e. `CMD hello`) or override it by using the `entrypoint` keyword in the `docker-compose.yml` file (i.e. `entrypoint: hello`). To see the result, use a web browser and navigate to http://<AXIS_DEVICE_IP>:2001.
 
 ## Proxy settings
 
