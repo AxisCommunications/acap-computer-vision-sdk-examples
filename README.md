@@ -4,6 +4,23 @@
 
 [![CI](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/ci.yml/badge.svg)](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/ci.yml)
 
+> [!IMPORTANT]
+> The ACAP Computer Vision solution is deprecated from AXIS OS 12.0.
+>
+> - The deprecation of the ACAP Computer Vision solution only affects container applications.
+>   It will still be possible to build and run analytics, computer vision and machine learning applications on Axis devices using
+>   ACAP Native SDK. Examples can be found in the
+>   [ACAP Native SDK examples](https://github.com/AxisCommunications/acap-native-sdk-examples) repository.
+>   For more context about this transition, please visit the [Enhanced ACAP SDK news article](https://www.axis.com/developer-community/news/enhanced-acap-sdk).
+> - `armv7hf` is no longer supported after AXIS OS 11.11.
+> - `aarch64` will be supported until the end of the AXIS OS 12 LTS cycle.
+>   After this period, the components of the Computer Vision solution will no longer
+>   receive updates or support.
+> - From AXIS OS 12.0, the artifact ACAP Computer Vision SDK in form of a
+>   container image is removed and utility libraries and scripts have been
+>   moved to [ACAP Runtime](https://github.com/AxisCommunications/acap-runtime).
+>   This means that the ACAP Computer Vision SDK is no longer needed to run container applications.
+
 ## Mission
 
 Our mission is to provide an excellent development experience by enabling developers
