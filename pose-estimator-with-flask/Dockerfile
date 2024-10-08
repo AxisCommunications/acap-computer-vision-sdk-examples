@@ -3,7 +3,7 @@
 ARG RUNTIME_VERSION=2.0.0
 ARG REPO=axisecp
 ARG IMAGE=acap-runtime
-ARG UBUNTU_VERSION=22.04
+ARG UBUNTU_VERSION=24.04
 
 FROM ${REPO}/${IMAGE}:${RUNTIME_VERSION}-protofiles AS proto-image
 FROM arm64v8/ubuntu:${UBUNTU_VERSION} AS runtime-image
@@ -12,6 +12,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
+    python3-venv \
     ffmpeg \
     libsm6 \
     libxext6 \
@@ -20,6 +21,9 @@ RUN DEBIAN_FRONTEND=noninteractive \
 # Copy list of grpc dependencies
 COPY --from=proto-image /build/requirements.txt .
 
+# Create a virtual environment for installations using pip
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 RUN pip install --no-cache-dir -r requirements.txt \
     numpy \
     opencv-python \
