@@ -45,6 +45,9 @@ Define and export the application image name in `APP_NAME` for use in the Docker
 ```sh
 export APP_NAME=acap-opencv-qr-decoder-python
 
+# Install qemu to allow build for a different architecture
+docker run --rm --privileged multiarch/qemu-user-static --credential yes --persistent yes
+
 docker build --tag $APP_NAME .
 ```
 

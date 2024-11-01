@@ -1,8 +1,9 @@
 # syntax=docker/dockerfile:1
 
 ARG UBUNTU_VERSION=24.04
+ARG DEVICE_PLATFORM=linux/arm64/v8
 
-FROM arm64v8/ubuntu:${UBUNTU_VERSION}
+FROM --platform=$DEVICE_PLATFORM ubuntu:${UBUNTU_VERSION}
 
 RUN DEBIAN_FRONTEND=noninteractive \
     apt-get update && apt-get install -y --no-install-recommends \

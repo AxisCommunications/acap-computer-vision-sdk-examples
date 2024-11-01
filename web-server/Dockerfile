@@ -1,8 +1,9 @@
 # syntax=docker/dockerfile:1
 
 ARG UBUNTU_VERSION=24.04
+ARG DEVICE_PLATFORM=linux/arm64/v8
 
-FROM arm64v8/ubuntu:${UBUNTU_VERSION} as runtime-image
+FROM --platform=$DEVICE_PLATFORM ubuntu:${UBUNTU_VERSION}
 
 # Setup environment variables
 ENV DEBIAN_FRONTEND=noninteractive
