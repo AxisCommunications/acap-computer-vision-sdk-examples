@@ -4,9 +4,10 @@ ARG RUNTIME_VERSION=2.0.0
 ARG REPO=axisecp
 ARG IMAGE=acap-runtime
 ARG UBUNTU_VERSION=24.04
+ARG DEVICE_PLATFORM=linux/arm64/v8
 
-FROM ${REPO}/${IMAGE}:${RUNTIME_VERSION}-protofiles AS proto-image
-FROM arm64v8/ubuntu:${UBUNTU_VERSION} AS runtime-image
+FROM --platform=$DEVICE_PLATFORM ${REPO}/${IMAGE}:${RUNTIME_VERSION}-protofiles AS proto-image
+FROM --platform=$DEVICE_PLATFORM ubuntu:${UBUNTU_VERSION} AS runtime-image
 
 RUN DEBIAN_FRONTEND=noninteractive \
     apt-get update && apt-get install -y --no-install-recommends \
