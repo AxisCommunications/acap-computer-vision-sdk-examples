@@ -4,22 +4,18 @@
 
 [![CI](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/ci.yml/badge.svg)](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples/actions/workflows/ci.yml)
 
-> [!IMPORTANT]
-> The ACAP Computer Vision solution is deprecated from AXIS OS 12.0.
+> **Note:**
 >
-> - The deprecation of the ACAP Computer Vision solution only affects container applications.
->   It will still be possible to build and run analytics, computer vision and machine learning applications on Axis devices using
->   ACAP Native SDK. Examples can be found in the
->   [ACAP Native SDK examples](https://github.com/AxisCommunications/acap-native-sdk-examples) repository.
->   For more context about this transition, please visit the [Enhanced ACAP SDK news article](https://www.axis.com/developer-community/news/enhanced-acap-sdk).
-> - `armv7hf` is no longer supported after AXIS OS 11.11.
-> - `aarch64` will be supported until the end of the AXIS OS 12 LTS cycle.
->   After this period, the components of the Computer Vision solution will no longer
->   receive updates or support.
-> - From AXIS OS 12.0, the artifact ACAP Computer Vision SDK in form of a
->   container image is removed and utility libraries and scripts have been
->   moved to [ACAP Runtime](https://github.com/AxisCommunications/acap-runtime).
->   This means that the ACAP Computer Vision SDK is no longer needed to run container applications.
+> - New Axis products released on AXIS OS 12.x will not have container support.
+> - [All products with existing container support](https://www.axis.com/support/tools/product-selector/shared/%5B%7B%22index%22%3A%5B10%2C0%5D%2C%22value%22%3A%22ARTPEC-8%22%7D%2C%7B%22index%22%3A%5B10%2C2%5D%2C%22value%22%3A%22Yes%22%7D%5D)
+>   will be supported until end of 2031 when [AXIS OS 2026 LTS](https://help.axis.com/en-us/axis-os) reaches end of life.
+> - The recommended way to build analytics, computer vision and machine learning applications on Axis devices with ACAP support,
+>   is to use the ACAP Native SDK. For usage see the [acap-native-sdk-examples](https://github.com/AxisCommunications/acap-native-sdk-examples)
+>   repo.
+> - The ACAP Computer Vision SDK has been archived as its components have been refactored:
+>   utility libraries and scripts are now available in [ACAP Runtime](https://github.com/AxisCommunications/acap-runtime).
+>   For usage of the new setup, see the [examples](https://github.com/AxisCommunications/acap-computer-vision-sdk-examples)
+>   repository.
 
 ## Mission
 
