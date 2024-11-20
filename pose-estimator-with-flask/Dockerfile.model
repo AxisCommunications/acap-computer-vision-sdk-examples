@@ -1,6 +1,8 @@
 # syntax=docker/dockerfile:1
 
-FROM arm64v8/alpine
+ARG DEVICE_PLATFORM=linux/arm64/v8
+
+FROM --platform=$DEVICE_PLATFORM alpine as model-image
 
 # Get SSD Mobilenet V2
 ADD https://raw.githubusercontent.com/google-coral/test_data/master/movenet_single_pose_lightning_ptq_edgetpu.tflite models/
