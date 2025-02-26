@@ -58,7 +58,7 @@ The examples support the following architectures:
 The example applications make use of two special components:
 
 * [Docker ACAP](https://github.com/AxisCommunications/docker-acap) needs to be installed and running on the Axis device. It's required to deploy and run the example application.
-* [ACAP runtime](https://github.com/AxisCommunications/acap-runtime) is used in a few examples to get access to [APIs](https://axiscommunications.github.io/acap-documentation/docs/api/computer-vision-sdk-apis.html). ACAP Runtime is a container image and the example applications will pull it from Docker Hub when starting.
+* [ACAP runtime](https://github.com/AxisCommunications/acap-runtime) is used in a few examples to get access to [APIs](https://developer.axis.com/acap/api/computer-vision-sdk-apis). ACAP Runtime is a container image and the example applications will pull it from Docker Hub when starting.
 
 ## Example applications
 
