@@ -11,7 +11,7 @@ The model [MoveNet SinglePose Lightning](https://coral.ai/models/pose-estimation
 
 This example composes three different container images into an application that performs object detection using a deep learning model.
 
-The first container contains the actual program built in this example. It then uses [gRPC](https://grpc.io/)/[protobuf](https://developers.google.com/protocol-buffers) to call the second container, the *inference-server*, that is used to capture images from the camera and perform the actual inference by implementing the [TensorFlow Serving API](https://github.com/tensorflow/serving). You can find more documentation on the [Machine Learning API documentation page](https://axiscommunications.github.io/acap-documentation/docs/api/computer-vision-sdk-apis.html#machine-learning-api). This example uses a containerized version of the [ACAP Runtime](https://github.com/AxisCommunications/acap-runtime#containerized-version) as the *inference-server*.
+The first container contains the actual program built in this example. It then uses [gRPC](https://grpc.io/)/[protobuf](https://developers.google.com/protocol-buffers) to call the second container, the *inference-server*, that is used to capture images from the camera and perform the actual inference by implementing the [TensorFlow Serving API](https://github.com/tensorflow/serving). You can find more documentation on the [Machine Learning API documentation page](https://developer.axis.com/acap/api/computer-vision-sdk-apis/#machine-learning-api). This example uses a containerized version of the [ACAP Runtime](https://github.com/AxisCommunications/acap-runtime#containerized-version) as the *inference-server*.
 Lastly, there is a third container that holds the deep learning model, which is put into a volume that is accessible by the other two images. The layout of the Docker image containing the model is shown below. The *MODEL_PATH* variable in the configuration file you're using specifies what model to use.
 
 ```text
@@ -169,7 +169,7 @@ pose-estimator_1    |  0.02048427 0.01638742 0.15568045 0.07374337 0.05735596]
 ### Hardware acceleration
 
 The `./config` folder contains configuration files with the parameters to run the inference on different camera models, also giving the possibility to use the hardware accelerator.
-To achieve the best performance we recommend using DLPU (Deep Learning Processing Unit) equipped ARTPEC-8 cameras. See [ACAP Computer Vision SDK hardware and compatibility](https://axiscommunications.github.io/acap-documentation/docs/axis-devices-and-compatibility/#acap-computer-vision-sdk-hardware-compatibility)
+To achieve the best performance we recommend using DLPU (Deep Learning Processing Unit) equipped ARTPEC-8 cameras. See [ACAP Computer Vision SDK hardware and compatibility](https://developer.axis.com/acap/axis-devices-and-compatibility/#acap-computer-vision-solution-compatibility)
 
 ## License
 
