@@ -7,7 +7,7 @@ services:
       - parameter-api:/opt/certificates
 
   acap-runtime:
-    image: axisecp/acap-runtime:2.0.0-aarch64-containerized
+    image: axisecp/acap-runtime:2.0.1-aarch64-containerized
     logging:
       driver: "json-file"
       options:

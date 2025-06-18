@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG RUNTIME_VERSION=2.0.0
+ARG RUNTIME_VERSION=2.0.1
 ARG REPO=axisecp
 ARG IMAGE=acap-runtime
 ARG UBUNTU_VERSION=24.04

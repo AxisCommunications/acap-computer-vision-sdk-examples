@@ -13,7 +13,7 @@ services:
     volumes:
       - inference-server:/tmp
   inference-server:
-    image: axisecp/acap-runtime:2.0.0-aarch64-containerized
+    image: axisecp/acap-runtime:2.0.1-aarch64-containerized
     logging:
       driver: "json-file"
       options:
