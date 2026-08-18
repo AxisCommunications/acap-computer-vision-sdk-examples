@@ -8,6 +8,9 @@ on:
       - '.github/workflows/parameter-api-python.yml'
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
