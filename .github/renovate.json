@@ -1,0 +1,25 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:best-practices", ":prHourlyLimitNone"],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "description": "Auto-merge non-breaking SemVer updates (minor and patch) for stable (>= 1.0.0) dependencies",
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true
+    },
+    {
+      "description": "Enforce a 14-day minimumReleaseAge for all update types, overriding any inherited preset configuration",
+      "matchUpdateTypes": ["major", "minor", "patch", "pin", "pinDigest", "digest"],
+      "minimumReleaseAge": "14 days"
+    }
+  ],
+  "rebaseWhen": "behind-base-branch",
+  "vulnerabilityAlerts": {
+    "labels": ["security"]
+  },
+  "minimumReleaseAge": "14 days",
+  "prCreation": "not-pending",
+  "dependencyDashboard": true
+}
